@@ -11,11 +11,11 @@ title: Reorder List
 
 Given the `head` of a singly linked list:
 
-$$L_0 → L_1 → … → L_{n-2} → L_{n-1}$$
+`L0 → L1 → … → L(n-2) → L(n-1)`
 
 Reorder it to:
 
-$$L_0 → L_{n-1} → L_1 → L_{n-2} → L_2 → L_{n-3} → …$$
+`L0 → L(n-1) → L1 → L(n-2) → L2 → L(n-3) → …`
 
 You may not modify the values in the list's nodes. Only nodes themselves may be changed.
 
