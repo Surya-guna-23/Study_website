@@ -69,6 +69,8 @@ var isAnagram = function(s, t) {
 
 ## Dry Run
 
+![Valid Anagram Dry Run](/img/dsa/valid-anagram-dry-run.svg)
+
 Let's walk through **Example 1**: `s = "anagram"`, `t = "nagaram"`
 
 **Step 1 — Length check:** Both strings have length `7` → continue.

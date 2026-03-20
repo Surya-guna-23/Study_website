@@ -78,6 +78,8 @@ var reorderList = function(head) {
 
 ## Dry Run
 
+![Reorder List Dry Run](/img/dsa/reorder-list-dry-run.svg)
+
 **Example 1:** `head = [1, 2, 3, 4]`
 
 **Stack:** `[2, 3, 4]` (all nodes after head)

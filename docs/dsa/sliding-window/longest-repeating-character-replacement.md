@@ -67,6 +67,8 @@ var characterReplacement = function(s, k) {
 
 ## Dry Run
 
+![Longest Repeating Character Replacement Dry Run](/img/dsa/longest-repeating-character-replacement-dry-run.svg)
+
 **Example 2:** `s = "AABABBA"`, `k = 1`
 
 | Step | `r` | `s[r]` | `h` (non-zero) | `maxfreq` | Window size `r-l+1` | Replacements needed | `> k`? | `l` | `maxlen` |

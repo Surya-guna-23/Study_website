@@ -66,6 +66,8 @@ var removeNthFromEnd = function(head, n) {
 
 ## Dry Run
 
+![Remove Nth Node From End Dry Run](/img/dsa/remove-nth-node-from-end-dry-run.svg)
+
 **Example 1:** `head = [1, 2, 3, 4, 5]`, `n = 2`
 
 **Step 1 — Move `fast` 2 steps ahead:**

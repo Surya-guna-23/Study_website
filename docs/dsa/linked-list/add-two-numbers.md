@@ -73,6 +73,8 @@ var addTwoNumbers = function(l1, l2) {
 
 ## Dry Run
 
+![Add Two Numbers Dry Run](/img/dsa/add-two-numbers-dry-run.svg)
+
 **Example 1:** `l1 = [2,4,3]`, `l2 = [5,6,4]` → represents `342 + 465 = 807`
 
 | Step | `t1.val` | `t2.val` | `carry` (in) | `sum` | New digit (`sum%10`) | `carry` (out) |

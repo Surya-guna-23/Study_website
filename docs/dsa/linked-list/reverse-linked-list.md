@@ -66,6 +66,8 @@ var reverseList = function(head) {
 
 ## Dry Run
 
+![Reverse Linked List Dry Run](/img/dsa/reverse-linked-list-dry-run.svg)
+
 **Example:** `head = [1, 2, 3, 4, 5]`
 
 **Recursion going down:**

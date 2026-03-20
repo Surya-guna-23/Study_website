@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 420" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#2d2d44;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="750" height="420" rx="12" fill="url(#bgat)"/>
+  <text x="375" y="30" text-anchor="middle" fill="#cdd6f4" font-size="16" font-weight="bold">Add Two Numbers — Dry Run: [2,4,3] + [5,6,4]</text>
+  <text x="375" y="50" text-anchor="middle" fill="#6c7086" font-size="12">342 + 465 = 807 (digits stored in reverse)</text>
+
+  <!-- Two input lists side by side -->
+  <g transform="translate(80, 65)">
+    <text x="0" y="0" fill="#89b4fa" font-size="12" font-weight="bold">l1:</text>
+    <rect x="30" y="-14" width="40" height="28" rx="6" fill="#89b4fa"/><text x="50" y="7" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">2</text>
+    <text x="76" y="7" fill="#585b70">→</text>
+    <rect x="88" y="-14" width="40" height="28" rx="6" fill="#89b4fa"/><text x="108" y="7" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">4</text>
+    <text x="134" y="7" fill="#585b70">→</text>
+    <rect x="146" y="-14" width="40" height="28" rx="6" fill="#89b4fa"/><text x="166" y="7" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">3</text>
+  </g>
+  <g transform="translate(380, 65)">
+    <text x="0" y="0" fill="#f9e2af" font-size="12" font-weight="bold">l2:</text>
+    <rect x="30" y="-14" width="40" height="28" rx="6" fill="#f9e2af"/><text x="50" y="7" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">5</text>
+    <text x="76" y="7" fill="#585b70">→</text>
+    <rect x="88" y="-14" width="40" height="28" rx="6" fill="#f9e2af"/><text x="108" y="7" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">6</text>
+    <text x="134" y="7" fill="#585b70">→</text>
+    <rect x="146" y="-14" width="40" height="28" rx="6" fill="#f9e2af"/><text x="166" y="7" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">4</text>
+  </g>
+
+  <!-- Step 1 -->
+  <g transform="translate(30, 100)">
+    <rect x="0" y="0" width="690" height="75" rx="8" fill="#313244" stroke="#45475a"/>
+    <circle cx="22" cy="18" r="12" fill="#89b4fa"/><text x="22" y="23" text-anchor="middle" fill="#1e1e2e" font-size="10" font-weight="bold">1</text>
+    <text x="42" y="22" fill="#cdd6f4" font-size="12">t1.val=<tspan fill="#89b4fa" font-weight="bold">2</tspan> + t2.val=<tspan fill="#f9e2af" font-weight="bold">5</tspan> + carry=<tspan fill="#cba6f7">0</tspan> = <tspan fill="#a6e3a1" font-weight="bold">7</tspan></text>
+    <text x="42" y="42" fill="#a6adc8" font-size="12">digit = 7 % 10 = <tspan fill="#a6e3a1" font-weight="bold">7</tspan>  |  carry = ⌊7/10⌋ = <tspan fill="#cba6f7" font-weight="bold">0</tspan></text>
+    <g transform="translate(42, 50)">
+      <text x="0" y="14" fill="#6c7086" font-size="11">Result:</text>
+      <rect x="55" y="0" width="35" height="22" rx="4" fill="#a6e3a1"/><text x="72" y="16" text-anchor="middle" fill="#1e1e2e" font-size="12" font-weight="bold">7</text>
+    </g>
+  </g>
+
+  <!-- Step 2 -->
+  <g transform="translate(30, 185)">
+    <rect x="0" y="0" width="690" height="75" rx="8" fill="#313244" stroke="#45475a"/>
+    <circle cx="22" cy="18" r="12" fill="#89b4fa"/><text x="22" y="23" text-anchor="middle" fill="#1e1e2e" font-size="10" font-weight="bold">2</text>
+    <text x="42" y="22" fill="#cdd6f4" font-size="12">t1.val=<tspan fill="#89b4fa" font-weight="bold">4</tspan> + t2.val=<tspan fill="#f9e2af" font-weight="bold">6</tspan> + carry=<tspan fill="#cba6f7">0</tspan> = <tspan fill="#f38ba8" font-weight="bold">10</tspan></text>
+    <text x="42" y="42" fill="#a6adc8" font-size="12">digit = 10 % 10 = <tspan fill="#a6e3a1" font-weight="bold">0</tspan>  |  carry = ⌊10/10⌋ = <tspan fill="#f38ba8" font-weight="bold">1</tspan></text>
+    <g transform="translate(42, 50)">
+      <text x="0" y="14" fill="#6c7086" font-size="11">Result:</text>
+      <rect x="55" y="0" width="35" height="22" rx="4" fill="#a6e3a1"/><text x="72" y="16" text-anchor="middle" fill="#1e1e2e" font-size="12" font-weight="bold">7</text>
+      <text x="94" y="16" fill="#a6e3a1">→</text>
+      <rect x="108" y="0" width="35" height="22" rx="4" fill="#a6e3a1"/><text x="125" y="16" text-anchor="middle" fill="#1e1e2e" font-size="12" font-weight="bold">0</text>
+    </g>
+  </g>
+
+  <!-- Step 3 -->
+  <g transform="translate(30, 270)">
+    <rect x="0" y="0" width="690" height="75" rx="8" fill="#1e3a2f" stroke="#a6e3a1" stroke-width="1.5"/>
+    <circle cx="22" cy="18" r="12" fill="#a6e3a1"/><text x="22" y="23" text-anchor="middle" fill="#1e1e2e" font-size="10" font-weight="bold">3</text>
+    <text x="42" y="22" fill="#cdd6f4" font-size="12">t1.val=<tspan fill="#89b4fa" font-weight="bold">3</tspan> + t2.val=<tspan fill="#f9e2af" font-weight="bold">4</tspan> + carry=<tspan fill="#f38ba8">1</tspan> = <tspan fill="#a6e3a1" font-weight="bold">8</tspan></text>
+    <text x="42" y="42" fill="#a6adc8" font-size="12">digit = 8 % 10 = <tspan fill="#a6e3a1" font-weight="bold">8</tspan>  |  carry = ⌊8/10⌋ = <tspan fill="#cba6f7" font-weight="bold">0</tspan></text>
+    <g transform="translate(42, 50)">
+      <text x="0" y="14" fill="#6c7086" font-size="11">Result:</text>
+      <rect x="55" y="0" width="35" height="22" rx="4" fill="#a6e3a1"/><text x="72" y="16" text-anchor="middle" fill="#1e1e2e" font-size="12" font-weight="bold">7</text>
+      <text x="94" y="16" fill="#a6e3a1">→</text>
+      <rect x="108" y="0" width="35" height="22" rx="4" fill="#a6e3a1"/><text x="125" y="16" text-anchor="middle" fill="#1e1e2e" font-size="12" font-weight="bold">0</text>
+      <text x="147" y="16" fill="#a6e3a1">→</text>
+      <rect x="161" y="0" width="35" height="22" rx="4" fill="#a6e3a1"/><text x="178" y="16" text-anchor="middle" fill="#1e1e2e" font-size="12" font-weight="bold">8</text>
+    </g>
+  </g>
+
+  <!-- Final -->
+  <rect x="210" y="370" width="330" height="36" rx="18" fill="#a6e3a1"/>
+  <text x="375" y="393" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">Output: [7, 0, 8] → 807 ✅</text>
+</svg>

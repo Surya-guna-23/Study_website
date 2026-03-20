@@ -67,6 +67,8 @@ var maxArea = function(height) {
 
 ## Dry Run
 
+![Container With Most Water Dry Run](/img/dsa/container-with-most-water-dry-run.svg)
+
 **Example 1:** `height = [1, 8, 6, 2, 5, 4, 8, 3, 7]`
 
 | Step | `l` | `r` | `height[l]` | `height[r]` | `h` (min) | `b` (width) | Area | `total` | Move |

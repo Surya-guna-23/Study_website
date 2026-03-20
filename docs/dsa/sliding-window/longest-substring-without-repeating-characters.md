@@ -65,6 +65,8 @@ var lengthOfLongestSubstring = function(s) {
 
 ## Dry Run
 
+![Longest Substring Without Repeating Characters Dry Run](/img/dsa/longest-substring-without-repeating-characters-dry-run.svg)
+
 **Example 1:** `s = "abcabcbb"`
 
 | Step | `r` | `s[r]` | `h[idx]` | `h[idx] >= l?` | `l` (after) | Window | `r-l+1` | `max` |

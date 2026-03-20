@@ -67,6 +67,8 @@ var hasCycle = function(head) {
 
 ## Dry Run
 
+![Linked List Cycle Dry Run](/img/dsa/linked-list-cycle-dry-run.svg)
+
 **Example 1:** `head = [3,2,0,-4]`, tail connects to node at index `1` (value `2`)
 
 ```

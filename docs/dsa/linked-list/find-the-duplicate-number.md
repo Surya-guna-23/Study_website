@@ -58,6 +58,8 @@ var findDuplicate = function(nums) {
 
 ## Dry Run
 
+![Find The Duplicate Number Dry Run](/img/dsa/find-the-duplicate-number-dry-run.svg)
+
 **Example 1:** `nums = [1, 3, 4, 2, 2]`
 
 | Step | `i` | `nums[i]` | `res.has(nums[i])?` | `res` (after) | Action |

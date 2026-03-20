@@ -94,6 +94,8 @@ function finalmap(head)
 
 ## Dry Run
 
+![Copy List With Random Pointer Dry Run](/img/dsa/copy-list-with-random-pointer-dry-run.svg)
+
 **Example:** `[[7,null],[13,0],[11,4],[10,2],[1,0]]`
 
 ```

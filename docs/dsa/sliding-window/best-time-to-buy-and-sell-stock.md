@@ -65,6 +65,8 @@ var maxProfit = function(prices) {
 
 ## Dry Run
 
+![Best Time to Buy and Sell Stock Dry Run](/img/dsa/best-time-to-buy-and-sell-stock-dry-run.svg)
+
 **Example 1:** `prices = [7, 1, 5, 3, 6, 4]`
 
 | Step | `i` | `j` | `prices[i]` | `prices[j]` | Condition | Profit | `max` | Action |

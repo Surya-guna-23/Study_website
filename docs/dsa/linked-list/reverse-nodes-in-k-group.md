@@ -105,6 +105,8 @@ function findkthnode(temp,k)
 
 ## Dry Run
 
+![Reverse Nodes In K Group Dry Run](/img/dsa/reverse-nodes-in-k-group-dry-run.svg)
+
 **Example 1:** `head = [1, 2, 3, 4, 5]`, `k = 2`
 
 ### Iteration 1: `temp = 1`

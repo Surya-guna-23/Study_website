@@ -67,6 +67,8 @@ var mergeTwoLists = function(list1, list2) {
 
 ## Dry Run
 
+![Merge Two Sorted Lists Dry Run](/img/dsa/merge-two-sorted-lists-dry-run.svg)
+
 **Example 1:** `list1 = [1,2,4]`, `list2 = [1,3,4]`
 
 | Step | `list1` val | `list2` val | Compare | Attach | Merged so far |

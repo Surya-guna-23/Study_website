@@ -72,6 +72,8 @@ var isPalindrome = function(s) {
 
 ## Dry Run
 
+![Valid Palindrome Dry Run](/img/dsa/valid-palindrome-dry-run.svg)
+
 **Example 1:** `s = "A man, a plan, a canal: Panama"`
 
 **Step 1 — Clean string:**

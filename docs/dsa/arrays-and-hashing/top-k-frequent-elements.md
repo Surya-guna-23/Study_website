@@ -60,6 +60,8 @@ var topKFrequent = function(nums, k) {
 
 ## Dry Run
 
+![Top K Frequent Elements Dry Run](/img/dsa/top-k-frequent-elements-dry-run.svg)
+
 Let's walk through **Example 1**: `nums = [1, 1, 1, 2, 2, 3]`, `k = 2`
 
 **Step 1 — Build frequency map:**

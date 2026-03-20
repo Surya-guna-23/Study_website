@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 580" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d44;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="780" height="580" rx="12" fill="url(#bg2)"/>
+  <text x="390" y="35" text-anchor="middle" fill="#cdd6f4" font-size="17" font-weight="bold">Valid Anagram — Dry Run: s="anagram", t="nagaram"</text>
+  
+  <!-- Strings -->
+  <text x="30" y="68" fill="#89b4fa" font-size="13" font-weight="bold">s = "anagram"</text>
+  <g transform="translate(30, 78)">
+    <rect x="0" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="18" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">a</text>
+    <rect x="42" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="60" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">n</text>
+    <rect x="84" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="102" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">a</text>
+    <rect x="126" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="144" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">g</text>
+    <rect x="168" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="186" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">r</text>
+    <rect x="210" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="228" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">a</text>
+    <rect x="252" y="0" width="36" height="32" rx="5" fill="#89b4fa"/><text x="270" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">m</text>
+  </g>
+
+  <text x="420" y="68" fill="#f9e2af" font-size="13" font-weight="bold">t = "nagaram"</text>
+  <g transform="translate(420, 78)">
+    <rect x="0" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="18" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">n</text>
+    <rect x="42" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="60" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">a</text>
+    <rect x="84" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="102" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">g</text>
+    <rect x="126" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="144" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">a</text>
+    <rect x="168" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="186" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">r</text>
+    <rect x="210" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="228" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">a</text>
+    <rect x="252" y="0" width="36" height="32" rx="5" fill="#f9e2af"/><text x="270" y="22" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">m</text>
+  </g>
+
+  <!-- Length Check -->
+  <rect x="30" y="130" width="720" height="32" rx="6" fill="#313244" stroke="#45475a"/>
+  <text x="390" y="151" text-anchor="middle" fill="#a6e3a1" font-size="13">✅ Length Check: s.length (7) === t.length (7) → Continue</text>
+
+  <!-- Frequency Maps -->
+  <text x="30" y="192" fill="#89b4fa" font-size="14" font-weight="bold">smap (Frequency Map for s):</text>
+  <g transform="translate(30, 202)">
+    <!-- a:3 -->
+    <rect x="0" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="30" y="20" text-anchor="middle" fill="#89b4fa" font-size="14" font-weight="bold">a</text>
+    <text x="30" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">3</text>
+    <!-- n:1 -->
+    <rect x="70" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="100" y="20" text-anchor="middle" fill="#89b4fa" font-size="14" font-weight="bold">n</text>
+    <text x="100" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+    <!-- g:1 -->
+    <rect x="140" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="170" y="20" text-anchor="middle" fill="#89b4fa" font-size="14" font-weight="bold">g</text>
+    <text x="170" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+    <!-- r:1 -->
+    <rect x="210" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="240" y="20" text-anchor="middle" fill="#89b4fa" font-size="14" font-weight="bold">r</text>
+    <text x="240" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+    <!-- m:1 -->
+    <rect x="280" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="310" y="20" text-anchor="middle" fill="#89b4fa" font-size="14" font-weight="bold">m</text>
+    <text x="310" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+  </g>
+
+  <text x="420" y="192" fill="#f9e2af" font-size="14" font-weight="bold">tmap (Frequency Map for t):</text>
+  <g transform="translate(420, 202)">
+    <rect x="0" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="30" y="20" text-anchor="middle" fill="#f9e2af" font-size="14" font-weight="bold">n</text>
+    <text x="30" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+    <rect x="70" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="100" y="20" text-anchor="middle" fill="#f9e2af" font-size="14" font-weight="bold">a</text>
+    <text x="100" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">3</text>
+    <rect x="140" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="170" y="20" text-anchor="middle" fill="#f9e2af" font-size="14" font-weight="bold">g</text>
+    <text x="170" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+    <rect x="210" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="240" y="20" text-anchor="middle" fill="#f9e2af" font-size="14" font-weight="bold">r</text>
+    <text x="240" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+    <rect x="280" y="0" width="60" height="55" rx="6" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="310" y="20" text-anchor="middle" fill="#f9e2af" font-size="14" font-weight="bold">m</text>
+    <text x="310" y="44" text-anchor="middle" fill="#cdd6f4" font-size="18" font-weight="bold">1</text>
+  </g>
+
+  <!-- Comparison -->
+  <text x="30" y="295" fill="#a6e3a1" font-size="14" font-weight="bold">Compare Maps:</text>
+  <g transform="translate(30, 308)">
+    <!-- Row headers -->
+    <rect x="0" y="0" width="720" height="30" rx="4" fill="#45475a"/>
+    <text x="60" y="20" text-anchor="middle" fill="#cdd6f4" font-size="12" font-weight="bold">Key</text>
+    <text x="200" y="20" text-anchor="middle" fill="#89b4fa" font-size="12" font-weight="bold">smap[key]</text>
+    <text x="380" y="20" text-anchor="middle" fill="#f9e2af" font-size="12" font-weight="bold">tmap[key]</text>
+    <text x="550" y="20" text-anchor="middle" fill="#cdd6f4" font-size="12" font-weight="bold">Match?</text>
+    <!-- Row 1: n -->
+    <rect x="0" y="36" width="720" height="30" rx="0" fill="#313244"/>
+    <text x="60" y="56" text-anchor="middle" fill="#cdd6f4" font-size="13">n</text>
+    <text x="200" y="56" text-anchor="middle" fill="#89b4fa" font-size="13">1</text>
+    <text x="380" y="56" text-anchor="middle" fill="#f9e2af" font-size="13">1</text>
+    <text x="550" y="56" text-anchor="middle" fill="#a6e3a1" font-size="13">✅</text>
+    <!-- Row 2: a -->
+    <rect x="0" y="68" width="720" height="30" rx="0" fill="#2a2a3c"/>
+    <text x="60" y="88" text-anchor="middle" fill="#cdd6f4" font-size="13">a</text>
+    <text x="200" y="88" text-anchor="middle" fill="#89b4fa" font-size="13">3</text>
+    <text x="380" y="88" text-anchor="middle" fill="#f9e2af" font-size="13">3</text>
+    <text x="550" y="88" text-anchor="middle" fill="#a6e3a1" font-size="13">✅</text>
+    <!-- Row 3: g -->
+    <rect x="0" y="100" width="720" height="30" rx="0" fill="#313244"/>
+    <text x="60" y="120" text-anchor="middle" fill="#cdd6f4" font-size="13">g</text>
+    <text x="200" y="120" text-anchor="middle" fill="#89b4fa" font-size="13">1</text>
+    <text x="380" y="120" text-anchor="middle" fill="#f9e2af" font-size="13">1</text>
+    <text x="550" y="120" text-anchor="middle" fill="#a6e3a1" font-size="13">✅</text>
+    <!-- Row 4: r -->
+    <rect x="0" y="132" width="720" height="30" rx="0" fill="#2a2a3c"/>
+    <text x="60" y="152" text-anchor="middle" fill="#cdd6f4" font-size="13">r</text>
+    <text x="200" y="152" text-anchor="middle" fill="#89b4fa" font-size="13">1</text>
+    <text x="380" y="152" text-anchor="middle" fill="#f9e2af" font-size="13">1</text>
+    <text x="550" y="152" text-anchor="middle" fill="#a6e3a1" font-size="13">✅</text>
+    <!-- Row 5: m -->
+    <rect x="0" y="164" width="720" height="30" rx="0" fill="#313244"/>
+    <text x="60" y="184" text-anchor="middle" fill="#cdd6f4" font-size="13">m</text>
+    <text x="200" y="184" text-anchor="middle" fill="#89b4fa" font-size="13">1</text>
+    <text x="380" y="184" text-anchor="middle" fill="#f9e2af" font-size="13">1</text>
+    <text x="550" y="184" text-anchor="middle" fill="#a6e3a1" font-size="13">✅</text>
+  </g>
+
+  <!-- Result -->
+  <rect x="240" y="525" width="300" height="38" rx="19" fill="#a6e3a1"/>
+  <text x="390" y="550" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">All frequencies match → true ✅</text>
+</svg>

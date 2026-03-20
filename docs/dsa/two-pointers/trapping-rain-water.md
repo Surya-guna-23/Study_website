@@ -63,6 +63,8 @@ var trap = function(height) {
 
 ## Dry Run
 
+![Trapping Rain Water Dry Run](/img/dsa/trapping-rain-water-dry-run.svg)
+
 **Example 2:** `height = [4, 2, 0, 3, 2, 5]`
 
 Initial state: `i = 0`, `j = 5`, `left_max = 4`, `right_max = 5`, `sum = 0`

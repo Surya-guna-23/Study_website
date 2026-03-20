@@ -64,6 +64,8 @@ var groupAnagrams = function(strs) {
 
 ## Dry Run
 
+![Group Anagrams Dry Run](/img/dsa/group-anagrams-dry-run.svg)
+
 Let's walk through **Example 1**: `strs = ["eat","tea","tan","ate","nat","bat"]`
 
 | Step | `str` | `sorted` (key) | `hash.has(sorted)?` | Action | `hash` |

@@ -80,6 +80,8 @@ var threeSum = function(nums) {
 
 ## Dry Run
 
+![Three Sum Dry Run](/img/dsa/three-sum-dry-run.svg)
+
 **Example 1:** `nums = [-1, 0, 1, 2, -1, -4]`
 
 **Step 1 — Sort:** `[-4, -1, -1, 0, 1, 2]`

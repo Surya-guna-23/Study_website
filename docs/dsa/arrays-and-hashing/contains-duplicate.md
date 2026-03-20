@@ -59,6 +59,8 @@ var containsDuplicate = function(nums) {
 
 ## Dry Run
 
+![Contains Duplicate Dry Run](/img/dsa/contains-duplicate-dry-run.svg)
+
 Let's walk through **Example 1**: `nums = [1, 2, 3, 1]`
 
 | Step | `i` | `nums[i]` | `res` (Set) | `res.has(nums[i])?` | Action |

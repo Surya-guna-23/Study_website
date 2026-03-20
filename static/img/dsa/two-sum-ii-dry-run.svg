@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgts2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#2d2d44;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="720" height="350" rx="12" fill="url(#bgts2)"/>
+  <text x="360" y="30" text-anchor="middle" fill="#cdd6f4" font-size="15" font-weight="bold">Two Sum II — Dry Run: numbers=[2,7,11,15], target=9</text>
+
+  <!-- Array -->
+  <g transform="translate(30, 50)">
+    <text x="0" y="14" fill="#89b4fa" font-size="12" font-weight="bold">Sorted Array (1-indexed):</text>
+    <g transform="translate(0, 22)">
+      <rect x="0" y="0" width="55" height="38" rx="6" fill="#a6e3a1"/><text x="27" y="24" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">2</text><text x="27" y="-6" text-anchor="middle" fill="#6c7086" font-size="9">idx 0</text>
+      <rect x="65" y="0" width="55" height="38" rx="6" fill="#a6e3a1"/><text x="92" y="24" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">7</text><text x="92" y="-6" text-anchor="middle" fill="#6c7086" font-size="9">idx 1</text>
+      <rect x="130" y="0" width="55" height="38" rx="6" fill="#313244" stroke="#585b70"/><text x="157" y="24" text-anchor="middle" fill="#6c7086" font-size="15">11</text><text x="157" y="-6" text-anchor="middle" fill="#6c7086" font-size="9">idx 2</text>
+      <rect x="195" y="0" width="55" height="38" rx="6" fill="#313244" stroke="#585b70"/><text x="222" y="24" text-anchor="middle" fill="#6c7086" font-size="15">15</text><text x="222" y="-6" text-anchor="middle" fill="#6c7086" font-size="9">idx 3</text>
+    </g>
+  </g>
+
+  <!-- Step 1 -->
+  <g transform="translate(30, 140)">
+    <rect x="0" y="0" width="660" height="65" rx="8" fill="#313244" stroke="#45475a"/>
+    <circle cx="22" cy="18" r="12" fill="#89b4fa"/><text x="22" y="23" text-anchor="middle" fill="#1e1e2e" font-size="10" font-weight="bold">1</text>
+    <text x="42" y="22" fill="#cdd6f4" font-size="12">i=0, numbers[0]=2 → complement: 9 - 2 = <tspan fill="#f9e2af" font-weight="bold">7</tspan></text>
+    <text x="42" y="42" fill="#a6adc8" font-size="12">map.has(7)? No → store map.set(2, 0)</text>
+    <text x="480" y="22" fill="#6c7086" font-size="11">Map:</text>
+    <rect x="480" y="30" width="100" height="24" rx="4" fill="#45475a"/><text x="530" y="47" text-anchor="middle" fill="#89b4fa" font-size="11">{ 2→0 }</text>
+  </g>
+
+  <!-- Step 2 -->
+  <g transform="translate(30, 215)">
+    <rect x="0" y="0" width="660" height="70" rx="8" fill="#1e3a2f" stroke="#a6e3a1" stroke-width="2"/>
+    <circle cx="22" cy="18" r="12" fill="#a6e3a1"/><text x="22" y="23" text-anchor="middle" fill="#1e1e2e" font-size="10" font-weight="bold">2</text>
+    <text x="42" y="22" fill="#a6e3a1" font-size="12" font-weight="bold">i=1, numbers[1]=7 → complement: 9 - 7 = 2</text>
+    <text x="42" y="42" fill="#a6e3a1" font-size="12">map.has(2)? <tspan font-weight="bold">YES!</tspan> → found at index 0</text>
+    <text x="42" y="62" fill="#a6e3a1" font-size="12" font-weight="bold">Return [0+1, 1+1] = [1, 2] (1-indexed) ✅</text>
+  </g>
+
+  <rect x="240" y="305" width="240" height="32" rx="16" fill="#a6e3a1"/>
+  <text x="360" y="326" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">Output: [1, 2] ✅</text>
+</svg>

@@ -69,6 +69,8 @@ var mergeKLists = function(lists) {
 
 ## Dry Run
 
+![Merge K Sorted Lists Dry Run](/img/dsa/merge-k-sorted-lists-dry-run.svg)
+
 **Example 1:** `lists = [[1,4,5], [1,3,4], [2,6]]`
 
 **Initial heap** (min at top): push heads `1`, `1`, `2`

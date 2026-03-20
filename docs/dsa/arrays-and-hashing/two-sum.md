@@ -63,6 +63,8 @@ var twoSum = function(nums, target) {
 
 ## Dry Run
 
+![Two Sum Dry Run](/img/dsa/two-sum-dry-run.svg)
+
 Let's walk through **Example 1**: `nums = [2, 7, 11, 15]`, `target = 9`
 
 | Step | `i` | `nums[i]` | `target - nums[i]` | `map.has(...)` | `map` (after step) | Action |

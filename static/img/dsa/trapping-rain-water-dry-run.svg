@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 520" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgtr" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#2d2d44;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="750" height="520" rx="12" fill="url(#bgtr)"/>
+  <text x="375" y="28" text-anchor="middle" fill="#cdd6f4" font-size="15" font-weight="bold">Trapping Rain Water — Dry Run</text>
+  <text x="375" y="46" text-anchor="middle" fill="#6c7086" font-size="12">height = [4, 2, 0, 3, 2, 5]</text>
+
+  <!-- Elevation visual -->
+  <g transform="translate(80, 58)">
+    <!-- Grid lines -->
+    <line x1="0" y1="0" x2="0" y2="150" stroke="#45475a" stroke-width="0.5"/>
+    <text x="-15" y="5" fill="#6c7086" font-size="9">5</text>
+    <text x="-15" y="35" fill="#6c7086" font-size="9">4</text>
+    <text x="-15" y="65" fill="#6c7086" font-size="9">3</text>
+    <text x="-15" y="95" fill="#6c7086" font-size="9">2</text>
+    <text x="-15" y="125" fill="#6c7086" font-size="9">1</text>
+    
+    <!-- Bars: height 4,2,0,3,2,5 (30px per unit, width 70, gap 20) -->
+    <!-- h=4 -->
+    <rect x="10" y="30" width="70" height="120" rx="4" fill="#89b4fa"/>
+    <text x="45" y="165" text-anchor="middle" fill="#89b4fa" font-size="10" font-weight="bold">4</text>
+    <!-- h=2 -->
+    <rect x="100" y="90" width="70" height="60" rx="4" fill="#89b4fa"/>
+    <text x="135" y="165" text-anchor="middle" fill="#cdd6f4" font-size="10">2</text>
+    <!-- water at h=2 pos: fill to level 4 above bar -->
+    <rect x="100" y="30" width="70" height="60" rx="4" fill="#89b4fa" opacity="0.15" stroke="#89b4fa" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="135" y="65" text-anchor="middle" fill="#89b4fa" font-size="9">+2</text>
+    <!-- h=0 -->
+    <rect x="190" y="150" width="70" height="0" rx="4" fill="#89b4fa"/>
+    <text x="225" y="165" text-anchor="middle" fill="#cdd6f4" font-size="10">0</text>
+    <rect x="190" y="60" width="70" height="90" rx="4" fill="#89b4fa" opacity="0.15" stroke="#89b4fa" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="225" y="100" text-anchor="middle" fill="#89b4fa" font-size="9">+3</text>
+    <!-- h=3 -->
+    <rect x="280" y="60" width="70" height="90" rx="4" fill="#89b4fa"/>
+    <text x="315" y="165" text-anchor="middle" fill="#cdd6f4" font-size="10">3</text>
+    <!-- h=2 -->
+    <rect x="370" y="90" width="70" height="60" rx="4" fill="#89b4fa"/>
+    <text x="405" y="165" text-anchor="middle" fill="#cdd6f4" font-size="10">2</text>
+    <rect x="370" y="60" width="70" height="30" rx="4" fill="#89b4fa" opacity="0.15" stroke="#89b4fa" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="405" y="80" text-anchor="middle" fill="#89b4fa" font-size="9">+1</text>
+    <!-- h=5 -->
+    <rect x="460" y="0" width="70" height="150" rx="4" fill="#a6e3a1"/>
+    <text x="495" y="165" text-anchor="middle" fill="#a6e3a1" font-size="10" font-weight="bold">5</text>
+
+    <!-- Water label -->
+    <text x="550" y="70" fill="#89b4fa" font-size="11" font-weight="bold">■ water trapped</text>
+    <text x="550" y="88" fill="#89b4fa" font-size="11">total = 2+3+0+1 = 6</text>
+  </g>
+
+  <!-- Two pointer approach -->
+  <g transform="translate(30, 240)">
+    <rect x="0" y="0" width="690" height="30" rx="4" fill="#45475a"/>
+    <text x="40" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">Step</text>
+    <text x="100" y="20" text-anchor="middle" fill="#89b4fa" font-size="9" font-weight="bold">L</text>
+    <text x="155" y="20" text-anchor="middle" fill="#f38ba8" font-size="9" font-weight="bold">R</text>
+    <text x="220" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">h[L]</text>
+    <text x="280" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">h[R]</text>
+    <text x="355" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">leftMax</text>
+    <text x="435" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">rightMax</text>
+    <text x="530" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">Water added</text>
+    <text x="640" y="20" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">Total</text>
+
+    <rect x="0" y="34" width="690" height="24" fill="#313244"/>
+    <text x="40" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">1</text>
+    <text x="100" y="50" text-anchor="middle" fill="#89b4fa" font-size="9">0</text>
+    <text x="155" y="50" text-anchor="middle" fill="#f38ba8" font-size="9">5</text>
+    <text x="220" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">4</text>
+    <text x="280" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="355" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">4</text>
+    <text x="435" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="530" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">4-4=0</text>
+    <text x="640" y="50" text-anchor="middle" fill="#cdd6f4" font-size="9">0</text>
+
+    <rect x="0" y="60" width="690" height="24" fill="#2a2a3c"/>
+    <text x="40" y="76" text-anchor="middle" fill="#cdd6f4" font-size="9">2</text>
+    <text x="100" y="76" text-anchor="middle" fill="#89b4fa" font-size="9">1</text>
+    <text x="155" y="76" text-anchor="middle" fill="#f38ba8" font-size="9">5</text>
+    <text x="220" y="76" text-anchor="middle" fill="#cdd6f4" font-size="9">2</text>
+    <text x="280" y="76" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="355" y="76" text-anchor="middle" fill="#cdd6f4" font-size="9">4</text>
+    <text x="435" y="76" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="530" y="76" text-anchor="middle" fill="#a6e3a1" font-size="9" font-weight="bold">4-2=2</text>
+    <text x="640" y="76" text-anchor="middle" fill="#a6e3a1" font-size="9">2</text>
+
+    <rect x="0" y="86" width="690" height="24" fill="#313244"/>
+    <text x="40" y="102" text-anchor="middle" fill="#cdd6f4" font-size="9">3</text>
+    <text x="100" y="102" text-anchor="middle" fill="#89b4fa" font-size="9">2</text>
+    <text x="155" y="102" text-anchor="middle" fill="#f38ba8" font-size="9">5</text>
+    <text x="220" y="102" text-anchor="middle" fill="#cdd6f4" font-size="9">0</text>
+    <text x="280" y="102" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="355" y="102" text-anchor="middle" fill="#cdd6f4" font-size="9">4</text>
+    <text x="435" y="102" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="530" y="102" text-anchor="middle" fill="#a6e3a1" font-size="9" font-weight="bold">4-0=4 ⚠ →3</text>
+    <text x="640" y="102" text-anchor="middle" fill="#a6e3a1" font-size="9">5</text>
+
+    <rect x="0" y="112" width="690" height="24" fill="#2a2a3c"/>
+    <text x="40" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">4</text>
+    <text x="100" y="128" text-anchor="middle" fill="#89b4fa" font-size="9">3</text>
+    <text x="155" y="128" text-anchor="middle" fill="#f38ba8" font-size="9">5</text>
+    <text x="220" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">3</text>
+    <text x="280" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="355" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">4</text>
+    <text x="435" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+    <text x="530" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">4-3=1→0</text>
+    <text x="640" y="128" text-anchor="middle" fill="#cdd6f4" font-size="9">5</text>
+
+    <rect x="0" y="138" width="690" height="26" fill="#1e3a2f" stroke="#a6e3a1"/>
+    <text x="40" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">5</text>
+    <text x="100" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">4</text>
+    <text x="155" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">5</text>
+    <text x="220" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">2</text>
+    <text x="280" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">5</text>
+    <text x="355" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">4</text>
+    <text x="435" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9">5</text>
+    <text x="530" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9" font-weight="bold">4-2=2→1</text>
+    <text x="640" y="155" text-anchor="middle" fill="#a6e3a1" font-size="9" font-weight="bold">6</text>
+  </g>
+
+  <rect x="250" y="475" width="250" height="32" rx="16" fill="#a6e3a1"/>
+  <text x="375" y="496" text-anchor="middle" fill="#1e1e2e" font-size="14" font-weight="bold">Output: 6 units ✅</text>
+</svg>
