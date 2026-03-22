@@ -5,7 +5,7 @@ title: Merge Two Sorted Lists
 
 # Merge Two Sorted Lists
 
-> **LeetCode 21** – [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+> **LeetCode 21** – [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/) | **Striver (TUF)** – [Merge Two Sorted Lists Article](https://takeuforward.org/data-structure/merge-two-sorted-linked-lists/)
 
 ## Problem Statement
 

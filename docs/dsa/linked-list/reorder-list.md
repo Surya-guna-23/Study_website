@@ -5,7 +5,7 @@ title: Reorder List
 
 # Reorder List
 
-> **LeetCode 143** – [Reorder List](https://leetcode.com/problems/reorder-list/)
+> **LeetCode 143** – [Reorder List](https://leetcode.com/problems/reorder-list/) | **Striver (TUF)** – [Reorder List Article](https://takeuforward.org/data-structure/reorder-list/)
 
 ## Problem Statement
 

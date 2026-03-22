@@ -5,7 +5,7 @@ title: Merge K Sorted Lists
 
 # Merge K Sorted Lists
 
-> **LeetCode 23** – [Merge K Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+> **LeetCode 23** – [Merge K Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) | **Striver (TUF)** – [Merge K Sorted Lists Article](https://takeuforward.org/data-structure/merge-k-sorted-lists/)
 
 ## Problem Statement
 

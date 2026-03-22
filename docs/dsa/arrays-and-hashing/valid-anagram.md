@@ -5,7 +5,7 @@ title: Valid Anagram
 
 # Valid Anagram
 
-> **LeetCode 242** – [Valid Anagram](https://leetcode.com/problems/valid-anagram/)
+> **LeetCode 242** – [Valid Anagram](https://leetcode.com/problems/valid-anagram/) | **Striver (TUF)** – [Valid Anagram Article](https://takeuforward.org/data-structure/check-if-two-strings-are-anagrams-of-each-other/)
 
 ## Problem Statement
 

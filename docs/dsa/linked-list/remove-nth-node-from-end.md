@@ -5,7 +5,7 @@ title: Remove Nth Node From End of List
 
 # Remove Nth Node From End of List
 
-> **LeetCode 19** – [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+> **LeetCode 19** – [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) | **Striver (TUF)** – [Remove Nth Node From End Article](https://takeuforward.org/data-structure/remove-n-th-node-from-the-end-of-a-linked-list/)
 
 ## Problem Statement
 

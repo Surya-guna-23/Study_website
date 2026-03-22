@@ -5,7 +5,7 @@ title: Reverse Linked List
 
 # Reverse Linked List
 
-> **LeetCode 206** – [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
+> **LeetCode 206** – [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) | **Striver (TUF)** – [Reverse Linked List Article](https://takeuforward.org/data-structure/reverse-a-linked-list/)
 
 ## Problem Statement
 

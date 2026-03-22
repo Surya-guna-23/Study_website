@@ -5,7 +5,7 @@ title: 3Sum
 
 # 3Sum
 
-> **LeetCode 15** – [3Sum](https://leetcode.com/problems/3sum/)
+> **LeetCode 15** – [3Sum](https://leetcode.com/problems/3sum/) | **Striver (TUF)** – [3Sum Article](https://takeuforward.org/data-structure/3-sum-find-all-triplets-that-add-up-to-a-given-sum/)
 
 ## Problem Statement
 

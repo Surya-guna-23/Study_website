@@ -5,7 +5,7 @@ title: Find the Duplicate Number
 
 # Find the Duplicate Number
 
-> **LeetCode 287** – [Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/)
+> **LeetCode 287** – [Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/) | **Striver (TUF)** – [Find the Duplicate Number Article](https://takeuforward.org/data-structure/find-the-duplicate-in-an-array-of-n1-integers/)
 
 ## Problem Statement
 

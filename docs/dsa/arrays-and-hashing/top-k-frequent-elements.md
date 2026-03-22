@@ -5,7 +5,7 @@ title: Top K Frequent Elements
 
 # Top K Frequent Elements
 
-> **LeetCode 347** – [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+> **LeetCode 347** – [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) | **Striver (TUF)** – [Top K Frequent Elements Article](https://takeuforward.org/data-structure/top-k-frequent-elements/)
 
 ## Problem Statement
 

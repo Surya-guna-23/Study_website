@@ -5,7 +5,7 @@ title: Add Two Numbers
 
 # Add Two Numbers
 
-> **LeetCode 2** – [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/)
+> **LeetCode 2** – [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | **Striver (TUF)** – [Add Two Numbers Article](https://takeuforward.org/data-structure/add-two-numbers-represented-as-linked-lists/)
 
 ## Problem Statement
 

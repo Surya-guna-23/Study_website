@@ -5,7 +5,7 @@ title: Longest Repeating Character Replacement
 
 # Longest Repeating Character Replacement
 
-> **LeetCode 424** – [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)
+> **LeetCode 424** – [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/) | **Striver (TUF)** – [Longest Repeating Character Replacement Article](https://takeuforward.org/data-structure/longest-repeating-character-replacement/)
 
 ## Problem Statement
 

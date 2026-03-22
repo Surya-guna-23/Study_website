@@ -5,7 +5,7 @@ title: Longest Substring Without Repeating Characters
 
 # Longest Substring Without Repeating Characters
 
-> **LeetCode 3** – [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+> **LeetCode 3** – [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) | **Striver (TUF)** – [Longest Substring Without Repeating Characters Article](https://takeuforward.org/data-structure/length-of-longest-substring-without-any-repeating-character/)
 
 ## Problem Statement
 

@@ -5,7 +5,7 @@ title: Copy List with Random Pointer
 
 # Copy List with Random Pointer
 
-> **LeetCode 138** – [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/)
+> **LeetCode 138** – [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/) | **Striver (TUF)** – [Clone Linked List with Random Pointer Article](https://takeuforward.org/data-structure/clone-linked-list-with-random-and-next-pointer/)
 
 ## Problem Statement
 

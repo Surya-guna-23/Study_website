@@ -5,7 +5,7 @@ title: Contains Duplicate
 
 # Contains Duplicate
 
-> **LeetCode 217** – [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
+> **LeetCode 217** – [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/) | **Striver (TUF)** – [Contains Duplicate Article](https://takeuforward.org/data-structure/contains-duplicate-check-if-a-value-appears-atleast-twice-in-an-array/)
 
 ## Problem Statement
 

@@ -5,7 +5,7 @@ title: Container With Most Water
 
 # Container With Most Water
 
-> **LeetCode 11** – [Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
+> **LeetCode 11** – [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | **Striver (TUF)** – [Container With Most Water Article](https://takeuforward.org/data-structure/container-with-most-water/)
 
 ## Problem Statement
 

@@ -5,7 +5,7 @@ title: Reverse Nodes in k-Group
 
 # Reverse Nodes in k-Group
 
-> **LeetCode 25** – [Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+> **LeetCode 25** – [Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) | **Striver (TUF)** – [Reverse Nodes in k-Group Article](https://takeuforward.org/data-structure/reverse-linked-list-in-groups-of-size-k/)
 
 ## Problem Statement
 

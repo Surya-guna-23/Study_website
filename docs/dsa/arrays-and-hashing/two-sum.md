@@ -5,7 +5,7 @@ title: Two Sum
 
 # Two Sum
 
-> **LeetCode 1** – [Two Sum](https://leetcode.com/problems/two-sum/)
+> **LeetCode 1** – [Two Sum](https://leetcode.com/problems/two-sum/) | **Striver (TUF)** – [Two Sum Article](https://takeuforward.org/data-structure/two-sum-check-if-a-pair-with-given-sum-exists-in-array/)
 
 ## Problem Statement
 

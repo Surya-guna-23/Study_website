@@ -5,7 +5,7 @@ title: Two Sum II - Sorted Array
 
 # Two Sum II - Input Array Is Sorted
 
-> **LeetCode 167** – [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+> **LeetCode 167** – [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) | **Striver (TUF)** – [Two Sum II Article](https://takeuforward.org/data-structure/two-sum-check-if-a-pair-with-given-sum-exists-in-array/)
 
 ## Problem Statement
 

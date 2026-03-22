@@ -5,7 +5,7 @@ title: Linked List Cycle
 
 # Linked List Cycle
 
-> **LeetCode 141** – [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
+> **LeetCode 141** – [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/) | **Striver (TUF)** – [Detect Cycle in Linked List Article](https://takeuforward.org/data-structure/detect-a-cycle-in-a-linked-list/)
 
 ## Problem Statement
 

@@ -5,7 +5,7 @@ title: Valid Palindrome
 
 # Valid Palindrome
 
-> **LeetCode 125** – [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
+> **LeetCode 125** – [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) | **Striver (TUF)** – [Valid Palindrome Article](https://takeuforward.org/data-structure/check-if-the-given-string-is-palindrome-or-not/)
 
 ## Problem Statement
 

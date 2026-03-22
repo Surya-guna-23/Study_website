@@ -5,7 +5,7 @@ title: Trapping Rain Water
 
 # Trapping Rain Water
 
-> **LeetCode 42** – [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
+> **LeetCode 42** – [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | **Striver (TUF)** – [Trapping Rain Water Article](https://takeuforward.org/data-structure/trapping-rainwater/)
 
 ## Problem Statement
 

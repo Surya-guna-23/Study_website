@@ -5,7 +5,7 @@ title: Group Anagrams
 
 # Group Anagrams
 
-> **LeetCode 49** – [Group Anagrams](https://leetcode.com/problems/group-anagrams/)
+> **LeetCode 49** – [Group Anagrams](https://leetcode.com/problems/group-anagrams/) | **Striver (TUF)** – [Group Anagrams Article](https://takeuforward.org/data-structure/group-anagrams/)
 
 ## Problem Statement
 
