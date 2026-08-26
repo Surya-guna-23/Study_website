@@ -24,10 +24,10 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://Surya-guna-23.github.io',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/Study_website/',
+  url: 'https://surya-studymaterial.vercel.app',
+  // Set the /<baseUrl>/ pathname under which your site is served.
+  // Vercel serves from the domain root, so this must be '/'.
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'Surya-guna-23', // Your GitHub org/user name.
