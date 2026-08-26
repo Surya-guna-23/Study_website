@@ -1,0 +1,158 @@
+---
+sidebar_position: 4
+title: Container With Most Water
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Container With Most Water
+
+> **LeetCode 11** – [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | **Striver (TUF)** – [Container With Most Water Article](https://takeuforward.org/data-structure/container-with-most-water/)
+
+## Problem Statement
+
+You are given an integer array `height` of length `n`. There are `n` vertical lines drawn such that the two endpoints of the `iᵗʰ` line are `(i, 0)` and `(i, height[i])`.
+
+Find two lines that together with the x-axis form a container, such that the container contains the **most water**.
+
+Return the **maximum amount of water** a container can store.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `height = [1,8,6,2,5,4,8,3,7]` | `49` |
+| 2 | `height = [1,1]` | `1` |
+
+### Constraints
+
+- `n == height.length`
+- `2 <= n <= 10⁵`
+- `0 <= height[i] <= 10⁴`
+
+---
+
+## Solution
+
+**Approach:** Use two pointers starting at both ends. Calculate the area as `min(height[l], height[r]) * (r - l)`. Move the pointer with the smaller height inward — keeping the taller line gives a better chance of finding a larger area.
+
+- **Time Complexity:** $O(n)$ — single pass with two pointers.
+- **Space Complexity:** $O(1)$ — only a few variables.
+
+```js
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function(height) {
+    let l=0
+    let r=height.length-1
+    let total=0
+    while(l<r)
+    {
+        let h=Math.min(height[r],height[l])
+        let b= r-l
+        total= Math.max(total,h*b)
+        if(height[r]>height[l])
+        {
+            l++
+        }
+        else{
+            r--
+        }
+    }
+    return total
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Container With Most Water — height = [1,8,6,2,5,4,8,3,7]"
+  steps={[
+    {
+      caption: 'Start with the widest container: L at 0, R at 8.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'active',8:'active'}, pointers:[{index:0,label:'L'},{index:8,label:'R'}]}], notes:['area = min(1,7) * (8-0) = 8','best = 8'] },
+      state: ['L = 0','R = 8','area = 8','best = 8'],
+      details: (<>Area is limited by the <b>shorter</b> wall, so we move the shorter one inward hoping for a taller wall. Here <code>min(1,7) * 8 = 8</code>. Since <code>height[L]=1 &lt; height[R]=7</code>, move <b>L</b> right.</>),
+    },
+    {
+      caption: 'L=1, R=8. area = min(8,7) * 7 = 49 → new best!',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',8:'active'}, pointers:[{index:1,label:'L'},{index:8,label:'R'}]}], notes:['area = min(8,7) * (8-1) = 49','best = 49'] },
+      state: ['L = 1','R = 8','area = 49','best = 49'],
+      details: (<>Now <code>min(8,7) * 7 = 49</code> — the maximum for this whole input. Since <code>height[R]=7 ≤ height[L]=8</code>, we move <b>R</b> left.</>),
+    },
+    {
+      caption: 'L=1, R=7. area = min(8,3) * 6 = 18. best stays 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',7:'active',8:'muted'}, pointers:[{index:1,label:'L'},{index:7,label:'R'}]}], notes:['area = min(8,3) * 6 = 18','best = 49'] },
+      state: ['L = 1','R = 7','area = 18','best = 49'],
+      details: (<>Height <code>3</code> is the bottleneck. Area <code>18 &lt; 49</code>, so best is unchanged. Move <b>R</b> left.</>),
+    },
+    {
+      caption: 'L=1, R=6. area = min(8,8) * 5 = 40. best stays 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',6:'active',7:'muted',8:'muted'}, pointers:[{index:1,label:'L'},{index:6,label:'R'}]}], notes:['area = min(8,8) * 5 = 40','best = 49'] },
+      state: ['L = 1','R = 6','area = 40','best = 49'],
+      details: (<>Both walls are <code>8</code>, giving <code>40</code>. Still less than 49. Since <code>height[R] ≤ height[L]</code>, move <b>R</b> left.</>),
+    },
+    {
+      caption: 'L=1, R=5. area = min(8,4) * 4 = 16. best stays 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',5:'active',6:'muted',7:'muted',8:'muted'}, pointers:[{index:1,label:'L'},{index:5,label:'R'}]}], notes:['area = min(8,4) * 4 = 16','best = 49'] },
+      state: ['L = 1','R = 5','area = 16','best = 49'],
+      details: (<>Bottleneck <code>4</code> → area <code>16</code>. Move <b>R</b> left.</>),
+    },
+    {
+      caption: 'L=1, R=4. area = min(8,5) * 3 = 15. best stays 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',4:'active',5:'muted',6:'muted',7:'muted',8:'muted'}, pointers:[{index:1,label:'L'},{index:4,label:'R'}]}], notes:['area = min(8,5) * 3 = 15','best = 49'] },
+      state: ['L = 1','R = 4','area = 15','best = 49'],
+      details: (<>Bottleneck <code>5</code> → area <code>15</code>. Move <b>R</b> left.</>),
+    },
+    {
+      caption: 'L=1, R=3. area = min(8,2) * 2 = 4. best stays 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',3:'active',4:'muted',5:'muted',6:'muted',7:'muted',8:'muted'}, pointers:[{index:1,label:'L'},{index:3,label:'R'}]}], notes:['area = min(8,2) * 2 = 4','best = 49'] },
+      state: ['L = 1','R = 3','area = 4','best = 49'],
+      details: (<>Bottleneck <code>2</code> → area <code>4</code>. Move <b>R</b> left.</>),
+    },
+    {
+      caption: 'L=1, R=2. area = min(8,6) * 1 = 6. best stays 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{0:'muted',1:'active',2:'active',3:'muted',4:'muted',5:'muted',6:'muted',7:'muted',8:'muted'}, pointers:[{index:1,label:'L'},{index:2,label:'R'}]}], notes:['area = min(8,6) * 1 = 6','best = 49'] },
+      state: ['L = 1','R = 2','area = 6','best = 49'],
+      details: (<>Bottleneck <code>6</code> → area <code>6</code>. Move <b>R</b> left, which makes <code>L == R</code>.</>),
+    },
+    {
+      caption: 'L == R → loop ends. Answer = 49.',
+      viz: { arrays: [{label:'height', values:[1,8,6,2,5,4,8,3,7], states:{1:'match',8:'match',0:'muted',2:'muted',3:'muted',4:'muted',5:'muted',6:'muted',7:'muted'}, pointers:[]}], notes:['best = 49 (indices 1 and 8)'] },
+      state: ['result = 49'],
+      details: (<>The pointers met, so the scan is done. The maximum area <b>49</b> was formed between indices <code>1</code> and <code>8</code>: <code>min(8,7) * 7 = 49</code>.</>),
+    },
+  ]}
+/>
+
+**Example 1:** `height = [1, 8, 6, 2, 5, 4, 8, 3, 7]`
+
+| Step | `l` | `r` | `height[l]` | `height[r]` | `h` (min) | `b` (width) | Area | `total` | Move |
+|------|-----|-----|-------------|-------------|-----------|-------------|------|---------|------|
+| 1 | 0 | 8 | 1 | 7 | 1 | 8 | 8 | 8 | `l++` (1 < 7) |
+| 2 | 1 | 8 | 8 | 7 | 7 | 7 | **49** | **49** | `r--` (7 ≤ 8) |
+| 3 | 1 | 7 | 8 | 3 | 3 | 6 | 18 | 49 | `r--` (3 ≤ 8) |
+| 4 | 1 | 6 | 8 | 8 | 8 | 5 | 40 | 49 | `r--` (8 ≤ 8) |
+| 5 | 1 | 5 | 8 | 4 | 4 | 4 | 16 | 49 | `r--` (4 ≤ 8) |
+| 6 | 1 | 4 | 8 | 5 | 5 | 3 | 15 | 49 | `r--` (5 ≤ 8) |
+| 7 | 1 | 3 | 8 | 2 | 2 | 2 | 4 | 49 | `r--` (2 ≤ 8) |
+| 8 | 1 | 2 | 8 | 6 | 6 | 1 | 6 | 49 | `r--` (6 ≤ 8) |
+| — | 1 | 1 | — | — | — | — | — | — | `l < r` false → exit |
+
+**Result:** `49` ✅ (formed between indices 1 and 8 → height `min(8,7) * 7 = 49`)
+
+---
+
+## Test Cases
+
+```js
+console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7])); // 49
+console.log(maxArea([1, 1]));                         // 1
+console.log(maxArea([4, 3, 2, 1, 4]));                // 16
+console.log(maxArea([1, 2, 1]));                      // 2
+console.log(maxArea([2, 3, 10, 5, 7, 8, 9]));         // 36
+```

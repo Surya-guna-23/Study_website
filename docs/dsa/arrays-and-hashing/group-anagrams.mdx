@@ -1,0 +1,247 @@
+---
+sidebar_position: 4
+title: Group Anagrams
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Group Anagrams
+
+> **LeetCode 49** – [Group Anagrams](https://leetcode.com/problems/group-anagrams/) | **Striver (TUF)** – [Group Anagrams Article](https://takeuforward.org/data-structure/group-anagrams/)
+
+## Problem Statement
+
+Given an array of strings `strs`, group the **anagrams** together. You can return the answer in **any order**.
+
+An **anagram** is a word formed by rearranging the letters of another word, using all the original letters exactly once.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `strs = ["eat","tea","tan","ate","nat","bat"]` | `[["bat"],["nat","tan"],["ate","eat","tea"]]` |
+| 2 | `strs = [""]` | `[[""]]` |
+| 3 | `strs = ["a"]` | `[["a"]]` |
+
+### Constraints
+
+- `1 <= strs.length <= 10⁴`
+- `0 <= strs[i].length <= 100`
+- `strs[i]` consists of lowercase English letters.
+
+---
+
+## Solution
+
+**Approach:** For each string, sort its characters alphabetically to create a canonical key. All anagrams will produce the same sorted key. Use a `Map` to group strings by their sorted key.
+
+- **Time Complexity:** $O(n \cdot k \log k)$ — where `n` is the number of strings and `k` is the maximum string length (sorting each string).
+- **Space Complexity:** $O(n \cdot k)$ — storing all strings in the map.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function(strs) {
+    let hash = new Map();
+
+    for (let str of strs) {
+        // Sort each string alphabetically to use as a key
+        let sorted = str.split('').sort().join('');
+
+        if (hash.has(sorted)) {
+            hash.get(sorted).push(str);
+        } else {
+            hash.set(sorted, [str]);
+        }
+    }
+
+    // Convert Map values to array
+    return Array.from(hash.values());
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> output = new HashMap<>();
+        for (String str : strs) {
+            String sorted = str.chars()
+                    .sorted()
+                    .mapToObj(c -> String.valueOf((char) c))
+                    .collect(Collectors.joining());
+
+            if (output.containsKey(sorted)) {
+                output.get(sorted).add(str);
+            } else {
+                output.put(sorted, new ArrayList<>());
+                output.get(sorted).add(str);
+            }
+        }
+        return new ArrayList<>(output.values());
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Group Anagrams — strs = ["eat","tea","tan","ate","nat","bat"]'
+  steps={[
+    {
+      caption: 'Setup: sort each word’s letters to form a key; anagrams share the same key.',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat']}],
+        map: {label: 'hash', entries: []},
+        notes: ['key = sorted(word)'],
+      },
+      state: ['hash = {}'],
+      details: (
+        <>
+          Two words are anagrams iff their sorted letters match. So we turn each
+          word into a canonical <b>sorted key</b> and bucket words by that key
+          in a map.
+        </>
+      ),
+    },
+    {
+      caption: 'str = "eat" → key "aet": new key, create ["eat"].',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'hash', entries: [['aet', '["eat"]']], highlightKey: 'aet'},
+        notes: ['sort("eat") = "aet"', 'new bucket'],
+      },
+      state: ['str = "eat"', 'key = "aet"', 'hash = {aet: [eat]}'],
+      details: (
+        <>
+          <code>"eat"</code> sorts to <code>"aet"</code>. The key is new, so we
+          create a fresh list <code>["eat"]</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'str = "tea" → key "aet": key exists, push → ["eat","tea"].',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'hash', entries: [['aet', '["eat","tea"]']], highlightKey: 'aet'},
+        notes: ['sort("tea") = "aet"', 'existing bucket'],
+      },
+      state: ['str = "tea"', 'key = "aet"', 'hash = {aet: [eat, tea]}'],
+      details: (
+        <>
+          <code>"tea"</code> also sorts to <code>"aet"</code>, matching the
+          existing bucket, so we push it alongside <code>"eat"</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'str = "tan" → key "ant": new key, create ["tan"].',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'], states: {0: 'done', 1: 'done', 2: 'active'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'hash', entries: [['aet', '["eat","tea"]'], ['ant', '["tan"]']], highlightKey: 'ant'},
+        notes: ['sort("tan") = "ant"', 'new bucket'],
+      },
+      state: ['str = "tan"', 'key = "ant"', 'hash += {ant: [tan]}'],
+      details: (
+        <>
+          <code>"tan"</code> sorts to <code>"ant"</code> — a brand new key — so
+          we start a second bucket.
+        </>
+      ),
+    },
+    {
+      caption: 'str = "ate" → key "aet": push → ["eat","tea","ate"].',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'], states: {0: 'done', 1: 'done', 2: 'done', 3: 'active'}, pointers: [{index: 3, label: 'i'}]}],
+        map: {label: 'hash', entries: [['aet', '["eat","tea","ate"]'], ['ant', '["tan"]']], highlightKey: 'aet'},
+        notes: ['sort("ate") = "aet"', 'existing bucket'],
+      },
+      state: ['str = "ate"', 'key = "aet"', 'hash = {aet: [eat, tea, ate], ant: [tan]}'],
+      details: (
+        <>
+          <code>"ate"</code> → <code>"aet"</code>, joining the first bucket which
+          now holds three anagrams.
+        </>
+      ),
+    },
+    {
+      caption: 'str = "nat" → key "ant": push → ["tan","nat"].',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'], states: {0: 'done', 1: 'done', 2: 'done', 3: 'done', 4: 'active'}, pointers: [{index: 4, label: 'i'}]}],
+        map: {label: 'hash', entries: [['aet', '["eat","tea","ate"]'], ['ant', '["tan","nat"]']], highlightKey: 'ant'},
+        notes: ['sort("nat") = "ant"', 'existing bucket'],
+      },
+      state: ['str = "nat"', 'key = "ant"', 'hash = {aet:[...], ant:[tan, nat]}'],
+      details: (
+        <>
+          <code>"nat"</code> → <code>"ant"</code>, joining <code>"tan"</code> in
+          the second bucket.
+        </>
+      ),
+    },
+    {
+      caption: 'str = "bat" → key "abt": new key, create ["bat"]. Done → return buckets.',
+      viz: {
+        arrays: [{label: 'strs', values: ['eat', 'tea', 'tan', 'ate', 'nat', 'bat'], states: {0: 'done', 1: 'done', 2: 'done', 3: 'done', 4: 'done', 5: 'match'}, pointers: [{index: 5, label: 'i'}]}],
+        map: {label: 'hash', entries: [['aet', '["eat","tea","ate"]'], ['ant', '["tan","nat"]'], ['abt', '["bat"]']], highlightKey: 'abt'},
+        notes: ['sort("bat") = "abt"', 'result = hash.values()'],
+      },
+      state: ['str = "bat"', 'key = "abt"', 'return [[eat,tea,ate],[tan,nat],[bat]]'],
+      details: (
+        <>
+          <code>"bat"</code> → <code>"abt"</code>, a unique key, giving a third
+          bucket. With every word processed, we return the map’s values as the
+          grouped answer.
+        </>
+      ),
+    },
+  ]}
+/>
+
+Let's walk through **Example 1**: `strs = ["eat","tea","tan","ate","nat","bat"]`
+
+| Step | `str` | `sorted` (key) | `hash.has(sorted)?` | Action | `hash` |
+|------|-------|-----------------|----------------------|--------|--------|
+| 1 | `"eat"` | `"aet"` | No | Create `"aet" → ["eat"]` | `{aet: ["eat"]}` |
+| 2 | `"tea"` | `"aet"` | Yes | Push → `["eat","tea"]` | `{aet: ["eat","tea"]}` |
+| 3 | `"tan"` | `"ant"` | No | Create `"ant" → ["tan"]` | `{aet: ["eat","tea"], ant: ["tan"]}` |
+| 4 | `"ate"` | `"aet"` | Yes | Push → `["eat","tea","ate"]` | `{aet: ["eat","tea","ate"], ant: ["tan"]}` |
+| 5 | `"nat"` | `"ant"` | Yes | Push → `["tan","nat"]` | `{aet: ["eat","tea","ate"], ant: ["tan","nat"]}` |
+| 6 | `"bat"` | `"abt"` | No | Create `"abt" → ["bat"]` | `{aet: ["eat","tea","ate"], ant: ["tan","nat"], abt: ["bat"]}` |
+
+**Result:** `[["eat","tea","ate"], ["tan","nat"], ["bat"]]` ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(groupAnagrams(["eat","tea","tan","ate","nat","bat"]));
+// [["eat","tea","ate"], ["tan","nat"], ["bat"]]
+
+console.log(groupAnagrams([""]));
+// [[""]]
+
+console.log(groupAnagrams(["a"]));
+// [["a"]]
+
+console.log(groupAnagrams(["abc","bca","cab","xyz","zyx"]));
+// [["abc","bca","cab"], ["xyz","zyx"]]
+
+console.log(groupAnagrams(["no","on","is","si"]));
+// [["no","on"], ["is","si"]]
+```

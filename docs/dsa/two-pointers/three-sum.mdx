@@ -1,0 +1,184 @@
+---
+sidebar_position: 3
+title: 3Sum
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# 3Sum
+
+> **LeetCode 15** – [3Sum](https://leetcode.com/problems/3sum/) | **Striver (TUF)** – [3Sum Article](https://takeuforward.org/data-structure/3-sum-find-all-triplets-that-add-up-to-a-given-sum/)
+
+## Problem Statement
+
+Given an integer array `nums`, return all the triplets `[nums[i], nums[j], nums[k]]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
+
+Notice that the solution set must not contain **duplicate triplets**.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [-1,0,1,2,-1,-4]` | `[[-1,-1,2],[-1,0,1]]` |
+| 2 | `nums = [0,1,1]` | `[]` |
+| 3 | `nums = [0,0,0]` | `[[0,0,0]]` |
+
+### Constraints
+
+- `3 <= nums.length <= 3000`
+- `-10⁵ <= nums[i] <= 10⁵`
+
+---
+
+## Solution
+
+**Approach:** Sort the array first. Then fix one element (`nums[i]`) and use two pointers (`j` from left, `k` from right) to find pairs that sum to `-nums[i]`. Skip duplicates at every level to avoid duplicate triplets.
+
+- **Time Complexity:** $O(n^2)$ — for each element, the two-pointer scan is $O(n)$.
+- **Space Complexity:** $O(1)$ — ignoring the output array (sorting is in-place).
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
+    let sum=0;
+    let i=0;
+    
+    let res=[]
+    nums.sort((a,b)=>a-b)
+    for(let i=0 ; i<nums.length;i++)
+    {
+        let j=i+1;
+    let k=nums.length-1
+        if((i<k)&&nums[i]===nums[i-1]) continue
+        while(j<k)
+        {
+            const total = nums[i]+nums[j]+nums[k]
+            if(total>0)
+            {
+                k--;
+            }
+            else if(total<0)
+            {
+                j++
+            }
+            else {
+                res.push([nums[i],nums[j],nums[k]])
+                j++;
+                k--;
+                while((j<k)&&nums[j]===nums[j-1]) j++
+                while((j<k)&&nums[k]===nums[k+1]) k--
+            }
+        }
+    }
+    return res
+    
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="3Sum — nums = [-1,0,1,2,-1,-4]"
+  steps={[
+    {
+      caption: 'Sort the array so two pointers can work.',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{}, pointers:[]}], notes:['[-1,0,1,2,-1,-4] → [-4,-1,-1,0,1,2]'] },
+      state: ['n = 6','res = []'],
+      details: (<>Sorting lets us fix one element <code>nums[i]</code> and use an <b>L</b>/<b>R</b> two-pointer scan on the rest, moving inward based on the running sum. It also makes duplicate-skipping easy.</>),
+    },
+    {
+      caption: 'i = 0 (nums[i] = -4). L = 1, R = 5. total = -4 + -1 + 2 = -3 < 0 → L++.',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{0:'active',1:'window',5:'window'}, pointers:[{index:0,label:'i'},{index:1,label:'L'},{index:5,label:'R'}]}], notes:['total = -4 + (-1) + 2 = -3','-3 < 0 → L++'] },
+      state: ['i = 0','L = 1','R = 5','total = -3'],
+      details: (<>With <code>nums[i] = -4</code> we need the pair to sum to <code>+4</code>. The current total <code>-3</code> is too small, so we move <b>L</b> right to increase it.</>),
+    },
+    {
+      caption: 'i = 0. L walks right (all totals stay < 0) until L meets R → no triplet for -4.',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{0:'active',4:'window',5:'window'}, pointers:[{index:0,label:'i'},{index:4,label:'L'},{index:5,label:'R'}]}], notes:['total = -4 + 1 + 2 = -1','-1 < 0 → L++, then L == R → exit'] },
+      state: ['i = 0','no triplet'],
+      details: (<>Every total with <code>-4</code> fixed stays negative, so <b>L</b> keeps advancing until <code>L == R</code> and the inner loop exits with no triplet found.</>),
+    },
+    {
+      caption: 'i = 1 (nums[i] = -1). L = 2, R = 5. total = -1 + -1 + 2 = 0 → found!',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{1:'active',2:'match',5:'match'}, pointers:[{index:1,label:'i'},{index:2,label:'L'},{index:5,label:'R'}]}], notes:['total = -1 + (-1) + 2 = 0','push [-1,-1,2] ✓'] },
+      state: ['i = 1','L = 2','R = 5','total = 0'],
+      details: (<>The total is exactly <code>0</code>, so we record the triplet <code>[-1,-1,2]</code>, then move <b>both</b> pointers inward (<code>L++</code>, <code>R--</code>) and skip any duplicate values.</>),
+    },
+    {
+      caption: 'i = 1. L = 3, R = 4. total = -1 + 0 + 1 = 0 → found again!',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{1:'active',3:'match',4:'match'}, pointers:[{index:1,label:'i'},{index:3,label:'L'},{index:4,label:'R'}]}], notes:['total = -1 + 0 + 1 = 0','push [-1,0,1] ✓'] },
+      state: ['i = 1','L = 3','R = 4','total = 0'],
+      details: (<>Another zero-sum triplet <code>[-1,0,1]</code>. Record it and move inward again. Now <code>L (4)</code> is no longer &lt; <code>R (3)</code>, so the inner loop ends.</>),
+    },
+    {
+      caption: 'i = 2 (nums[i] = -1) equals nums[1] → skip duplicate.',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{1:'done',2:'muted'}, pointers:[{index:2,label:'i'}]}], notes:['nums[2] == nums[1] → continue'] },
+      state: ['i = 2','skip duplicate'],
+      details: (<>To avoid duplicate triplets, when <code>nums[i] == nums[i-1]</code> we skip this <code>i</code> entirely.</>),
+    },
+    {
+      caption: 'i = 3 (nums[i] = 0). L = 4, R = 5. total = 0 + 1 + 2 = 3 > 0 → R--, then L == R → exit.',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{3:'active',4:'window',5:'window'}, pointers:[{index:3,label:'i'},{index:4,label:'L'},{index:5,label:'R'}]}], notes:['total = 0 + 1 + 2 = 3','3 > 0 → R--, then exit'] },
+      state: ['i = 3','L = 4','R = 5','total = 3'],
+      details: (<>Total <code>3</code> is too big, so we move <b>R</b> left. That makes <code>L == R</code> and the loop ends. Remaining <code>i</code> values have too few elements to the right, so the scan is complete.</>),
+    },
+    {
+      caption: 'Result: [[-1,-1,2], [-1,0,1]].',
+      viz: { arrays: [{label:'sorted', values:[-4,-1,-1,0,1,2], states:{}, pointers:[]}], notes:['res = [[-1,-1,2], [-1,0,1]] ✓'] },
+      state: ['result = [[-1,-1,2],[-1,0,1]]'],
+      details: (<>Two unique triplets were found. Sorting + the two-pointer sweep gives <b>O(n²)</b> time overall.</>),
+    },
+  ]}
+/>
+
+**Example 1:** `nums = [-1, 0, 1, 2, -1, -4]`
+
+**Step 1 — Sort:** `[-4, -1, -1, 0, 1, 2]`
+
+**Step 2 — Iterate with two pointers:**
+
+### `i = 0`, `nums[i] = -4`, `j = 1`, `k = 5`
+
+| `j` | `k` | `nums[j]` | `nums[k]` | `total` | Action |
+|-----|-----|-----------|-----------|---------|--------|
+| 1 | 5 | -1 | 2 | -3 | `< 0` → `j++` |
+| 2 | 5 | -1 | 2 | -3 | `< 0` → `j++` |
+| 3 | 5 | 0 | 2 | -2 | `< 0` → `j++` |
+| 4 | 5 | 1 | 2 | -1 | `< 0` → `j++` |
+| 5 | 5 | — | — | — | `j < k` false → exit |
+
+### `i = 1`, `nums[i] = -1`, `j = 2`, `k = 5`
+
+| `j` | `k` | `nums[j]` | `nums[k]` | `total` | Action |
+|-----|-----|-----------|-----------|---------|--------|
+| 2 | 5 | -1 | 2 | **0** | ✅ Push `[-1, -1, 2]`, `j++`, `k--`, skip dups |
+| 3 | 4 | 0 | 1 | **0** | ✅ Push `[-1, 0, 1]`, `j++`, `k--` |
+| 4 | 3 | — | — | — | `j < k` false → exit |
+
+### `i = 2`, `nums[i] = -1` → same as `nums[1]` → **skip** (duplicate)
+
+### `i = 3`, `nums[i] = 0`, `j = 4`, `k = 5`
+
+| `j` | `k` | `nums[j]` | `nums[k]` | `total` | Action |
+|-----|-----|-----------|-----------|---------|--------|
+| 4 | 5 | 1 | 2 | 3 | `> 0` → `k--` |
+| 4 | 4 | — | — | — | `j < k` false → exit |
+
+**Result:** `[[-1, -1, 2], [-1, 0, 1]]` ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(threeSum([-1, 0, 1, 2, -1, -4]));  // [[-1,-1,2], [-1,0,1]]
+console.log(threeSum([0, 1, 1]));                // []
+console.log(threeSum([0, 0, 0]));                // [[0,0,0]]
+console.log(threeSum([0, 0, 0, 0]));             // [[0,0,0]]
+console.log(threeSum([-2, 0, 1, 1, 2]));         // [[-2,0,2], [-2,1,1]]
+```

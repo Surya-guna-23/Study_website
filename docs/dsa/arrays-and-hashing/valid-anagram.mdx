@@ -1,0 +1,252 @@
+---
+sidebar_position: 2
+title: Valid Anagram
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Valid Anagram
+
+> **LeetCode 242** – [Valid Anagram](https://leetcode.com/problems/valid-anagram/) | **Striver (TUF)** – [Valid Anagram Article](https://takeuforward.org/data-structure/check-if-two-strings-are-anagrams-of-each-other/)
+
+## Problem Statement
+
+Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.
+
+An **anagram** is a word formed by rearranging the letters of another word, using all the original letters exactly once.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `s = "anagram"`, `t = "nagaram"` | `true` |
+| 2 | `s = "rat"`, `t = "car"` | `false` |
+
+### Constraints
+
+- `1 <= s.length, t.length <= 5 * 10⁴`
+- `s` and `t` consist of lowercase English letters.
+
+---
+
+## Solution
+
+**Approach:** Use two `Map`s to count the frequency of each character in `s` and `t`. If the lengths differ, return `false` immediately. Then compare the frequency of every character in `t`'s map against `s`'s map.
+
+- **Time Complexity:** $O(n)$ — two passes through the strings (one to build maps, one to compare).
+- **Space Complexity:** $O(n)$ — two maps storing character frequencies (at most 26 keys for lowercase letters).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {boolean}
+ */
+var isAnagram = function(s, t) {
+    t=t.split("")
+    s= s.split("")
+    let smap= new Map()
+    let tmap = new Map()
+    if(t.length!=s.length)
+    {
+        return false
+    }
+    for(let i=0;i<t.length;i++)
+    {
+        smap.set(s[i],(smap.get(s[i])||0)+1)
+        tmap.set(t[i],(tmap.get(t[i])||0)+1)
+    }
+    for(const [key ,value] of tmap)
+    {
+        if(smap.get(key)!=tmap.get(key))
+        {
+            return false
+        }
+    }
+    return true
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+Uses a single `int[26]` count array — increment for `s`, decrement for `t`, then verify all counts are zero.
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        int[] count = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
+            count[t.charAt(i) - 'a']--;
+        }
+        for (int j = 0; j < 26; j++) {
+            if (count[j] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Valid Anagram — s = "anagram", t = "nagaram"'
+  steps={[
+    {
+      caption: 'Length check: both strings have length 7, so they could be anagrams.',
+      viz: {
+        arrays: [
+          {label: 's', values: ['a', 'n', 'a', 'g', 'r', 'a', 'm']},
+          {label: 't', values: ['n', 'a', 'g', 'a', 'r', 'a', 'm']},
+        ],
+        map: {label: 'count', entries: []},
+        notes: ['s.length = 7', 't.length = 7', 'lengths equal → continue'],
+      },
+      state: ['s.length = 7', 't.length = 7'],
+      details: (
+        <>
+          If the lengths differ the answer is instantly <code>false</code>. Here
+          both are <code>7</code>. We will use a single <code>count</code> map:
+          <b> increment</b> for every letter of <code>s</code> and{' '}
+          <b>decrement</b> for every letter of <code>t</code>. If they are
+          anagrams, every count ends at zero.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 0: +1 for s["a"], −1 for t["n"].',
+      viz: {
+        arrays: [
+          {label: 's', values: ['a', 'n', 'a', 'g', 'r', 'a', 'm'], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]},
+          {label: 't', values: ['n', 'a', 'g', 'a', 'r', 'a', 'm'], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]},
+        ],
+        map: {label: 'count', entries: [['a', '+1'], ['n', '-1']]},
+        notes: ['count[a]++', 'count[n]--'],
+      },
+      state: ['i = 0', 's[i] = a', 't[i] = n', 'count = {a:1, n:-1}'],
+      details: (
+        <>
+          We add one for <code>s[0] = 'a'</code> and subtract one for{' '}
+          <code>t[0] = 'n'</code>. A positive count means “seen more in s”, a
+          negative means “seen more in t”.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 1: +1 for s["n"], −1 for t["a"]. Both a and n return to 0.',
+      viz: {
+        arrays: [
+          {label: 's', values: ['a', 'n', 'a', 'g', 'r', 'a', 'm'], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]},
+          {label: 't', values: ['n', 'a', 'g', 'a', 'r', 'a', 'm'], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]},
+        ],
+        map: {label: 'count', entries: [['a', '0'], ['n', '0']]},
+        notes: ['count[n]++ → 0', 'count[a]-- → 0'],
+      },
+      state: ['i = 1', 's[i] = n', 't[i] = a', 'count = {a:0, n:0}'],
+      details: (
+        <>
+          Now <code>s[1] = 'n'</code> pushes <code>n</code> back to{' '}
+          <code>0</code>, and <code>t[1] = 'a'</code> pushes <code>a</code> back
+          to <code>0</code>. Balanced so far.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 2..6: continue incrementing for s and decrementing for t.',
+      viz: {
+        arrays: [
+          {label: 's', values: ['a', 'n', 'a', 'g', 'r', 'a', 'm'], states: {0: 'done', 1: 'done', 2: 'done', 3: 'done', 4: 'done', 5: 'done', 6: 'active'}, pointers: [{index: 6, label: 'i'}]},
+          {label: 't', values: ['n', 'a', 'g', 'a', 'r', 'a', 'm'], states: {0: 'done', 1: 'done', 2: 'done', 3: 'done', 4: 'done', 5: 'done', 6: 'active'}, pointers: [{index: 6, label: 'i'}]},
+        ],
+        map: {label: 'count', entries: [['a', '0'], ['n', '0'], ['g', '0'], ['r', '0'], ['m', '0']]},
+        notes: ['each letter incremented in s and decremented in t'],
+      },
+      state: ['processed all 7 pairs', 'count = {a:0, n:0, g:0, r:0, m:0}'],
+      details: (
+        <>
+          Working through indices 2–6 (letters <code>a/g</code>,{' '}
+          <code>g/a</code>, <code>r/r</code>, <code>a/a</code>,{' '}
+          <code>m/m</code>), every letter is added once from <code>s</code> and
+          removed once from <code>t</code>, so all counts settle at{' '}
+          <code>0</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'Final check: every count is 0 → return true.',
+      viz: {
+        arrays: [
+          {label: 's', values: ['a', 'n', 'a', 'g', 'r', 'a', 'm'], states: {0: 'match', 1: 'match', 2: 'match', 3: 'match', 4: 'match', 5: 'match', 6: 'match'}},
+          {label: 't', values: ['n', 'a', 'g', 'a', 'r', 'a', 'm'], states: {0: 'match', 1: 'match', 2: 'match', 3: 'match', 4: 'match', 5: 'match', 6: 'match'}},
+        ],
+        map: {label: 'count', entries: [['a', '0'], ['n', '0'], ['g', '0'], ['r', '0'], ['m', '0']]},
+        notes: ['all counts = 0 → anagram'],
+      },
+      state: ['all counts zero', 'return true'],
+      details: (
+        <>
+          Since no count is non-zero, <code>s</code> and <code>t</code> use
+          exactly the same letters the same number of times — they are
+          anagrams, so we return <code>true</code>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+Let's walk through **Example 1**: `s = "anagram"`, `t = "nagaram"`
+
+**Step 1 — Length check:** Both strings have length `7` → continue.
+
+**Step 2 — Build frequency maps:**
+
+| `i` | `s[i]` | `smap` | `t[i]` | `tmap` |
+|-----|--------|--------|--------|--------|
+| 0 | `a` | `{a:1}` | `n` | `{n:1}` |
+| 1 | `n` | `{a:1, n:1}` | `a` | `{n:1, a:1}` |
+| 2 | `a` | `{a:2, n:1}` | `g` | `{n:1, a:1, g:1}` |
+| 3 | `g` | `{a:2, n:1, g:1}` | `a` | `{n:1, a:2, g:1}` |
+| 4 | `r` | `{a:2, n:1, g:1, r:1}` | `r` | `{n:1, a:2, g:1, r:1}` |
+| 5 | `a` | `{a:3, n:1, g:1, r:1}` | `a` | `{n:1, a:3, g:1, r:1}` |
+| 6 | `m` | `{a:3, n:1, g:1, r:1, m:1}` | `m` | `{n:1, a:3, g:1, r:1, m:1}` |
+
+**Step 3 — Compare maps:**
+
+| Key | `smap.get(key)` | `tmap.get(key)` | Match? |
+|-----|-----------------|-----------------|--------|
+| `n` | 1 | 1 | ✅ |
+| `a` | 3 | 3 | ✅ |
+| `g` | 1 | 1 | ✅ |
+| `r` | 1 | 1 | ✅ |
+| `m` | 1 | 1 | ✅ |
+
+All frequencies match → **Return `true`** ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(isAnagram("anagram", "nagaram"));  // true
+console.log(isAnagram("rat", "car"));          // false
+console.log(isAnagram("a", "a"));              // true   (single char)
+console.log(isAnagram("ab", "a"));             // false  (different lengths)
+console.log(isAnagram("aacc", "ccac"));        // false  (same length, different freq)
+console.log(isAnagram("listen", "silent"));    // true
+```

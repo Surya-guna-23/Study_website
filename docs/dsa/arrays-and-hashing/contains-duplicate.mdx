@@ -1,0 +1,198 @@
+---
+sidebar_position: 1
+title: Contains Duplicate
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Contains Duplicate
+
+> **LeetCode 217** – [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/) | **Striver (TUF)** – [Contains Duplicate Article](https://takeuforward.org/data-structure/contains-duplicate-check-if-a-value-appears-atleast-twice-in-an-array/)
+
+## Problem Statement
+
+Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [1, 2, 3, 1]` | `true` |
+| 2 | `nums = [1, 2, 3, 4]` | `false` |
+| 3 | `nums = [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]` | `true` |
+
+### Constraints
+
+- `1 <= nums.length <= 10⁵`
+- `-10⁹ <= nums[i] <= 10⁹`
+
+---
+
+## Solution
+
+**Approach:** Use a `Set` to track numbers we've already seen. As we iterate through the array, if the current number is already in the set we return `true` immediately. Otherwise we add it and continue.
+
+- **Time Complexity:** $O(n)$ — single pass through the array.
+- **Space Complexity:** $O(n)$ — the set can hold at most `n` elements.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var containsDuplicate = function(nums) {
+    let res = new Set()
+    for (let i=0;i<nums.length;i++)
+    {
+        if(res.has(nums[i]))
+        {
+            return true;
+        }
+        else{
+            res.add(nums[i])
+        }
+    }
+    return false
+    
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashSet<Integer> number = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!number.contains(nums[i])) {
+                number.add(nums[i]);
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Contains Duplicate — nums = [1, 2, 3, 1]"
+  steps={[
+    {
+      caption: 'Setup: an empty Set will track values we have already seen.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3, 1]}],
+        map: {label: 'set', entries: []},
+        notes: ['seen = {}'],
+      },
+      state: ['set = {}'],
+      details: (
+        <>
+          A <b>Set</b> gives us <code>O(1)</code> membership checks. As we scan
+          left→right, we ask “have I seen this value before?”. If yes, we found
+          a duplicate; if no, we add it and move on. This turns an{' '}
+          <code>O(n²)</code> pairwise comparison into a single{' '}
+          <code>O(n)</code> pass.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 0: value 1 is not in the set → add it.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3, 1], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'set', entries: [['1', '✓']]},
+        notes: ['set.has(1) = false → add 1'],
+      },
+      state: ['i = 0', 'nums[i] = 1', 'set = {1}'],
+      details: (
+        <>
+          The set is empty, so <code>set.has(1)</code> is <code>false</code>. We
+          record <code>1</code> and continue.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 1: value 2 is not in the set → add it.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3, 1], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'set', entries: [['1', '✓'], ['2', '✓']]},
+        notes: ['set.has(2) = false → add 2'],
+      },
+      state: ['i = 1', 'nums[i] = 2', 'set = {1, 2}'],
+      details: (
+        <>
+          <code>2</code> is new, so we add it. The set now holds{' '}
+          <code>{'{1, 2}'}</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 2: value 3 is not in the set → add it.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3, 1], states: {0: 'done', 1: 'done', 2: 'active'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'set', entries: [['1', '✓'], ['2', '✓'], ['3', '✓']]},
+        notes: ['set.has(3) = false → add 3'],
+      },
+      state: ['i = 2', 'nums[i] = 3', 'set = {1, 2, 3}'],
+      details: (
+        <>
+          <code>3</code> is also new. Still no duplicate — the set grows to{' '}
+          <code>{'{1, 2, 3}'}</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 3: value 1 IS already in the set → return true.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3, 1], states: {0: 'match', 1: 'done', 2: 'done', 3: 'match'}, pointers: [{index: 3, label: 'i'}]}],
+        map: {label: 'set', entries: [['1', '✓'], ['2', '✓'], ['3', '✓']], highlightKey: '1'},
+        notes: ['set.has(1) = true → duplicate found'],
+      },
+      state: ['i = 3', 'nums[i] = 1', 'duplicate found → return true'],
+      details: (
+        <>
+          Now <code>set.has(1)</code> is <code>true</code> — we already stored{' '}
+          <code>1</code> at index 0. A duplicate exists, so we return{' '}
+          <code>true</code> immediately without checking the rest of the array.
+        </>
+      ),
+    },
+  ]}
+/>
+
+Let's walk through **Example 1**: `nums = [1, 2, 3, 1]`
+
+| Step | `i` | `nums[i]` | `res` (Set) | `res.has(nums[i])?` | Action |
+|------|-----|-----------|-------------|----------------------|--------|
+| 1 | 0 | 1 | `{}` | No | Add `1` → `{1}` |
+| 2 | 1 | 2 | `{1}` | No | Add `2` → `{1, 2}` |
+| 3 | 2 | 3 | `{1, 2}` | No | Add `3` → `{1, 2, 3}` |
+| 4 | 3 | 1 | `{1, 2, 3}` | **Yes** | **Return `true`** ✅ |
+
+Duplicate `1` found at index `3` — we exit early without checking the rest of the array.
+
+---
+
+## Test Cases
+
+```js
+console.log(containsDuplicate([1, 2, 3, 1]));                      // true
+console.log(containsDuplicate([1, 2, 3, 4]));                      // false
+console.log(containsDuplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2]));   // true
+console.log(containsDuplicate([0]));                                // false  (single element)
+console.log(containsDuplicate([1, 1]));                             // true   (minimum duplicate)
+console.log(containsDuplicate([-1, -1, 2]));                       // true   (negative numbers)
+```

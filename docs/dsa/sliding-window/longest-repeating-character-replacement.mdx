@@ -1,0 +1,211 @@
+---
+sidebar_position: 3
+title: Longest Repeating Character Replacement
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Longest Repeating Character Replacement
+
+> **LeetCode 424** – [Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/) | **Striver (TUF)** – [Longest Repeating Character Replacement Article](https://takeuforward.org/data-structure/longest-repeating-character-replacement/)
+
+## Problem Statement
+
+You are given a string `s` and an integer `k`. You can choose any character of the string and change it to any other uppercase English letter. You can perform this operation at most `k` times.
+
+Return the length of the **longest substring** containing the same letter you can get after performing the above operations.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `s = "ABAB"`, `k = 2` | `4` |
+| 2 | `s = "AABABBA"`, `k = 1` | `4` |
+
+### Constraints
+
+- `1 <= s.length <= 10⁵`
+- `s` consists of only uppercase English letters.
+- `0 <= k <= s.length`
+
+---
+
+## Solution
+
+**Approach:** Use a sliding window `[l, r]`. Maintain a frequency array `h` for the 26 uppercase letters and track the `maxfreq` (count of the most frequent character in the window). The number of characters we need to replace is `(window size) - maxfreq`. If this exceeds `k`, shrink from the left.
+
+**Key insight:** We never need to decrease `maxfreq` when shrinking — if we've seen a window of that quality before, only a wider window can improve the answer.
+
+- **Time Complexity:** $O(n)$ — each pointer moves at most `n` times.
+- **Space Complexity:** $O(1)$ — fixed array of 26 entries.
+
+```js
+/*
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function(s, k) {
+    let l=0,r=0,maxlen=0,maxfreq=0
+    let h = new Array(26).fill(0)
+
+    while(r<s.length)
+    {
+        h[s.charCodeAt(r)-"A".charCodeAt(0)]++
+        maxfreq = Math.max(maxfreq,h[s.charCodeAt(r)-"A".charCodeAt(0)])
+        if((r-l+1)-maxfreq>k)
+        {
+            h[s.charCodeAt(l)-"A".charCodeAt(0)]--
+            l++
+        }
+        maxlen=Math.max(maxlen,(r-l+1))
+        r++
+    }
+    return maxlen
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Longest Repeating Character Replacement — s = "AABABBA", k = 1'
+  steps={[
+    {
+      caption: 'r=0: add A. maxFreq=1. size=1, need=1-1=0 ≤ k. maxlen=1.',
+      state: ['l=0', 'r=0', 'maxFreq=1', 'need=0', 'maxlen=1'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {0: 'active'},
+          pointers: [{index: 0, label: 'l'}, {index: 0, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '1']], highlightKey: 'A'},
+        notes: ['size = 1, maxFreq = 1', 'need = size - maxFreq = 0 ≤ 1', 'maxlen = 1'],
+      },
+      details: (<span>Add <code>A</code>. Replacements needed <code>= size - maxFreq = 1 - 1 = 0 ≤ k</code>. Window valid.</span>),
+    },
+    {
+      caption: 'r=1: add A. maxFreq=2. size=2, need=0 ≤ k. maxlen=2.',
+      state: ['l=0', 'r=1', 'maxFreq=2', 'need=0', 'maxlen=2'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {0: 'window', 1: 'active'},
+          pointers: [{index: 0, label: 'l'}, {index: 1, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '2']], highlightKey: 'A'},
+        notes: ['size = 2, maxFreq = 2', 'need = 0 ≤ 1', 'maxlen = 2'],
+      },
+      details: (<span>Another <code>A</code> → <code>maxFreq = 2</code>. Whole window is <code>A</code>, need <code>0</code> replacements.</span>),
+    },
+    {
+      caption: 'r=2: add B. maxFreq=2. size=3, need=3-2=1 ≤ k. maxlen=3.',
+      state: ['l=0', 'r=2', 'maxFreq=2', 'need=1', 'maxlen=3'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {0: 'window', 1: 'window', 2: 'active'},
+          pointers: [{index: 0, label: 'l'}, {index: 2, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '2'], ['B', '1']], highlightKey: 'B'},
+        notes: ['size = 3, maxFreq = 2', 'need = 3 - 2 = 1 ≤ 1', 'maxlen = 3'],
+      },
+      details: (<span>Add <code>B</code>. Need <code>= 3 - 2 = 1 ≤ k</code>: replace the single <code>B</code> with <code>A</code>. Valid.</span>),
+    },
+    {
+      caption: 'r=3: add A. maxFreq=3. size=4, need=4-3=1 ≤ k. Best! maxlen=4.',
+      state: ['l=0', 'r=3', 'maxFreq=3', 'need=1', 'maxlen=4'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {0: 'match', 1: 'match', 2: 'match', 3: 'match'},
+          pointers: [{index: 0, label: 'l'}, {index: 3, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '3'], ['B', '1']], highlightKey: 'A'},
+        notes: ['size = 4, maxFreq = 3', 'need = 4 - 3 = 1 ≤ 1', 'maxlen = 4  ★'],
+      },
+      details: (<span><code>A</code> → <code>maxFreq = 3</code>. Window <code>"AABA"</code> needs just <code>1</code> replacement. Best answer (green): <b>maxlen = 4</b>.</span>),
+    },
+    {
+      caption: 'r=4: add B. maxFreq=3. size=5, need=5-3=2 > k → shrink: l=1.',
+      state: ['l=1', 'r=4', 'maxFreq=3', 'need=1', 'maxlen=4'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {0: 'muted', 1: 'window', 2: 'window', 3: 'window', 4: 'active'},
+          pointers: [{index: 1, label: 'l'}, {index: 4, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '2'], ['B', '2']], highlightKey: 'B'},
+        notes: ['size 5, need = 5 - 3 = 2 > 1 → invalid', 'drop s[0]=A, l = 1', 'size = 4, maxlen = 4'],
+      },
+      details: (<span>Add <code>B</code>: need <code>= 5 - 3 = 2 &gt; k</code>. Shrink from the left: decrement <code>count[A]</code>, move <code>l = 1</code>. Window is valid again at size 4.</span>),
+    },
+    {
+      caption: 'r=5: add B. maxFreq=3. size=5, need=5-3=2 > k → shrink: l=2.',
+      state: ['l=2', 'r=5', 'maxFreq=3', 'need=1', 'maxlen=4'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {1: 'muted', 2: 'window', 3: 'window', 4: 'window', 5: 'active'},
+          pointers: [{index: 2, label: 'l'}, {index: 5, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '1'], ['B', '3']], highlightKey: 'B'},
+        notes: ['size 5, need = 5 - 3 = 2 > 1 → invalid', 'drop s[1]=A, l = 2', 'size = 4, maxlen = 4'],
+      },
+      details: (<span>Add <code>B</code> → <code>count[B]=3</code>. Need <code>2 &gt; k</code> again, so drop <code>s[1]=A</code> and set <code>l = 2</code>.</span>),
+    },
+    {
+      caption: 'r=6: add A. maxFreq=3. size=5, need=2 > k → shrink: l=3. Done, maxlen=4.',
+      state: ['l=3', 'r=6', 'maxFreq=3', 'need=1', 'maxlen=4'],
+      viz: {
+        arrays: [{
+          label: 's',
+          values: ['A', 'A', 'B', 'A', 'B', 'B', 'A'],
+          states: {2: 'muted', 3: 'window', 4: 'window', 5: 'window', 6: 'active'},
+          pointers: [{index: 3, label: 'l'}, {index: 6, label: 'r'}],
+        }],
+        map: {label: 'count', entries: [['A', '2'], ['B', '2']], highlightKey: 'A'},
+        notes: ['size 5, need = 5 - 3 = 2 > 1 → invalid', 'drop s[2]=B, l = 3', 'answer = maxlen = 4'],
+      },
+      details: (<span>Add <code>A</code>: need <code>2 &gt; k</code>, so drop <code>s[2]=B</code> and set <code>l = 3</code>. The loop ends; the best window was <code>"AABA"</code> at length <b>4</b>.</span>),
+    },
+  ]}
+/>
+
+**Example 2:** `s = "AABABBA"`, `k = 1`
+
+| Step | `r` | `s[r]` | `h` (non-zero) | `maxfreq` | Window size `r-l+1` | Replacements needed | `> k`? | `l` | `maxlen` |
+|------|-----|--------|----------------|-----------|---------------------|---------------------|--------|-----|----------|
+| 1 | 0 | A | `{A:1}` | 1 | 1 | 0 | No | 0 | 1 |
+| 2 | 1 | A | `{A:2}` | 2 | 2 | 0 | No | 0 | 2 |
+| 3 | 2 | B | `{A:2, B:1}` | 2 | 3 | 1 | No | 0 | 3 |
+| 4 | 3 | A | `{A:3, B:1}` | 3 | 4 | 1 | No | 0 | **4** |
+| 5 | 4 | B | `{A:3, B:2}` | 3 | 5 | 2 | **Yes** | → 1 | 4 |
+|   |   |   | `{A:2, B:2}` |   | 4 |   |   |     |   |
+| 6 | 5 | B | `{A:2, B:3}` | 3 | 5 | 2 | **Yes** | → 2 | 4 |
+|   |   |   | `{A:1, B:3}` |   | 4 |   |   |     |   |
+| 7 | 6 | A | `{A:2, B:3}` | 3 | 5 | 2 | **Yes** | → 3 | 4 |
+|   |   |   | `{A:2, B:2}` |   | 4 |   |   |     |   |
+
+**Result:** `4` ✅ (substring `"AABA"` — replace the one `B` with `A`)
+
+---
+
+## Test Cases
+
+```js
+console.log(characterReplacement("ABAB", 2));    // 4
+console.log(characterReplacement("AABABBA", 1)); // 4
+console.log(characterReplacement("AAAA", 0));     // 4
+console.log(characterReplacement("ABCD", 2));     // 3
+console.log(characterReplacement("AAAB", 0));     // 3
+console.log(characterReplacement("ABBB", 2));     // 4
+```

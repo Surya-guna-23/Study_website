@@ -1,0 +1,154 @@
+---
+sidebar_position: 4
+title: Reorder List
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Reorder List
+
+> **LeetCode 143** – [Reorder List](https://leetcode.com/problems/reorder-list/) | **Striver (TUF)** – [Reorder List Article](https://takeuforward.org/data-structure/reorder-list/)
+
+## Problem Statement
+
+Given the `head` of a singly linked list:
+
+`L0 → L1 → … → L(n-2) → L(n-1)`
+
+Reorder it to:
+
+`L0 → L(n-1) → L1 → L(n-2) → L2 → L(n-3) → …`
+
+You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `[1,2,3,4]` | `[1,4,2,3]` |
+| 2 | `[1,2,3,4,5]` | `[1,5,2,4,3]` |
+
+### Constraints
+
+- `1 <= Number of nodes <= 5 * 10⁴`
+- `1 <= Node.val <= 1000`
+
+---
+
+## Solution
+
+**Approach:** Push all nodes (except head) onto a stack. Then alternate — pick from the front (`curr.next`) and from the back (stack pop). Stop when we reach the middle.
+
+- **Time Complexity:** $O(n)$ — one pass to build the stack, one pass to reorder.
+- **Space Complexity:** $O(n)$ — the stack holds `n-1` nodes.
+
+```js
+var reorderList = function(head) {
+    if (!head || !head.next) return;
+
+    let stack = [];
+    let temp = head.next;
+
+    // push NODES into stack
+    while (temp !== null) {
+        stack.push(temp);
+        temp = temp.next;
+    }
+
+    let curr = head;
+    let length = stack.length;
+
+    while (length > 0) {
+        let last = stack.pop();
+        length--;
+
+        // stop at middle
+        if (curr === last || curr.next === last) {
+            last.next = null;
+            break;
+        }
+
+        let next = curr.next;
+        curr.next = last;
+        last.next = next;
+        curr = next;
+    }
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Reorder List — [1,2,3,4,5]"
+  steps={[
+    {
+      caption: 'Push all nodes after head onto a stack: [2,3,4,5]. curr = head (1).',
+      viz: { arrays: [{label:'list', values:[1,2,3,4,5], states:{0:'active'}, pointers:[{index:0,label:'curr'}]}], notes:['stack (bottom→top): 2,3,4,5','curr = 1'] },
+      state: ['curr = 1','stack = [2,3,4,5]'],
+      details: (<>We store every node except the head in a stack so we can pull the tail nodes in reverse order.</>),
+    },
+    {
+      caption: 'Pop last = 5. Insert 5 between 1 and 2. curr advances to 2.',
+      viz: { arrays: [{label:'list', values:[1,5,2,3,4], states:{0:'done',1:'match',2:'active'}, pointers:[{index:2,label:'curr'}]}], notes:['inserted 5 after 1','stack: 2,3,4'] },
+      state: ['curr = 2','last = 5','list: 1→5→2→3→4'],
+      details: (<><code>next = curr.next (2)</code>; <code>curr.next = 5</code>; <code>5.next = 2</code>; then <code>curr = 2</code>.</>),
+    },
+    {
+      caption: 'Pop last = 4. Insert 4 between 2 and 3. curr advances to 3.',
+      viz: { arrays: [{label:'list', values:[1,5,2,4,3], states:{0:'done',1:'done',2:'done',3:'match',4:'active'}, pointers:[{index:4,label:'curr'}]}], notes:['inserted 4 after 2','stack: 2,3'] },
+      state: ['curr = 3','last = 4','list: 1→5→2→4→3'],
+      details: (<>Same weave: <code>2.next = 4</code>, <code>4.next = 3</code>, advance <code>curr</code> to <code>3</code>.</>),
+    },
+    {
+      caption: 'Pop last = 3. curr === last → reached middle. Set 3.next = null and break.',
+      viz: { arrays: [{label:'list', values:[1,5,2,4,3], states:{0:'match',1:'match',2:'match',3:'match',4:'match'}, pointers:[{index:4,label:'curr=last'}]}], notes:['middle reached','3.next = null'] },
+      state: ['curr = last = 3','result done'],
+      details: (<>When <code>curr === last</code> (or <code>curr.next === last</code>) we terminate the pointer <code>3.next = null</code> to avoid a loop. Final list <code>[1,5,2,4,3]</code>.</>),
+    },
+  ]}
+/>
+
+**Example 1:** `head = [1, 2, 3, 4]`
+
+**Stack:** `[2, 3, 4]` (all nodes after head)
+
+| Step | `curr` | `last` (pop) | Action | List state |
+|------|--------|-------------|--------|------------|
+| 1 | 1 | 4 | `next = 2`, insert `4` between `1` and `2` | `1→4→2→3` |
+| 2 | 2 | 3 | `curr.next === last` → set `3.next = null`, break | `1→4→2→3` |
+
+**Result:** `[1, 4, 2, 3]` ✅
+
+---
+
+**Example 2:** `head = [1, 2, 3, 4, 5]`
+
+**Stack:** `[2, 3, 4, 5]`
+
+| Step | `curr` | `last` (pop) | Action | List state |
+|------|--------|-------------|--------|------------|
+| 1 | 1 | 5 | Insert `5` between `1` and `2` | `1→5→2→3→4` |
+| 2 | 2 | 4 | Insert `4` between `2` and `3` | `1→5→2→4→3` |
+| 3 | 3 | 3 | `curr === last` → set `3.next = null`, break | `1→5→2→4→3` |
+
+**Result:** `[1, 5, 2, 4, 3]` ✅
+
+---
+
+## Test Cases
+
+```js
+let list1 = toList([1,2,3,4]);
+reorderList(list1);
+console.log(list1); // [1,4,2,3]
+
+let list2 = toList([1,2,3,4,5]);
+reorderList(list2);
+console.log(list2); // [1,5,2,4,3]
+
+let list3 = toList([1]);
+reorderList(list3);
+console.log(list3); // [1]
+```

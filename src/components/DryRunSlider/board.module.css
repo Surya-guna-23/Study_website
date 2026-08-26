@@ -1,0 +1,143 @@
+.board {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1rem;
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(137, 180, 250, 0.06), rgba(166, 227, 161, 0.06));
+  border: 1px dashed var(--ifm-color-emphasis-300);
+}
+
+.arrayRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.arrayLabel {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+  font-weight: 700;
+}
+
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cellWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cell {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-900);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  transition: transform 0.15s ease;
+}
+
+.active {
+  background: #89b4fa;
+  color: #1e1e2e;
+  border-color: #89b4fa;
+  transform: translateY(-3px);
+}
+
+.done {
+  background: #b4befe;
+  color: #1e1e2e;
+  border-color: #b4befe;
+}
+
+.match {
+  background: #a6e3a1;
+  color: #1e1e2e;
+  border-color: #a6e3a1;
+}
+
+.window {
+  background: rgba(249, 226, 175, 0.35);
+  border-color: #f9e2af;
+}
+
+.muted {
+  opacity: 0.45;
+}
+
+.index {
+  margin-top: 3px;
+  font-size: 0.68rem;
+  color: var(--ifm-color-emphasis-600);
+  font-variant-numeric: tabular-nums;
+}
+
+.pointer {
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ifm-color-primary);
+}
+
+.mapBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mapEntries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mapEmpty {
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--ifm-color-emphasis-600);
+}
+
+.mapEntry {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.82rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: var(--ifm-color-emphasis-200);
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.mapEntryHi {
+  background: #a6e3a1;
+  color: #1e1e2e;
+  border-color: #a6e3a1;
+}
+
+.notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.note {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.82rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-800);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}

@@ -1,50 +1,54 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
+import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: '📊 DSA Patterns',
+    to: '/docs/dsa/intro',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Curated LeetCode & Striver (TUF) problems grouped by pattern — Arrays &
+        Hashing, Two Pointers, Sliding Window, Binary Search, Linked List and
+        more, each with clean solutions and step-by-step dry runs.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: '🖼️ Visual Dry Runs',
+    to: '/docs/dsa/arrays-and-hashing/two-sum',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Every problem ships with a diagram that walks through the algorithm one
+        step at a time. Click any diagram to zoom in and follow the logic just
+        like a whiteboard explanation.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: '⚙️ JS Polyfills',
+    to: '/docs/polyfills/intro',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Implement the building blocks of JavaScript from scratch — Promise,
+        Promise.all, Promise.race, cancellable promises and more — to master how
+        the language works under the hood.
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({title, description, to}) {
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
-      </div>
+      <Link to={to} className={styles.featureCard}>
+        <div className="padding-horiz--md padding-vert--md">
+          <Heading as="h3">{title}</Heading>
+          <p>{description}</p>
+          <span className={styles.featureLink}>Explore →</span>
+        </div>
+      </Link>
     </div>
   );
 }

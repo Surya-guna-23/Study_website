@@ -1,0 +1,205 @@
+---
+sidebar_position: 7
+title: Longest Consecutive Sequence
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Longest Consecutive Sequence
+
+> **LeetCode 128** – [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) | **Striver (TUF)** – [Longest Consecutive Sequence Article](https://takeuforward.org/data-structure/longest-consecutive-sequence-in-an-array/)
+
+## Problem Statement
+
+Given an unsorted array of integers `nums`, return the **length of the longest consecutive elements sequence**.
+
+You must write an algorithm that runs in $O(n)$ time.
+
+### Examples
+
+| # | Input | Output | Explanation |
+|---|-------|--------|-------------|
+| 1 | `nums = [100,4,200,1,3,2]` | `4` | The sequence `[1, 2, 3, 4]` has length `4`. |
+| 2 | `nums = [0,3,7,2,5,8,4,6,0,1]` | `9` | The sequence `[0..8]` has length `9`. |
+
+### Constraints
+
+- `0 <= nums.length <= 10⁵`
+- `-10⁹ <= nums[i] <= 10⁹`
+
+---
+
+## Solution
+
+**Approach:** Put all numbers in a `HashSet` for $O(1)$ lookups. A number is the **start of a sequence** only if `num - 1` is **not** in the set. For every such start, walk forward (`num + 1`, `num + 2`, …) counting the length. Because each number is visited at most twice, the total work is linear.
+
+- **Time Complexity:** $O(n)$ — each element is only extended from its sequence start.
+- **Space Complexity:** $O(n)$ — the set stores all elements.
+
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums.length == 0) return 0;
+
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+
+        int longest = 0;
+
+        for (int num : set) {
+            // Only start counting from the beginning of a sequence
+            if (!set.contains(num - 1)) {
+                int current = num;
+                int count = 1;
+
+                while (set.contains(current + 1)) {
+                    current++;
+                    count++;
+                }
+
+                longest = Math.max(longest, count);
+            }
+        }
+
+        return longest;
+    }
+}
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Longest Consecutive Sequence — nums = [100, 4, 200, 1, 3, 2]"
+  steps={[
+    {
+      caption: 'Setup: put every number in a Set for O(1) lookups.',
+      viz: {
+        arrays: [{label: 'nums', values: [100, 4, 200, 1, 3, 2]}],
+        map: {label: 'set', entries: [['100', '✓'], ['4', '✓'], ['200', '✓'], ['1', '✓'], ['3', '✓'], ['2', '✓']]},
+        notes: ['longest = 0'],
+      },
+      state: ['set = {100, 4, 200, 1, 3, 2}', 'longest = 0'],
+      details: (
+        <>
+          The trick: only start counting a run from its <b>smallest</b> number.
+          A number <code>num</code> is a sequence start iff <code>num - 1</code>
+          is <b>not</b> in the set. This guarantees each number is walked at
+          most once, keeping it <code>O(n)</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'num = 100: is 99 in the set? No → start. 101? No. Run length = 1.',
+      viz: {
+        arrays: [{label: 'nums', values: [100, 4, 200, 1, 3, 2], states: {0: 'active'}, pointers: [{index: 0, label: 'num'}]}],
+        map: {label: 'set', entries: [['100', '✓'], ['4', '✓'], ['200', '✓'], ['1', '✓'], ['3', '✓'], ['2', '✓']], highlightKey: '100'},
+        notes: ['99 not in set → start', '101 not in set', 'longest = max(0, 1) = 1'],
+      },
+      state: ['num = 100', 'count = 1', 'longest = 1'],
+      details: (
+        <>
+          <code>99</code> is absent, so <code>100</code> is a start. But{' '}
+          <code>101</code> is also absent, so the run is just{' '}
+          <code>[100]</code>, length <code>1</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'num = 4: is 3 in the set? Yes → 4 is NOT a start, skip.',
+      viz: {
+        arrays: [{label: 'nums', values: [100, 4, 200, 1, 3, 2], states: {0: 'done', 1: 'muted'}, pointers: [{index: 1, label: 'num'}]}],
+        map: {label: 'set', entries: [['100', '✓'], ['4', '✓'], ['200', '✓'], ['1', '✓'], ['3', '✓'], ['2', '✓']]},
+        notes: ['3 in set → 4 is not a start', 'skip'],
+      },
+      state: ['num = 4', 'skip (not a start)', 'longest = 1'],
+      details: (
+        <>
+          Because <code>3</code> exists, <code>4</code> is in the middle of a
+          run, not its start. We skip it — it will be counted when we start from
+          <code>1</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'num = 200: is 199 in the set? No → start. 201? No. Run length = 1.',
+      viz: {
+        arrays: [{label: 'nums', values: [100, 4, 200, 1, 3, 2], states: {0: 'done', 1: 'muted', 2: 'active'}, pointers: [{index: 2, label: 'num'}]}],
+        map: {label: 'set', entries: [['100', '✓'], ['4', '✓'], ['200', '✓'], ['1', '✓'], ['3', '✓'], ['2', '✓']], highlightKey: '200'},
+        notes: ['199 not in set → start', '201 not in set', 'longest stays 1'],
+      },
+      state: ['num = 200', 'count = 1', 'longest = 1'],
+      details: (
+        <>
+          <code>200</code> is an isolated start (no <code>199</code>, no{' '}
+          <code>201</code>), so its run length is <code>1</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'num = 1: is 0 in the set? No → start! Walk 1→2→3→4. Length = 4.',
+      viz: {
+        arrays: [{label: 'nums', values: [100, 4, 200, 1, 3, 2], states: {0: 'done', 1: 'match', 2: 'done', 3: 'match', 4: 'match', 5: 'match'}, pointers: [{index: 3, label: 'num'}]}],
+        map: {label: 'set', entries: [['1', '✓'], ['2', '✓'], ['3', '✓'], ['4', '✓']], highlightKey: '1'},
+        notes: ['0 not in set → start', 'has 2? 3? 4? yes; 5? no', 'longest = max(1, 4) = 4'],
+      },
+      state: ['num = 1', 'walk 1→2→3→4', 'count = 4', 'longest = 4'],
+      details: (
+        <>
+          <code>0</code> is absent, so <code>1</code> starts a run. We walk
+          forward while the next number exists: <code>2</code>, <code>3</code>,{' '}
+          <code>4</code> are all present, then <code>5</code> is missing. That
+          is a run of length <code>4</code>, updating <code>longest</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'num = 3 and num = 2: both have predecessors in the set → skip. Answer = 4.',
+      viz: {
+        arrays: [{label: 'nums', values: [100, 4, 200, 1, 3, 2], states: {0: 'done', 1: 'muted', 2: 'done', 3: 'match', 4: 'muted', 5: 'muted'}}],
+        map: {label: 'set', entries: [['1', '✓'], ['2', '✓'], ['3', '✓'], ['4', '✓']]},
+        notes: ['2 in set → 3 not a start', '1 in set → 2 not a start', 'longest = 4'],
+      },
+      state: ['num = 3 skip', 'num = 2 skip', 'return longest = 4'],
+      details: (
+        <>
+          <code>3</code> has <code>2</code> before it and <code>2</code> has{' '}
+          <code>1</code> before it, so neither is a start — both skipped. No run
+          beats <code>4</code>, so the answer is <code>4</code>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+Let's walk through **Example 1**: `nums = [100, 4, 200, 1, 3, 2]`
+
+**Set:** `{100, 4, 200, 1, 3, 2}`
+
+| `num` | `set.contains(num - 1)?` | Is sequence start? | Walk forward | `count` | `longest` |
+|-------|---------------------------|--------------------|--------------|---------|-----------|
+| 100 | `99` → No | ✅ | `101`? No | 1 | 1 |
+| 4 | `3` → **Yes** | ❌ skip | — | — | 1 |
+| 200 | `199` → No | ✅ | `201`? No | 1 | 1 |
+| 1 | `0` → No | ✅ | `2,3,4` present, `5`? No | 4 | **4** |
+| 3 | `2` → **Yes** | ❌ skip | — | — | 4 |
+| 2 | `1` → **Yes** | ❌ skip | — | — | 4 |
+
+Only `1` triggers a full walk (`1 → 2 → 3 → 4`), giving the longest run of `4`.
+
+**Result:** `4` ✅
+
+---
+
+## Test Cases
+
+```java
+System.out.println(new Solution().longestConsecutive(new int[]{100, 4, 200, 1, 3, 2}));          // 4
+System.out.println(new Solution().longestConsecutive(new int[]{0, 3, 7, 2, 5, 8, 4, 6, 0, 1}));  // 9
+System.out.println(new Solution().longestConsecutive(new int[]{}));                               // 0
+System.out.println(new Solution().longestConsecutive(new int[]{1}));                              // 1
+System.out.println(new Solution().longestConsecutive(new int[]{1, 2, 0, 1}));                     // 3
+```

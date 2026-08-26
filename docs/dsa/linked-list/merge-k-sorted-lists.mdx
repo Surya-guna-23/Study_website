@@ -1,0 +1,179 @@
+---
+sidebar_position: 9
+title: Merge K Sorted Lists
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Merge K Sorted Lists
+
+> **LeetCode 23** – [Merge K Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) | **Striver (TUF)** – [Merge K Sorted Lists Article](https://takeuforward.org/data-structure/merge-k-sorted-lists/)
+
+## Problem Statement
+
+You are given an array of `k` linked-lists `lists`, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `lists = [[1,4,5],[1,3,4],[2,6]]` | `[1,1,2,3,4,4,5,6]` |
+| 2 | `lists = []` | `[]` |
+| 3 | `lists = [[]]` | `[]` |
+
+### Constraints
+
+- `k == lists.length`
+- `0 <= k <= 10⁴`
+- `0 <= lists[i].length <= 500`
+- `-10⁴ <= lists[i][j] <= 10⁴`
+- Each `lists[i]` is sorted in ascending order.
+- Total nodes across all lists ≤ `10⁴`.
+
+---
+
+## Solution
+
+**Approach:** Use a **min-heap (Priority Queue)**. Push the head of each list into the heap. Repeatedly extract the minimum node, append it to the result, and push its `next` node (if any) back into the heap.
+
+- **Time Complexity:** $O(N \log k)$ — where `N` is the total number of nodes and `k` is the number of lists. Each heap operation is $O(\log k)$.
+- **Space Complexity:** $O(k)$ — the heap holds at most `k` nodes.
+
+```js
+var mergeKLists = function(lists) {
+    let pq = new PriorityQueue((a, b) => a.val - b.val);
+
+    for (let i = 0; i < lists.length; i++) {
+        if (lists[i]) {
+            pq.enqueue(lists[i]); // enqueue node directly
+        }
+    }
+
+    let dummy = new ListNode(-1);
+    let temp = dummy;
+
+    while (!pq.isEmpty()) {
+        const node = pq.dequeue(); // node itself
+
+        if (node.next) {
+            pq.enqueue(node.next);
+        }
+
+        temp.next = node;
+        temp = temp.next;
+    }
+
+    return dummy.next;
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Merge K Sorted Lists — [[1,4,5],[1,3,4],[2,6]]"
+  steps={[
+    {
+      caption: 'Push each list head into the min-heap: 1, 1, 2.',
+      viz: { arrays: [
+        {label:'L0', values:[1,4,5], states:{0:'active'}, pointers:[{index:0,label:'h0'}]},
+        {label:'L1', values:[1,3,4], states:{0:'active'}, pointers:[{index:0,label:'h1'}]},
+        {label:'L2', values:[2,6], states:{0:'active'}, pointers:[{index:0,label:'h2'}]},
+        {label:'result', values:[], states:{}, pointers:[]},
+      ], notes:['heap: [1,1,2]','result: empty'] },
+      state: ['heap = [1,1,2]'],
+      details: (<>A min-heap keyed on <code>node.val</code> always exposes the global minimum among the current list heads in O(log k).</>),
+    },
+    {
+      caption: 'Pop min 1 (L0). Push its next (4). Append to result.',
+      viz: { arrays: [
+        {label:'L0', values:[1,4,5], states:{0:'done',1:'active'}, pointers:[{index:1,label:'h0'}]},
+        {label:'L1', values:[1,3,4], states:{0:'active'}, pointers:[{index:0,label:'h1'}]},
+        {label:'L2', values:[2,6], states:{0:'active'}, pointers:[{index:0,label:'h2'}]},
+        {label:'result', values:[1], states:{0:'match'}, pointers:[]},
+      ], notes:['heap: [1,2,4]','result: 1'] },
+      state: ['popped = 1 (L0)','heap = [1,2,4]'],
+      details: (<>Dequeue the minimum, enqueue its <code>next</code> (<code>4</code>), and link it into the output.</>),
+    },
+    {
+      caption: 'Pop min 1 (L1). Push next (3). Append.',
+      viz: { arrays: [
+        {label:'L0', values:[1,4,5], states:{0:'done',1:'active'}, pointers:[{index:1,label:'h0'}]},
+        {label:'L1', values:[1,3,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'h1'}]},
+        {label:'L2', values:[2,6], states:{0:'active'}, pointers:[{index:0,label:'h2'}]},
+        {label:'result', values:[1,1], states:{0:'match',1:'match'}, pointers:[]},
+      ], notes:['heap: [2,3,4]','result: 1 → 1'] },
+      state: ['popped = 1 (L1)','heap = [2,3,4]'],
+      details: (<>The other <code>1</code> comes out next; push <code>3</code>.</>),
+    },
+    {
+      caption: 'Pop min 2 (L2). Push next (6). Append.',
+      viz: { arrays: [
+        {label:'L1', values:[1,3,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'h1'}]},
+        {label:'L2', values:[2,6], states:{0:'done',1:'active'}, pointers:[{index:1,label:'h2'}]},
+        {label:'result', values:[1,1,2], states:{0:'match',1:'match',2:'match'}, pointers:[]},
+      ], notes:['heap: [3,4,6]','result: 1 → 1 → 2'] },
+      state: ['popped = 2 (L2)','heap = [3,4,6]'],
+      details: (<><code>2</code> is now the smallest; push its next <code>6</code>.</>),
+    },
+    {
+      caption: 'Pop 3 (L1) → push 4. result: 1,1,2,3.',
+      viz: { arrays: [
+        {label:'L1', values:[1,3,4], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'h1'}]},
+        {label:'result', values:[1,1,2,3], states:{0:'match',1:'match',2:'match',3:'match'}, pointers:[]},
+      ], notes:['heap: [4,4,6]','result: 1 → 1 → 2 → 3'] },
+      state: ['popped = 3 (L1)','heap = [4,4,6]'],
+      details: (<>Pop <code>3</code>, push L1's next <code>4</code>.</>),
+    },
+    {
+      caption: 'Pop 4 (L0) → push 5. Pop 4 (L1) → no next. result: 1,1,2,3,4,4.',
+      viz: { arrays: [
+        {label:'L0', values:[1,4,5], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'h0'}]},
+        {label:'result', values:[1,1,2,3,4,4], states:{0:'match',1:'match',2:'match',3:'match',4:'match',5:'match'}, pointers:[]},
+      ], notes:['heap: [5,6]','result: …1 → 4 → 4'] },
+      state: ['heap = [5,6]'],
+      details: (<>Both <code>4</code>s come out; L0 pushes <code>5</code>, L1 has no next.</>),
+    },
+    {
+      caption: 'Pop 5 (L0, no next), pop 6 (L2, no next). Heap empty → done.',
+      viz: { arrays: [
+        {label:'result', values:[1,1,2,3,4,4,5,6], states:{0:'match',1:'match',2:'match',3:'match',4:'match',5:'match',6:'match',7:'match'}, pointers:[{index:0,label:'head'}]},
+      ], notes:['heap: []','result: 1,1,2,3,4,4,5,6'] },
+      state: ['result = [1,1,2,3,4,4,5,6]'],
+      details: (<>When the heap drains, the output list is fully sorted. Total work is O(N log k).</>),
+    },
+  ]}
+/>
+
+**Example 1:** `lists = [[1,4,5], [1,3,4], [2,6]]`
+
+**Initial heap** (min at top): push heads `1`, `1`, `2`
+
+| Step | Dequeue (min) | Heap (after enqueue next) | Result so far |
+|------|--------------|--------------------------|---------------|
+| 1 | **1** (list 0) | `[1, 2, 4]` (push `4`) | `1` |
+| 2 | **1** (list 1) | `[2, 4, 3]` (push `3`) | `1→1` |
+| 3 | **2** (list 2) | `[3, 4, 6]` (push `6`) | `1→1→2` |
+| 4 | **3** (list 1) | `[4, 6, 4]` (push `4`) | `1→1→2→3` |
+| 5 | **4** (list 0) | `[4, 6, 5]` (push `5`) | `1→1→2→3→4` |
+| 6 | **4** (list 1) | `[5, 6]` (no next) | `1→1→2→3→4→4` |
+| 7 | **5** (list 0) | `[6]` (no next) | `1→1→2→3→4→4→5` |
+| 8 | **6** (list 2) | `[]` (no next) | `1→1→2→3→4→4→5→6` |
+
+**Result:** `[1, 1, 2, 3, 4, 4, 5, 6]` ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(mergeKLists([toList([1,4,5]), toList([1,3,4]), toList([2,6])]));
+// [1,1,2,3,4,4,5,6]
+
+console.log(mergeKLists([]));    // null
+console.log(mergeKLists([[]]));  // null
+
+console.log(mergeKLists([toList([1]), toList([0])]));
+// [0,1]
+```

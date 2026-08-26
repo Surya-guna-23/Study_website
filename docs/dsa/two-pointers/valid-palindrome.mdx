@@ -1,0 +1,163 @@
+---
+sidebar_position: 1
+title: Valid Palindrome
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Valid Palindrome
+
+> **LeetCode 125** – [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) | **Striver (TUF)** – [Valid Palindrome Article](https://takeuforward.org/data-structure/check-if-the-given-string-is-palindrome-or-not/)
+
+## Problem Statement
+
+A phrase is a **palindrome** if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
+
+Given a string `s`, return `true` if it is a palindrome, or `false` otherwise.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `s = "A man, a plan, a canal: Panama"` | `true` |
+| 2 | `s = "race a car"` | `false` |
+| 3 | `s = " "` | `true` |
+
+### Constraints
+
+- `1 <= s.length <= 2 * 10⁵`
+- `s` consists only of printable ASCII characters.
+
+---
+
+## Solution
+
+**Approach:** First, filter out non-alphanumeric characters and convert to lowercase. Then use two pointers — one at the start (`i`) and one at the end (`j`) — moving inward and comparing characters.
+
+- **Time Complexity:** $O(n)$ — one pass to clean, one pass to compare.
+- **Space Complexity:** $O(n)$ — the cleaned string.
+
+```js
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isPalindrome = function(s) {
+   let str=""
+   for(let ch of s)
+   {
+    ch=ch.toLowerCase()
+    if((ch>="a"&&ch<="z")||(ch>="0"&&ch<="9"))
+    {
+        str+=ch
+    }}
+    let i=0;
+    let j=str.length-1
+    while(i<j)
+    {
+        if(str[i]===str[j])
+        {
+            i++
+            j--
+        }
+        else{
+            return false
+        }
+        
+    }
+    return true
+   
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Valid Palindrome — s = "A man, a plan, a canal: Panama"'
+  steps={[
+    {
+      caption: 'Clean the string: keep only alphanumerics, lowercase them.',
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{}, pointers:[{index:0,label:'L'},{index:20,label:'R'}]}], notes:['"A man, a plan, a canal: Panama" → "amanaplanacanalpanama"'] },
+      state: ['len = 21','L = 0','R = 20'],
+      details: (<>We strip out spaces and punctuation and convert to lowercase, leaving <code>amanaplanacanalpanama</code>. Then place <b>L</b> at the start and <b>R</b> at the end and walk them inward, comparing characters.</>),
+    },
+    {
+      caption: "Compare str[L]='a' with str[R]='a' → match, move both inward.",
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'active',20:'active'}, pointers:[{index:0,label:'L'},{index:20,label:'R'}]}], notes:["str[0]='a' == str[20]='a' ✓"] },
+      state: ['L = 0','R = 20','match ✓'],
+      details: (<>Both ends are <code>a</code>. They match, so we do <code>L++</code> and <code>R--</code>.</>),
+    },
+    {
+      caption: "Compare str[L]='m' with str[R]='m' → match.",
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'done',20:'done',1:'active',19:'active'}, pointers:[{index:1,label:'L'},{index:19,label:'R'}]}], notes:["str[1]='m' == str[19]='m' ✓"] },
+      state: ['L = 1','R = 19','match ✓'],
+      details: (<>Both are <code>m</code>. Match again → move inward.</>),
+    },
+    {
+      caption: "Compare str[L]='a' with str[R]='a' → match.",
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'done',20:'done',1:'done',19:'done',2:'active',18:'active'}, pointers:[{index:2,label:'L'},{index:18,label:'R'}]}], notes:["str[2]='a' == str[18]='a' ✓"] },
+      state: ['L = 2','R = 18','match ✓'],
+      details: (<>Characters <code>a</code> and <code>a</code> match.</>),
+    },
+    {
+      caption: "Compare str[L]='n' with str[R]='n' → match.",
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'done',1:'done',2:'done',18:'done',19:'done',20:'done',3:'active',17:'active'}, pointers:[{index:3,label:'L'},{index:17,label:'R'}]}], notes:["str[3]='n' == str[17]='n' ✓"] },
+      state: ['L = 3','R = 17','match ✓'],
+      details: (<>Characters <code>n</code> and <code>n</code> match.</>),
+    },
+    {
+      caption: 'Continue inward — every pair keeps matching (a/a, p/p, l/l, a/a …).',
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'done',1:'done',2:'done',3:'done',17:'done',18:'done',19:'done',20:'done',4:'active',16:'active'}, pointers:[{index:4,label:'L'},{index:16,label:'R'}]}], notes:['all comparisons so far ✓'] },
+      state: ['L = 4','R = 16','match ✓'],
+      details: (<>The pointers keep marching inward: <code>a/a</code>, <code>p/p</code>, <code>l/l</code>, <code>a/a</code> … all matching.</>),
+    },
+    {
+      caption: 'Pointers meet in the middle at index 10 → L < R is false, exit loop.',
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'done',1:'done',2:'done',3:'done',4:'done',5:'done',6:'done',7:'done',8:'done',9:'done',11:'done',12:'done',13:'done',14:'done',15:'done',16:'done',17:'done',18:'done',19:'done',20:'done',10:'match'}, pointers:[{index:10,label:'L R'}]}], notes:['L (10) < R (10) is false → stop'] },
+      state: ['L = 10','R = 10','done'],
+      details: (<>The pointers cross at the center character <code>c</code>. Since <code>L &lt; R</code> is now false, the loop ends. Every comparison matched, so the string is a palindrome.</>),
+    },
+    {
+      caption: 'All characters matched → return true.',
+      viz: { arrays: [{label:'clean', values:['a','m','a','n','a','p','l','a','n','a','c','a','n','a','l','p','a','n','a','m','a'], states:{0:'match',1:'match',2:'match',3:'match',4:'match',5:'match',6:'match',7:'match',8:'match',9:'match',10:'match',11:'match',12:'match',13:'match',14:'match',15:'match',16:'match',17:'match',18:'match',19:'match',20:'match'}, pointers:[]}], notes:['return true ✓'] },
+      state: ['result = true'],
+      details: (<>No mismatch was ever found, so <code>isPalindrome</code> returns <b>true</b>.</>),
+    },
+  ]}
+/>
+
+**Example 1:** `s = "A man, a plan, a canal: Panama"`
+
+**Step 1 — Clean string:**
+
+`"A man, a plan, a canal: Panama"` → `"amanaplanacanalpanama"`
+
+**Step 2 — Two pointer comparison:**
+
+| Step | `i` | `j` | `str[i]` | `str[j]` | Match? | Action |
+|------|-----|-----|----------|----------|--------|--------|
+| 1 | 0 | 20 | `a` | `a` | ✅ | `i++`, `j--` |
+| 2 | 1 | 19 | `m` | `m` | ✅ | `i++`, `j--` |
+| 3 | 2 | 18 | `a` | `a` | ✅ | `i++`, `j--` |
+| 4 | 3 | 17 | `n` | `n` | ✅ | `i++`, `j--` |
+| 5 | 4 | 16 | `a` | `a` | ✅ | `i++`, `j--` |
+| ... | ... | ... | ... | ... | ✅ | ... |
+| 10 | 9 | 11 | `a` | `a` | ✅ | `i++`, `j--` |
+| 11 | 10 | 10 | `c` | `c` | — | `i < j` is false → exit |
+
+All characters matched → **Return `true`** ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(isPalindrome("A man, a plan, a canal: Panama")); // true
+console.log(isPalindrome("race a car"));                     // false
+console.log(isPalindrome(" "));                              // true
+console.log(isPalindrome("0P"));                             // false
+console.log(isPalindrome("a"));                              // true
+console.log(isPalindrome("12321"));                          // true
+```

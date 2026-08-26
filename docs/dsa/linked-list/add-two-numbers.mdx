@@ -1,0 +1,168 @@
+---
+sidebar_position: 6
+title: Add Two Numbers
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Add Two Numbers
+
+> **LeetCode 2** – [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | **Striver (TUF)** – [Add Two Numbers Article](https://takeuforward.org/data-structure/add-two-numbers-represented-as-linked-lists/)
+
+## Problem Statement
+
+You are given two **non-empty** linked lists representing two non-negative integers. The digits are stored in **reverse order**, and each node contains a single digit. Add the two numbers and return the sum as a linked list.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `l1 = [2,4,3]`, `l2 = [5,6,4]` | `[7,0,8]` (342 + 465 = 807) |
+| 2 | `l1 = [0]`, `l2 = [0]` | `[0]` |
+| 3 | `l1 = [9,9,9,9,9,9,9]`, `l2 = [9,9,9,9]` | `[8,9,9,9,0,0,0,1]` |
+
+### Constraints
+
+- `1 <= Number of nodes <= 100`
+- `0 <= Node.val <= 9`
+- Numbers do not contain leading zeros (except `0` itself).
+
+---
+
+## Solution
+
+**Approach:** Traverse both lists simultaneously, adding corresponding digits along with the carry. Create a new node for each digit of the result. Handle carry after the loop ends.
+
+- **Time Complexity:** $O(\max(n, m))$ — process the longer list fully.
+- **Space Complexity:** $O(\max(n, m))$ — the result list.
+
+```js
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var addTwoNumbers = function(l1, l2) {
+    let dummynode = new ListNode(-1)
+    let t1=l1;
+    let t2=l2
+    let sum,carry=0
+    let curr = dummynode
+    while(t1!=null||t2!=null)
+    {
+        sum=carry
+        if(t1)sum+=t1.val
+        if(t2)sum+=t2.val
+
+        let node = new ListNode(sum%10)
+        carry=Math.floor(sum/10)
+        curr.next=node
+        curr=curr.next
+
+        if(t1) t1=t1.next
+        if(t2) t2=t2.next
+    }
+    if(carry)
+    {
+        let node= new ListNode(carry)
+        curr.next = node
+    }
+    return dummynode.next
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Add Two Numbers — 342 + 465 = 807"
+  steps={[
+    {
+      caption: 'l1=[2,4,3] → 342, l2=[5,6,4] → 465 (digits stored reversed). carry=0.',
+      viz: { arrays: [
+        {label:'l1', values:[2,4,3], states:{0:'active'}, pointers:[{index:0,label:'t1'}]},
+        {label:'l2', values:[5,6,4], states:{0:'active'}, pointers:[{index:0,label:'t2'}]},
+        {label:'result', values:[], states:{}, pointers:[]},
+      ], notes:['carry = 0','least-significant digit first'] },
+      state: ['t1 = 2','t2 = 5','carry = 0'],
+      details: (<>Because digits are reversed, index 0 is the ones place — we can add left-to-right like grade-school addition.</>),
+    },
+    {
+      caption: 'Digit 1: 2 + 5 + 0 = 7. Write 7, carry = 0.',
+      viz: { arrays: [
+        {label:'l1', values:[2,4,3], states:{0:'done',1:'active'}, pointers:[{index:1,label:'t1'}]},
+        {label:'l2', values:[5,6,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'t2'}]},
+        {label:'result', values:[7], states:{0:'match'}, pointers:[{index:0,label:'curr'}]},
+      ], notes:['sum = 7','carry = 0'] },
+      state: ['digit = 7','carry = 0'],
+      details: (<><code>sum = 2 + 5 = 7</code>; new node <code>7 % 10 = 7</code>; <code>carry = ⌊7/10⌋ = 0</code>.</>),
+    },
+    {
+      caption: 'Digit 2: 4 + 6 + 0 = 10. Write 0, carry = 1.',
+      viz: { arrays: [
+        {label:'l1', values:[2,4,3], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'t1'}]},
+        {label:'l2', values:[5,6,4], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'t2'}]},
+        {label:'result', values:[7,0], states:{0:'match',1:'match'}, pointers:[{index:1,label:'curr'}]},
+      ], notes:['sum = 10','carry = 1'] },
+      state: ['digit = 0','carry = 1'],
+      details: (<><code>sum = 4 + 6 = 10</code>; write <code>10 % 10 = 0</code>; <code>carry = 1</code> for the next place.</>),
+    },
+    {
+      caption: 'Digit 3: 3 + 4 + carry(1) = 8. Write 8, carry = 0.',
+      viz: { arrays: [
+        {label:'l1', values:[2,4,3], states:{0:'done',1:'done',2:'done'}, pointers:[]},
+        {label:'l2', values:[5,6,4], states:{0:'done',1:'done',2:'done'}, pointers:[]},
+        {label:'result', values:[7,0,8], states:{0:'match',1:'match',2:'match'}, pointers:[{index:2,label:'curr'}]},
+      ], notes:['sum = 8','carry = 0','both lists exhausted'] },
+      state: ['digit = 8','carry = 0'],
+      details: (<><code>sum = 3 + 4 + 1 = 8</code>; write <code>8</code>; <code>carry = 0</code>. Both pointers become null.</>),
+    },
+    {
+      caption: 'No remaining carry → done. Result = [7,0,8] → 807.',
+      viz: { arrays: [
+        {label:'result', values:[7,0,8], states:{0:'match',1:'match',2:'match'}, pointers:[{index:0,label:'head'}]},
+      ], notes:['reversed result 807','carry = 0 → no extra node'] },
+      state: ['result = [7,0,8]'],
+      details: (<>Since <code>carry === 0</code> after the loop, no extra node is appended. Reading reversed gives <code>807</code>.</>),
+    },
+  ]}
+/>
+
+**Example 1:** `l1 = [2,4,3]`, `l2 = [5,6,4]` → represents `342 + 465 = 807`
+
+| Step | `t1.val` | `t2.val` | `carry` (in) | `sum` | New digit (`sum%10`) | `carry` (out) |
+|------|----------|----------|-------------|-------|---------------------|---------------|
+| 1 | 2 | 5 | 0 | 7 | **7** | 0 |
+| 2 | 4 | 6 | 0 | 10 | **0** | 1 |
+| 3 | 3 | 4 | 1 | 8 | **8** | 0 |
+
+No remaining carry → **Result:** `[7, 0, 8]` ✅
+
+---
+
+**Example 3:** `l1 = [9,9,9,9,9,9,9]`, `l2 = [9,9,9,9]`
+
+| Step | `t1.val` | `t2.val` | `carry` (in) | `sum` | Digit | `carry` (out) |
+|------|----------|----------|-------------|-------|-------|---------------|
+| 1 | 9 | 9 | 0 | 18 | **8** | 1 |
+| 2 | 9 | 9 | 1 | 19 | **9** | 1 |
+| 3 | 9 | 9 | 1 | 19 | **9** | 1 |
+| 4 | 9 | 9 | 1 | 19 | **9** | 1 |
+| 5 | 9 | — | 1 | 10 | **0** | 1 |
+| 6 | 9 | — | 1 | 10 | **0** | 1 |
+| 7 | 9 | — | 1 | 10 | **0** | 1 |
+| Post | — | — | 1 | — | **1** | — |
+
+**Result:** `[8, 9, 9, 9, 0, 0, 0, 1]` ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(addTwoNumbers(toList([2,4,3]), toList([5,6,4])));       // [7,0,8]
+console.log(addTwoNumbers(toList([0]), toList([0])));                 // [0]
+console.log(addTwoNumbers(toList([9,9,9,9,9,9,9]), toList([9,9,9,9]))); // [8,9,9,9,0,0,0,1]
+console.log(addTwoNumbers(toList([5]), toList([5])));                 // [0,1]
+```

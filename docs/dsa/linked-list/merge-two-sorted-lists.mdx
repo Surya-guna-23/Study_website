@@ -1,0 +1,170 @@
+---
+sidebar_position: 2
+title: Merge Two Sorted Lists
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Merge Two Sorted Lists
+
+> **LeetCode 21** – [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/) | **Striver (TUF)** – [Merge Two Sorted Lists Article](https://takeuforward.org/data-structure/merge-two-sorted-linked-lists/)
+
+## Problem Statement
+
+You are given the heads of two sorted linked lists `list1` and `list2`. Merge the two lists into one **sorted** list by splicing together the nodes of the first two lists.
+
+Return the head of the merged linked list.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `list1 = [1,2,4]`, `list2 = [1,3,4]` | `[1,1,2,3,4,4]` |
+| 2 | `list1 = []`, `list2 = []` | `[]` |
+| 3 | `list1 = []`, `list2 = [0]` | `[0]` |
+
+### Constraints
+
+- `0 <= Number of nodes in both lists <= 50`
+- `-100 <= Node.val <= 100`
+- Both lists are sorted in **non-decreasing** order.
+
+---
+
+## Solution
+
+**Approach:** Use a dummy node and a pointer `temp`. Compare values from both lists and attach the smaller node. When one list is exhausted, append the remainder of the other.
+
+- **Time Complexity:** $O(n + m)$ — where `n` and `m` are the lengths of the two lists.
+- **Space Complexity:** $O(1)$ — only rearranging existing nodes.
+
+```js
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+    let temp = new ListNode(0)
+    let dummy=temp
+    while(list1 && list2){
+        if(list1.val <list2.val)
+        {
+            temp.next=list1
+            list1=list1.next
+        }
+        else{
+            temp.next=list2
+            list2=list2.next
+        }
+        temp=temp.next
+    }
+    if(list1){temp.next=list1}
+    if(list2){temp.next=list2}
+    return dummy.next
+};
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Merge Two Sorted Lists — l1=[1,2,4], l2=[1,3,4]"
+  steps={[
+    {
+      caption: 'Initialize dummy node; temp points at dummy. Compare heads of l1 and l2.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'active'}, pointers:[{index:0,label:'l1'}]},
+        {label:'l2', values:[1,3,4], states:{0:'active'}, pointers:[{index:0,label:'l2'}]},
+        {label:'merged', values:[], states:{}, pointers:[]},
+      ], notes:['dummy → null','compare 1 vs 1'] },
+      state: ['l1 = 1','l2 = 1','merged: empty'],
+      details: (<>We use a <code>dummy</code> head so appending is uniform. <code>temp</code> always points to the last merged node.</>),
+    },
+    {
+      caption: '1 < 1? No → attach l2(1). Advance l2.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'active'}, pointers:[{index:0,label:'l1'}]},
+        {label:'l2', values:[1,3,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'l2'}]},
+        {label:'merged', values:[1], states:{0:'match'}, pointers:[{index:0,label:'temp'}]},
+      ], notes:['attached l2(1)','merged: 1'] },
+      state: ['l1 = 1','l2 = 3','merged: 1'],
+      details: (<>On ties (<code>1 &lt; 1</code> is false) we take from <code>l2</code>. Result stays a valid stable merge.</>),
+    },
+    {
+      caption: '1 < 3? Yes → attach l1(1). Advance l1.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'l1'}]},
+        {label:'l2', values:[1,3,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'l2'}]},
+        {label:'merged', values:[1,1], states:{0:'match',1:'match'}, pointers:[{index:1,label:'temp'}]},
+      ], notes:['attached l1(1)','merged: 1 → 1'] },
+      state: ['l1 = 2','l2 = 3','merged: 1 → 1'],
+      details: (<><code>1 &lt; 3</code> so we splice <code>l1</code>'s node in and move <code>l1</code> forward.</>),
+    },
+    {
+      caption: '2 < 3? Yes → attach l1(2). Advance l1.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'l1'}]},
+        {label:'l2', values:[1,3,4], states:{0:'done',1:'active'}, pointers:[{index:1,label:'l2'}]},
+        {label:'merged', values:[1,1,2], states:{0:'match',1:'match',2:'match'}, pointers:[{index:2,label:'temp'}]},
+      ], notes:['attached l1(2)','merged: 1 → 1 → 2'] },
+      state: ['l1 = 4','l2 = 3','merged: 1 → 1 → 2'],
+      details: (<><code>2 &lt; 3</code> — take the smaller from <code>l1</code>.</>),
+    },
+    {
+      caption: '4 < 3? No → attach l2(3). Advance l2.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'l1'}]},
+        {label:'l2', values:[1,3,4], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'l2'}]},
+        {label:'merged', values:[1,1,2,3], states:{0:'match',1:'match',2:'match',3:'match'}, pointers:[{index:3,label:'temp'}]},
+      ], notes:['attached l2(3)','merged: 1 → 1 → 2 → 3'] },
+      state: ['l1 = 4','l2 = 4','merged: 1 → 1 → 2 → 3'],
+      details: (<>Now <code>l2</code> supplies the smaller value <code>3</code>.</>),
+    },
+    {
+      caption: '4 < 4? No → attach l2(4). Advance l2 → null.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'done',1:'done',2:'active'}, pointers:[{index:2,label:'l1'}]},
+        {label:'l2', values:[1,3,4], states:{0:'done',1:'done',2:'done'}, pointers:[]},
+        {label:'merged', values:[1,1,2,3,4], states:{0:'match',1:'match',2:'match',3:'match',4:'match'}, pointers:[{index:4,label:'temp'}]},
+      ], notes:['attached l2(4)','l2 exhausted (null)'] },
+      state: ['l1 = 4','l2 = null','merged: 1 → 1 → 2 → 3 → 4'],
+      details: (<>Tie again → take <code>l2</code>. Now <code>l2</code> is <code>null</code>, loop ends.</>),
+    },
+    {
+      caption: 'l2 null → append remaining l1 (node 4). Done.',
+      viz: { arrays: [
+        {label:'l1', values:[1,2,4], states:{0:'done',1:'done',2:'done'}, pointers:[]},
+        {label:'l2', values:[1,3,4], states:{0:'done',1:'done',2:'done'}, pointers:[]},
+        {label:'merged', values:[1,1,2,3,4,4], states:{0:'match',1:'match',2:'match',3:'match',4:'match',5:'match'}, pointers:[{index:5,label:'temp'}]},
+      ], notes:['appended rest of l1','merged: 1 → 1 → 2 → 3 → 4 → 4'] },
+      state: ['result = [1,1,2,3,4,4]'],
+      details: (<>When one list is empty we simply link the other list's remainder — already sorted — in one step.</>),
+    },
+  ]}
+/>
+
+**Example 1:** `list1 = [1,2,4]`, `list2 = [1,3,4]`
+
+| Step | `list1` val | `list2` val | Compare | Attach | Merged so far |
+|------|------------|------------|---------|--------|---------------|
+| 1 | 1 | 1 | `1 < 1`? No | `list2(1)` | `1` |
+| 2 | 1 | 3 | `1 < 3`? Yes | `list1(1)` | `1→1` |
+| 3 | 2 | 3 | `2 < 3`? Yes | `list1(2)` | `1→1→2` |
+| 4 | 4 | 3 | `4 < 3`? No | `list2(3)` | `1→1→2→3` |
+| 5 | 4 | 4 | `4 < 4`? No | `list2(4)` | `1→1→2→3→4` |
+| 6 | 4 | `null` | — | Append rest of `list1` | `1→1→2→3→4→4` |
+
+**Result:** `[1, 1, 2, 3, 4, 4]` ✅
+
+---
+
+## Test Cases
+
+```js
+console.log(mergeTwoLists(toList([1,2,4]), toList([1,3,4]))); // [1,1,2,3,4,4]
+console.log(mergeTwoLists(toList([]), toList([])));             // null
+console.log(mergeTwoLists(toList([]), toList([0])));            // [0]
+console.log(mergeTwoLists(toList([5]), toList([1,2,4])));      // [1,2,4,5]
+```

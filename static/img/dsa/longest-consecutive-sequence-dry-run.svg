@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 470" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bglc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d44;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="720" height="470" rx="12" fill="url(#bglc)"/>
+  <text x="360" y="35" text-anchor="middle" fill="#cdd6f4" font-size="16" font-weight="bold">Longest Consecutive — Dry Run: nums = [100, 4, 200, 1, 3, 2]</text>
+
+  <!-- Set -->
+  <text x="30" y="68" fill="#89b4fa" font-size="13" font-weight="bold">HashSet:</text>
+  <g transform="translate(30, 78)">
+    <rect x="0" y="0" width="60" height="40" rx="6" fill="#313244" stroke="#585b70"/><text x="30" y="26" text-anchor="middle" fill="#cdd6f4" font-size="15">100</text>
+    <rect x="70" y="0" width="60" height="40" rx="6" fill="#313244" stroke="#585b70"/><text x="100" y="26" text-anchor="middle" fill="#cdd6f4" font-size="15">200</text>
+    <rect x="140" y="0" width="50" height="40" rx="6" fill="#a6e3a1"/><text x="165" y="26" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">1</text>
+    <rect x="200" y="0" width="50" height="40" rx="6" fill="#a6e3a1"/><text x="225" y="26" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">2</text>
+    <rect x="260" y="0" width="50" height="40" rx="6" fill="#a6e3a1"/><text x="285" y="26" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">3</text>
+    <rect x="320" y="0" width="50" height="40" rx="6" fill="#a6e3a1"/><text x="345" y="26" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">4</text>
+    <text x="380" y="26" fill="#a6e3a1" font-size="12">← consecutive run</text>
+  </g>
+
+  <!-- Rule -->
+  <g transform="translate(30, 145)">
+    <rect x="0" y="0" width="660" height="45" rx="8" fill="#313244" stroke="#45475a"/>
+    <text x="15" y="20" fill="#89b4fa" font-size="12" font-weight="bold">Rule: a number is a sequence START only if (num - 1) is NOT in the set.</text>
+    <text x="15" y="38" fill="#a6adc8" font-size="12">From each start, walk forward while (current + 1) exists, counting length.</text>
+  </g>
+
+  <!-- Skips -->
+  <g transform="translate(30, 205)">
+    <rect x="0" y="0" width="320" height="120" rx="8" fill="#3a2f1e" stroke="#f9e2af"/>
+    <text x="15" y="22" fill="#f9e2af" font-size="13" font-weight="bold">Not a start (skip):</text>
+    <text x="15" y="44" fill="#a6adc8" font-size="12">100 → has 99? No  → start, len 1</text>
+    <text x="15" y="62" fill="#a6adc8" font-size="12">200 → has 199? No → start, len 1</text>
+    <text x="15" y="80" fill="#a6adc8" font-size="12">4 → has 3? Yes → skip</text>
+    <text x="15" y="98" fill="#a6adc8" font-size="12">3 → has 2? Yes → skip</text>
+    <text x="15" y="116" fill="#a6adc8" font-size="12">2 → has 1? Yes → skip</text>
+  </g>
+
+  <!-- Winning walk -->
+  <g transform="translate(370, 205)">
+    <rect x="0" y="0" width="320" height="120" rx="8" fill="#1e3a2f" stroke="#a6e3a1" stroke-width="2"/>
+    <text x="15" y="22" fill="#a6e3a1" font-size="13" font-weight="bold">num = 1 → has 0? No → START</text>
+    <text x="15" y="46" fill="#a6adc8" font-size="12">has 2? Yes → count 2</text>
+    <text x="15" y="64" fill="#a6adc8" font-size="12">has 3? Yes → count 3</text>
+    <text x="15" y="82" fill="#a6adc8" font-size="12">has 4? Yes → count 4</text>
+    <text x="15" y="100" fill="#a6adc8" font-size="12">has 5? No → stop</text>
+    <text x="15" y="116" fill="#a6e3a1" font-size="12" font-weight="bold">longest = 4 ✅</text>
+  </g>
+
+  <!-- Result -->
+  <rect x="280" y="400" width="160" height="38" rx="19" fill="#a6e3a1"/>
+  <text x="360" y="425" text-anchor="middle" fill="#1e1e2e" font-size="15" font-weight="bold">Output: 4</text>
+</svg>

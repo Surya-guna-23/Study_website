@@ -28,3 +28,43 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* ---------------------------------------------------------------------------
+   Dry-run diagram framing (SVGs live under /img/dsa/*-dry-run*.svg)
+   Makes diagrams centered, framed, and hints they are click-to-zoom.
+--------------------------------------------------------------------------- */
+.markdown img[src*="-dry-run"] {
+  display: block;
+  margin: 1.5rem auto;
+  max-width: 100%;
+  width: min(760px, 100%);
+  border-radius: 12px;
+  border: 1px solid var(--ifm-toc-border-color);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  cursor: zoom-in;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.markdown img[src*="-dry-run"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+/* Caption for the image (an *italic* line directly under the image) */
+.markdown img[src*="-dry-run"] + em {
+  display: block;
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.9rem;
+  margin-top: -0.75rem;
+}
+
+/* Slightly tighter, easier-to-scan tables in problem write-ups */
+.markdown table {
+  display: table;
+  width: 100%;
+}
+
+.markdown table thead tr {
+  background: var(--ifm-color-emphasis-100);
+}

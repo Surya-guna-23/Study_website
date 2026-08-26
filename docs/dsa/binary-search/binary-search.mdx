@@ -1,0 +1,248 @@
+---
+sidebar_position: 1
+title: Binary Search
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Binary Search
+
+> **LeetCode 704** – [Binary Search](https://leetcode.com/problems/binary-search/) | **Striver (TUF)** – [Binary Search Article](https://takeuforward.org/data-structure/binary-search-explained/)
+
+## Problem Statement
+
+Given an array of integers `nums` which is sorted in ascending order, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, return its index. Otherwise, return `-1`.
+
+You must write an algorithm with $O(\log n)$ runtime complexity.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [-1,0,3,5,9,12]`, `target = 9` | `4` |
+| 2 | `nums = [-1,0,3,5,9,12]`, `target = 2` | `-1` |
+
+### Constraints
+
+- `1 <= nums.length <= 10⁴`
+- `-10⁴ < nums[i], target < 10⁴`
+- All the integers in `nums` are **unique**.
+- `nums` is sorted in ascending order.
+
+---
+
+## Solution
+
+**Approach — Recursive Binary Search:**
+Split the array in half at every step. Compare the middle element with the target:
+- If it matches, return the index.
+- If the target is greater, recurse on the **right half**.
+- Otherwise, recurse on the **left half**.
+
+- **Time Complexity:** $O(\log n)$ — the search space is halved each time.
+- **Space Complexity:** $O(\log n)$ — recursion stack depth.
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function(nums, target) {
+    let low = 0, high = nums.length - 1;
+    return helper(nums, low, high, target);
+};
+
+function helper(nums, low, high, target) {
+    if (low > high) {
+        return -1;
+    }
+    let mid = Math.ceil((low + high) / 2);
+    if (nums[mid] === target) return mid;
+    else if (target > nums[mid]) {
+        return helper(nums, mid + 1, high, target);
+    }
+    return helper(nums, low, mid - 1, target);
+}
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Binary Search — nums = [-1, 0, 3, 5, 9, 12], target = 9"
+  steps={[
+    {
+      caption: 'Setup: search the whole array. lo = 0, hi = 5. The yellow band is the active search window.',
+      viz: {
+        arrays: [{
+          label: 'nums',
+          values: [-1, 0, 3, 5, 9, 12],
+          states: {0: 'window', 1: 'window', 2: 'window', 3: 'window', 4: 'window', 5: 'window'},
+          pointers: [{index: 0, label: 'lo'}, {index: 5, label: 'hi'}],
+        }],
+        notes: ['target = 9'],
+      },
+      state: ['lo=0', 'hi=5', 'target=9'],
+      details: (
+        <>
+          Binary search only works because <code>nums</code> is <b>sorted</b>.
+          We repeatedly look at the middle element and throw away the half that
+          cannot contain the target, halving the search space each step.
+        </>
+      ),
+    },
+    {
+      caption: 'Call 1: mid = ceil((0+5)/2) = 3. Compare nums[3] = 5 with target 9.',
+      viz: {
+        arrays: [{
+          label: 'nums',
+          values: [-1, 0, 3, 5, 9, 12],
+          states: {0: 'window', 1: 'window', 2: 'window', 3: 'active', 4: 'window', 5: 'window'},
+          pointers: [{index: 0, label: 'lo'}, {index: 3, label: 'mid'}, {index: 5, label: 'hi'}],
+        }],
+        notes: ['nums[mid]=5 < target=9 → search right'],
+      },
+      state: ['lo=0', 'hi=5', 'mid=3', 'nums[mid]=5'],
+      details: (
+        <>
+          <code>9 &gt; 5</code>, so the target must be to the <b>right</b> of
+          <code>mid</code>. We move <code>lo = mid + 1 = 4</code> and discard
+          indices <code>0..3</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'Left half [-1, 0, 3, 5] is eliminated (muted). New window is lo = 4, hi = 5.',
+      viz: {
+        arrays: [{
+          label: 'nums',
+          values: [-1, 0, 3, 5, 9, 12],
+          states: {0: 'muted', 1: 'muted', 2: 'muted', 3: 'muted', 4: 'window', 5: 'window'},
+          pointers: [{index: 4, label: 'lo'}, {index: 5, label: 'hi'}],
+        }],
+        notes: ['discarded indices 0..3'],
+      },
+      state: ['lo=4', 'hi=5'],
+      details: (
+        <>
+          The search space shrank from 6 elements to 2. Each halving is what
+          gives binary search its <code>O(log n)</code> running time.
+        </>
+      ),
+    },
+    {
+      caption: 'Call 2: mid = ceil((4+5)/2) = 5. Compare nums[5] = 12 with target 9.',
+      viz: {
+        arrays: [{
+          label: 'nums',
+          values: [-1, 0, 3, 5, 9, 12],
+          states: {0: 'muted', 1: 'muted', 2: 'muted', 3: 'muted', 4: 'window', 5: 'active'},
+          pointers: [{index: 4, label: 'lo'}, {index: 5, label: 'mid'}, {index: 5, label: 'hi'}],
+        }],
+        notes: ['nums[mid]=12 > target=9 → search left'],
+      },
+      state: ['lo=4', 'hi=5', 'mid=5', 'nums[mid]=12'],
+      details: (
+        <>
+          <code>9 &lt; 12</code>, so the target is to the <b>left</b> of
+          <code>mid</code>. We move <code>hi = mid - 1 = 4</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'Call 3: window is a single cell. mid = ceil((4+4)/2) = 4. Compare nums[4] = 9.',
+      viz: {
+        arrays: [{
+          label: 'nums',
+          values: [-1, 0, 3, 5, 9, 12],
+          states: {0: 'muted', 1: 'muted', 2: 'muted', 3: 'muted', 4: 'active', 5: 'muted'},
+          pointers: [{index: 4, label: 'lo mid hi'}],
+        }],
+        notes: ['nums[mid]=9 === target=9'],
+      },
+      state: ['lo=4', 'hi=4', 'mid=4', 'nums[mid]=9'],
+      details: (
+        <>
+          <code>lo</code>, <code>mid</code> and <code>hi</code> all point to
+          index <code>4</code>. <code>nums[4] === 9</code> — the target is found.
+        </>
+      ),
+    },
+    {
+      caption: 'Match! nums[4] = 9 = target. Return index 4.',
+      viz: {
+        arrays: [{
+          label: 'nums',
+          values: [-1, 0, 3, 5, 9, 12],
+          states: {0: 'muted', 1: 'muted', 2: 'muted', 3: 'muted', 4: 'match', 5: 'muted'},
+          pointers: [{index: 4, label: 'found'}],
+        }],
+        notes: ['answer = 4'],
+      },
+      state: ['return 4'],
+      details: (
+        <>
+          The target <code>9</code> lives at index <code>4</code>, so we return
+          <code>4</code>. The whole search took just <b>3 comparisons</b>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+Let's walk through **Example 1**: `nums = [-1, 0, 3, 5, 9, 12]`, `target = 9`
+
+### Call 1 — `helper(nums, 0, 5, 9)`
+
+| Variable | Value |
+|----------|-------|
+| `low` | `0` |
+| `high` | `5` |
+| `mid` | `Math.ceil((0+5)/2) = 3` |
+| `nums[3]` | `5` |
+
+`9 > 5` → target is in the **right half** → recurse with `helper(nums, 4, 5, 9)`
+
+### Call 2 — `helper(nums, 4, 5, 9)`
+
+| Variable | Value |
+|----------|-------|
+| `low` | `4` |
+| `high` | `5` |
+| `mid` | `Math.ceil((4+5)/2) = 5` |
+| `nums[5]` | `12` |
+
+`9 < 12` → target is in the **left half** → recurse with `helper(nums, 4, 4, 9)`
+
+### Call 3 — `helper(nums, 4, 4, 9)`
+
+| Variable | Value |
+|----------|-------|
+| `low` | `4` |
+| `high` | `4` |
+| `mid` | `Math.ceil((4+4)/2) = 4` |
+| `nums[4]` | `9` |
+
+`nums[4] === 9` → **Return `4`** ✅
+
+### Summary Table
+
+| Call | `low` | `high` | `mid` | `nums[mid]` | Decision |
+|------|-------|--------|-------|-------------|----------|
+| 1 | 0 | 5 | 3 | 5 | `9 > 5` → go right |
+| 2 | 4 | 5 | 5 | 12 | `9 < 12` → go left |
+| 3 | 4 | 4 | 4 | 9 | **Match → return 4** ✅ |
+
+---
+
+## Test Cases
+
+```js
+console.log(search([-1, 0, 3, 5, 9, 12], 9));   // 4
+console.log(search([-1, 0, 3, 5, 9, 12], 2));   // -1
+console.log(search([5], 5));                      // 0  (single element, found)
+console.log(search([5], -5));                     // -1 (single element, not found)
+console.log(search([2, 5], 5));                   // 1  (two elements, target at end)
+```

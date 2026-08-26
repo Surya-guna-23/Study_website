@@ -1,0 +1,173 @@
+---
+sidebar_position: 3
+title: Two Sum
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Two Sum
+
+> **LeetCode 1** – [Two Sum](https://leetcode.com/problems/two-sum/) | **Striver (TUF)** – [Two Sum Article](https://takeuforward.org/data-structure/two-sum-check-if-a-pair-with-given-sum-exists-in-array/)
+
+## Problem Statement
+
+Given an array of integers `nums` and an integer `target`, return **indices of the two numbers** such that they add up to `target`.
+
+You may assume that each input would have **exactly one solution**, and you may not use the same element twice. You can return the answer in any order.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [2,7,11,15]`, `target = 9` | `[0,1]` |
+| 2 | `nums = [3,2,4]`, `target = 6` | `[1,2]` |
+| 3 | `nums = [3,3]`, `target = 6` | `[0,1]` |
+
+### Constraints
+
+- `2 <= nums.length <= 10⁴`
+- `-10⁹ <= nums[i] <= 10⁹`
+- `-10⁹ <= target <= 10⁹`
+- Only one valid answer exists.
+
+---
+
+## Solution
+
+**Approach:** Use a `Map` to store each number's index as we iterate. For every element, check if `target - nums[i]` already exists in the map. If it does, we've found our pair.
+
+- **Time Complexity:** $O(n)$ — single pass through the array.
+- **Space Complexity:** $O(n)$ — the map stores at most `n` entries.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    let map = new Map ()
+    let res=[]
+    for(let i=0;i<nums.length;i++)
+    {
+        if(map.has(target-nums[i]))
+        {
+            return [map.get(target-nums[i]),i]
+        }
+        else{
+            map.set(nums[i],i)
+        }
+    }
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> mapping = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (mapping.containsKey(target - nums[i])) {
+                return new int[] { mapping.get(target - nums[i]), i };
+            } else {
+                mapping.put(nums[i], i);
+            }
+        }
+        return new int[] {};
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Two Sum — nums = [2, 7, 11, 15], target = 9"
+  steps={[
+    {
+      caption: 'Setup: scan left→right, storing each value’s index in a map and checking for its complement.',
+      viz: {
+        arrays: [{label: 'nums', values: [2, 7, 11, 15]}],
+        map: {label: 'map', entries: []},
+        notes: ['target = 9'],
+      },
+      state: ['map = {}', 'target = 9'],
+      details: (
+        <>
+          The key insight is trading <b>space for time</b>. A brute-force
+          solution checks every pair in <code>O(n²)</code>. By remembering the
+          values we have already seen in a hash map, we can look up the required
+          complement in <code>O(1)</code>, bringing the total down to{' '}
+          <code>O(n)</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 0: complement 7 is not in the map yet, so store 2 → 0.',
+      viz: {
+        arrays: [{label: 'nums', values: [2, 7, 11, 15], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'map', entries: [['2', '0']]},
+        notes: ['complement = 9 − 2 = 7', 'map.has(7) = false'],
+      },
+      state: ['i = 0', 'nums[i] = 2', 'complement = 7', 'map = {2: 0}'],
+      details: (
+        <>
+          We compute <code>complement = target − nums[i] = 9 − 2 = 7</code> and
+          ask <code>map.has(7)</code>. Since the map is empty, there is no
+          match, so we record <code>map.set(2, 0)</code> — meaning “value 2 was
+          seen at index 0” — and continue.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 1: complement 2 IS in the map (index 0). Return [0, 1].',
+      viz: {
+        arrays: [{label: 'nums', values: [2, 7, 11, 15], states: {0: 'match', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'map', entries: [['2', '0']], highlightKey: '2'},
+        notes: ['complement = 9 − 7 = 2', 'map.has(2) = true → index 0'],
+      },
+      state: ['i = 1', 'nums[i] = 7', 'complement = 2', 'match at index 0'],
+      details: (
+        <>
+          Now <code>complement = 9 − 7 = 2</code>, and <code>map.has(2)</code> is
+          true — we stored it in the previous step. The stored index{' '}
+          <code>0</code> together with the current index <code>1</code> gives the
+          answer <code>[0, 1]</code>. We return immediately without scanning the
+          rest of the array.
+        </>
+      ),
+    },
+  ]}
+/>
+
+Let's walk through **Example 1**: `nums = [2, 7, 11, 15]`, `target = 9`
+
+| Step | `i` | `nums[i]` | `target - nums[i]` | `map.has(...)` | `map` (after step) | Action |
+|------|-----|-----------|---------------------|----------------|---------------------|--------|
+| 1 | 0 | 2 | 7 | No | `{2 → 0}` | Store index of `2` |
+| 2 | 1 | 7 | 2 | **Yes** (`2` at index `0`) | — | **Return `[0, 1]`** ✅ |
+
+We find the complement `2` in the map on the second iteration and return immediately.
+
+---
+
+## Test Cases
+
+```js
+console.log(twoSum([2, 7, 11, 15], 9));   // [0, 1]
+console.log(twoSum([3, 2, 4], 6));         // [1, 2]
+console.log(twoSum([3, 3], 6));            // [0, 1]
+console.log(twoSum([1, 5, 3, 7], 8));      // [1, 2]  (5 + 3)
+console.log(twoSum([-1, -2, -3, -4], -6)); // [1, 3]  (-2 + -4)
+```

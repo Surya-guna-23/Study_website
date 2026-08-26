@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Surya Study Materials',
-  tagline: 'Learn DSA, Polyfills & more',
+  tagline: 'DSA patterns with visual dry runs · JavaScript polyfills · clean solutions',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -24,15 +24,14 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://Surya-guna-23.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/Study_website/',
 
   // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'Surya-guna-23', // Your GitHub org/user name.
+  projectName: 'Study_website', // Your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -51,10 +50,10 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/Surya-guna-23/Study_website/tree/main/',
+          showLastUpdateTime: true,
+          breadcrumbs: true,
         },
         blog: {
           showReadingTime: true,
@@ -62,10 +61,8 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/Surya-guna-23/Study_website/tree/main/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -80,6 +77,21 @@ const config = {
 
   plugins: [
     'docusaurus-lunr-search',
+    [
+      'docusaurus-plugin-image-zoom',
+      /** @type {import('docusaurus-plugin-image-zoom').PluginOptions} */
+      ({
+        selector: '.markdown img',
+        background: {
+          light: 'rgba(30, 30, 46, 0.85)',
+          dark: 'rgba(0, 0, 0, 0.9)',
+        },
+        config: {
+          margin: 24,
+          scrollOffset: 0,
+        },
+      }),
+    ],
   ],
 
   themeConfig:
@@ -87,6 +99,18 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      announcementBar: {
+        id: 'star_repo',
+        content:
+          '⭐ If these notes help you, star the repo on <a target="_blank" rel="noopener noreferrer" href="https://github.com/Surya-guna-23/Study_website">GitHub</a>!',
+        backgroundColor: '#25c2a0',
+        textColor: '#1e1e2e',
+        isCloseable: true,
+      },
+      tableOfContents: {
+        minHeadingLevel: 2,
+        maxHeadingLevel: 4,
+      },
       colorMode: {
         respectPrefersColorScheme: true,
       },
@@ -117,7 +141,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/Surya-guna-23/Study_website',
             label: 'GitHub',
             position: 'right',
           },
@@ -161,7 +185,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/Surya-guna-23/Study_website',
               },
             ],
           },
@@ -171,6 +195,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+        additionalLanguages: ['java'],
       },
     }),
 };

@@ -19,8 +19,14 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            to="/docs/dsa/intro">
+            Start with DSA 🚀
+          </Link>
+          <Link
+            className="button button--outline button--secondary button--lg"
+            style={{marginLeft: '1rem'}}
+            to="/docs/polyfills/intro">
+            JS Polyfills ⚙️
           </Link>
         </div>
       </div>
@@ -32,8 +38,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={siteConfig.title}
+      description="DSA patterns with visual dry runs and JavaScript polyfills — study notes by Surya.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

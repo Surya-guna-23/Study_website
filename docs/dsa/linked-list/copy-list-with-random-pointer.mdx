@@ -1,0 +1,184 @@
+---
+sidebar_position: 8
+title: Copy List with Random Pointer
+---
+
+import DryRunSlider from '@site/src/components/DryRunSlider';
+
+# Copy List with Random Pointer
+
+> **LeetCode 138** – [Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/) | **Striver (TUF)** – [Clone Linked List with Random Pointer Article](https://takeuforward.org/data-structure/clone-linked-list-with-random-and-next-pointer/)
+
+## Problem Statement
+
+A linked list of length `n` is given where each node has an additional **random** pointer, which could point to any node in the list, or `null`.
+
+Construct a **deep copy** of the list. Return the head of the copied linked list.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `[[7,null],[13,0],[11,4],[10,2],[1,0]]` | `[[7,null],[13,0],[11,4],[10,2],[1,0]]` |
+| 2 | `[[1,1],[2,1]]` | `[[1,1],[2,1]]` |
+| 3 | `[[3,null],[3,0],[3,null]]` | `[[3,null],[3,0],[3,null]]` |
+
+### Constraints
+
+- `0 <= n <= 1000`
+- `-10⁴ <= Node.val <= 10⁴`
+- `random` is `null` or points to a node in the list.
+
+---
+
+## Solution
+
+**Approach (In-place, O(1) space):** Three-pass technique:
+
+1. **Create copy nodes** — insert a clone after each original node: `A → A' → B → B' → ...`
+2. **Set random pointers** — `copy.random = original.random.next` (the clone of the random target)
+3. **Extract the copy list** — separate original and cloned lists.
+
+- **Time Complexity:** $O(n)$ — three passes through the list.
+- **Space Complexity:** $O(1)$ — no extra data structures (output doesn't count).
+
+```js
+/**
+ * @param {_Node} head
+ * @return {_Node}
+ */
+var copyRandomList = function(head) {
+    createnode(head)
+    randompointer(head)
+    return finalmap(head)
+};
+function createnode(head){
+    let temp=head
+    while(temp!=null)
+    {
+        let copy = new ListNode(temp.val)
+        copy.next=temp.next
+        temp.next=copy
+        temp=temp.next.next
+    }
+
+}
+function randompointer(head){
+    let temp=head
+    while(temp!=null)
+    {
+        let copy=temp.next
+        if(temp.random)
+        {copy.random=temp.random.next}
+        else{
+            copy.random=null
+        }
+        temp=temp.next.next
+    }
+}
+function finalmap(head)
+{
+    const dummynode = new ListNode(-1)
+    let res = dummynode
+    let temp =head
+    while(temp!=null)
+    {
+        res.next=temp.next
+        temp.next=temp.next.next
+        res=res.next
+        temp=temp.next
+    }
+    return dummynode.next
+}
+```
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Copy List with Random Pointer — [7,13,11,10,1]"
+  steps={[
+    {
+      caption: 'Original list values 7,13,11,10,1 with random pointers (7:null, 13:7, 11:1, 10:11, 1:7).',
+      viz: { arrays: [{label:'orig', values:[7,13,11,10,1], states:{0:'active'}, pointers:[{index:0,label:'head'}]}], map:{label:'random', entries:[['7','null'],['13','7'],['11','1'],['10','11'],['1','7']], highlightKey:'7'}, notes:['3 passes: clone, wire random, split'] },
+      state: ['n = 5'],
+      details: (<>The O(1)-space trick interleaves each clone right after its original so we can find a clone in O(1) via <code>original.next</code>.</>),
+    },
+    {
+      caption: 'Pass 1 — createnode: interleave clone after each original.',
+      viz: { arrays: [{label:'interleaved', values:['7',"7'",'13',"13'",'11',"11'",'10',"10'",'1',"1'"], states:{1:'match',3:'match',5:'match',7:'match',9:'match'}, pointers:[]}], notes:["7 → 7' → 13 → 13' → …",'clones marked green'] },
+      state: ["list: 7→7'→13→13'…"],
+      details: (<>For each node we set <code>copy.next = temp.next</code> and <code>temp.next = copy</code>, then skip two.</>),
+    },
+    {
+      caption: "Pass 2 — randompointer: copy.random = original.random.next. Clone 13'.",
+      viz: { arrays: [{label:'interleaved', values:['7',"7'",'13',"13'",'11',"11'",'10',"10'",'1',"1'"], states:{2:'active',3:'match'}, pointers:[{index:2,label:'temp'},{index:3,label:'copy'}]}], map:{label:'random(copy)', entries:[["13'","7'"]], highlightKey:"13'"}, notes:['13.random = 7','so 13’.random = 7.next = 7’'] },
+      state: ["13'.random = 7'"],
+      details: (<>The clone of node <code>13</code>'s random target is exactly <code>original.random.next</code> — i.e. the clone sitting after the original's random target.</>),
+    },
+    {
+      caption: "Pass 2 continues for all clones: 11'→1', 10'→11', 1'→7'.",
+      viz: { arrays: [{label:'interleaved', values:['7',"7'",'13',"13'",'11',"11'",'10',"10'",'1',"1'"], states:{1:'match',3:'match',5:'match',7:'match',9:'match'}, pointers:[]}], map:{label:'random(copy)', entries:[["7'",'null'],["13'","7'"],["11'","1'"],["10'","11'"],["1'","7'"]], highlightKey:"11'"}, notes:['all clone randoms wired'] },
+      state: ['all randoms set'],
+      details: (<>Every clone now has a correct <code>random</code> pointing into the cloned list, not the original.</>),
+    },
+    {
+      caption: 'Pass 3 — finalmap: unweave. Restore originals, extract clones.',
+      viz: { arrays: [
+        {label:'orig', values:[7,13,11,10,1], states:{0:'done',1:'done',2:'done',3:'done',4:'done'}, pointers:[]},
+        {label:'copy', values:["7'","13'","11'","10'","1'"], states:{0:'match',1:'match',2:'match',3:'match',4:'match'}, pointers:[{index:0,label:'newhead'}]},
+      ], notes:['two independent lists','deep copy complete'] },
+      state: ['result = clone head'],
+      details: (<>We relink <code>temp.next = temp.next.next</code> for both lists, restoring the original and returning the detached copy list.</>),
+    },
+  ]}
+/>
+
+**Example:** `[[7,null],[13,0],[11,4],[10,2],[1,0]]`
+
+```
+Original:  7 → 13 → 11 → 10 → 1
+random:   null   7   1    11   7
+```
+
+### Pass 1 — `createnode`: Interleave copies
+
+```
+7 → 7' → 13 → 13' → 11 → 11' → 10 → 10' → 1 → 1'
+```
+
+### Pass 2 — `randompointer`: Set random on copies
+
+| Original | `original.random` | `copy.random = original.random.next` |
+|----------|-------------------|--------------------------------------|
+| 7 | `null` | `null` |
+| 13 | 7 | **7'** |
+| 11 | 1 | **1'** |
+| 10 | 11 | **11'** |
+| 1 | 7 | **7'** |
+
+### Pass 3 — `finalmap`: Separate lists
+
+```
+Original: 7 → 13 → 11 → 10 → 1
+Copy:     7' → 13' → 11' → 10' → 1'  (with correct random pointers)
+```
+
+**Result:** Deep copy created ✅
+
+---
+
+## Test Cases
+
+```js
+// Build: [7,null] → [13,0] → [11,4] → [10,2] → [1,0]
+let n1 = new _Node(7), n2 = new _Node(13), n3 = new _Node(11),
+    n4 = new _Node(10), n5 = new _Node(1);
+n1.next = n2; n2.next = n3; n3.next = n4; n4.next = n5;
+n1.random = null; n2.random = n1; n3.random = n5;
+n4.random = n3; n5.random = n1;
+
+let copy = copyRandomList(n1);
+// Verify: copy is a deep copy with same structure
+```
