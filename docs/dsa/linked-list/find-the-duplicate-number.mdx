@@ -4,6 +4,8 @@ title: Find the Duplicate Number
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Find the Duplicate Number
 
@@ -36,6 +38,9 @@ Given an array of integers `nums` containing `n + 1` integers where each integer
 - **Time Complexity:** $O(n)$ — single pass.
 - **Space Complexity:** $O(n)$ — the set.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} nums
@@ -55,6 +60,30 @@ var findDuplicate = function(nums) {
     }
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        Set<Integer> seen = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (seen.contains(nums[i])) {
+                return nums[i];
+            }
+            seen.add(nums[i]);
+        }
+        return -1;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

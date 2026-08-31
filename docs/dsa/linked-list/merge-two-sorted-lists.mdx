@@ -4,6 +4,8 @@ title: Merge Two Sorted Lists
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Merge Two Sorted Lists
 
@@ -38,6 +40,9 @@ Return the head of the merged linked list.
 - **Time Complexity:** $O(n + m)$ — where `n` and `m` are the lengths of the two lists.
 - **Space Complexity:** $O(1)$ — only rearranging existing nodes.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {ListNode} list1
@@ -64,6 +69,34 @@ var mergeTwoLists = function(list1, list2) {
     return dummy.next
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(0);
+        ListNode temp = dummy;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                temp.next = list1;
+                list1 = list1.next;
+            } else {
+                temp.next = list2;
+                list2 = list2.next;
+            }
+            temp = temp.next;
+        }
+        if (list1 != null) temp.next = list1;
+        if (list2 != null) temp.next = list2;
+        return dummy.next;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

@@ -4,6 +4,8 @@ title: Search in Rotated Sorted Array
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Search in Rotated Sorted Array
 
@@ -49,6 +51,9 @@ At every step, **one half** of the array is guaranteed to be sorted. We identify
 - **Time Complexity:** $O(\log n)$
 - **Space Complexity:** $O(1)$
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} nums
@@ -81,6 +86,44 @@ var search = function(nums, target) {
     return -1;
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int low = 0, high = nums.length - 1;
+        while (low <= high) {
+            int mid = (int) Math.ceil((low + high) / 2.0);
+            if (nums[mid] == target) {
+                return mid;
+            }
+
+            // Left half is sorted
+            if (nums[low] <= nums[mid]) {
+                if (nums[low] <= target && target <= nums[mid]) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+            // Right half is sorted
+            else {
+                if (nums[mid] <= target && target <= nums[high]) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

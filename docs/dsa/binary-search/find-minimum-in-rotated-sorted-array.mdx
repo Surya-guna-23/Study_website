@@ -4,6 +4,8 @@ title: Find Minimum in Rotated Sorted Array
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Find Minimum in Rotated Sorted Array
 
@@ -49,6 +51,9 @@ In a rotated sorted array, one half is always sorted. We use this property:
 - **Time Complexity:** $O(\log n)$ — binary search.
 - **Space Complexity:** $O(1)$
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} nums
@@ -78,6 +83,40 @@ var findMin = function(nums) {
     return ans;
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int findMin(int[] nums) {
+        int low = 0, high = nums.length - 1;
+        int ans = Integer.MAX_VALUE;
+        while (low <= high) {
+            int mid = (int) Math.ceil((low + high) / 2.0);
+            // If sub-array is already sorted
+            if (nums[low] <= nums[high]) {
+                ans = Math.min(ans, nums[low]);
+                break;
+            }
+            // Left half is sorted
+            if (nums[low] <= nums[mid]) {
+                ans = Math.min(ans, nums[low]);
+                low = mid + 1;
+            }
+            // Right half is sorted
+            else {
+                ans = Math.min(ans, nums[mid]);
+                high = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

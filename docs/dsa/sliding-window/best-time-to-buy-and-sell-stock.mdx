@@ -4,6 +4,8 @@ title: Best Time to Buy and Sell Stock
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Best Time to Buy and Sell Stock
 
@@ -38,6 +40,9 @@ Return the maximum profit you can achieve. If no profit is possible, return `0`.
 - **Time Complexity:** $O(n)$ — single pass through the array.
 - **Space Complexity:** $O(1)$ — only a few variables.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} prices
@@ -62,6 +67,29 @@ var maxProfit = function(prices) {
     return max
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        for (int price : prices) {
+            if (price < minPrice) {
+                minPrice = price;
+            } else if (price - minPrice > maxProfit) {
+                maxProfit = price - minPrice;
+            }
+        }
+        return maxProfit;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

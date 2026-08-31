@@ -4,6 +4,8 @@ title: Reverse Linked List
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Reverse Linked List
 
@@ -35,6 +37,9 @@ Given the `head` of a singly linked list, reverse the list, and return the rever
 - **Time Complexity:** $O(n)$ — visit each node once.
 - **Space Complexity:** $O(n)$ — recursion stack depth.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * Definition for singly-linked list.
@@ -63,6 +68,27 @@ var reverseList = function(head) {
    return reverse(head)
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = reverseList(head.next);
+        ListNode front = head.next;
+        front.next = head;
+        head.next = null;
+        return newHead;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

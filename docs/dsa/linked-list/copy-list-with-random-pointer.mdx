@@ -4,6 +4,8 @@ title: Copy List with Random Pointer
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Copy List with Random Pointer
 
@@ -41,6 +43,9 @@ Construct a **deep copy** of the list. Return the head of the copied linked list
 
 - **Time Complexity:** $O(n)$ — three passes through the list.
 - **Space Complexity:** $O(1)$ — no extra data structures (output doesn't count).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
 
 ```js
 /**
@@ -91,6 +96,57 @@ function finalmap(head)
     return dummynode.next
 }
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public Node copyRandomList(Node head) {
+        createNodes(head);
+        setRandom(head);
+        return extract(head);
+    }
+
+    // Pass 1: interleave a clone after each original node
+    private void createNodes(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            Node copy = new Node(temp.val);
+            copy.next = temp.next;
+            temp.next = copy;
+            temp = temp.next.next;
+        }
+    }
+
+    // Pass 2: wire up random pointers on the clones
+    private void setRandom(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            Node copy = temp.next;
+            copy.random = (temp.random != null) ? temp.random.next : null;
+            temp = temp.next.next;
+        }
+    }
+
+    // Pass 3: unweave the two lists and return the clone head
+    private Node extract(Node head) {
+        Node dummy = new Node(-1);
+        Node res = dummy;
+        Node temp = head;
+        while (temp != null) {
+            res.next = temp.next;
+            temp.next = temp.next.next;
+            res = res.next;
+            temp = temp.next;
+        }
+        return dummy.next;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

@@ -4,6 +4,8 @@ title: Linked List Cycle
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Linked List Cycle
 
@@ -39,6 +41,9 @@ Return `true` if there is a cycle, otherwise return `false`.
 - **Time Complexity:** $O(n)$ — fast pointer traverses at most `2n` steps.
 - **Space Complexity:** $O(1)$ — only two pointers.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {ListNode} head
@@ -64,6 +69,32 @@ var hasCycle = function(head) {
     
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

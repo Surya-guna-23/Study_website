@@ -4,6 +4,8 @@ title: Koko Eating Bananas
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Koko Eating Bananas
 
@@ -43,6 +45,9 @@ For a given speed `k`, the hours required for pile `piles[i]` is `⌈piles[i] / 
 - **Time Complexity:** $O(n \cdot \log(\max(piles)))$ — binary search range is `max(piles)`, and each check iterates all piles.
 - **Space Complexity:** $O(1)$
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} piles
@@ -73,6 +78,42 @@ function check(piles, k) {
     return total;
 }
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int low = 1, high = 0;
+        for (int pile : piles) {
+            high = Math.max(high, pile);
+        }
+
+        while (low <= high) {
+            int mid = (int) Math.ceil((low + high) / 2.0);
+            long totalHours = check(piles, mid);
+            if (totalHours <= h) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+
+    private long check(int[] piles, int k) {
+        long total = 0;
+        for (int pile : piles) {
+            total += (pile + k - 1) / k; // ceil(pile / k)
+        }
+        return total;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

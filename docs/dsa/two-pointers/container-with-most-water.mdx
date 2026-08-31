@@ -4,6 +4,8 @@ title: Container With Most Water
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Container With Most Water
 
@@ -39,6 +41,9 @@ Return the **maximum amount of water** a container can store.
 - **Time Complexity:** $O(n)$ — single pass with two pointers.
 - **Space Complexity:** $O(1)$ — only a few variables.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} height
@@ -64,6 +69,33 @@ var maxArea = function(height) {
     return total
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int l = 0;
+        int r = height.length - 1;
+        int total = 0;
+        while (l < r) {
+            int h = Math.min(height[l], height[r]);
+            int b = r - l;
+            total = Math.max(total, h * b);
+            if (height[r] > height[l]) {
+                l++;
+            } else {
+                r--;
+            }
+        }
+        return total;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

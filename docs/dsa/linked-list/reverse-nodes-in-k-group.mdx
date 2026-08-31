@@ -4,6 +4,8 @@ title: Reverse Nodes in k-Group
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Reverse Nodes in k-Group
 
@@ -42,6 +44,9 @@ Uses helper functions `findkthnode` (to locate the `kᵗʰ` node) and `reverse` 
 
 - **Time Complexity:** $O(n)$ — each node is visited a constant number of times.
 - **Space Complexity:** $O(n/k)$ — recursion depth for each group reversal (could be $O(k)$ per group).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
 
 ```js
 /**
@@ -102,6 +107,61 @@ function findkthnode(temp,k)
     return temp
 }
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode temp = head;
+        ListNode prevNode = null;
+        while (temp != null) {
+            ListNode kthNode = findKthNode(temp, k);
+            if (kthNode == null) {
+                if (prevNode != null) {
+                    prevNode.next = temp;
+                }
+                break;
+            }
+            ListNode nextNode = kthNode.next;
+            kthNode.next = null;
+            reverse(temp);
+            if (temp == head) {
+                head = kthNode;
+            } else {
+                prevNode.next = kthNode;
+            }
+            prevNode = temp;
+            temp = nextNode;
+        }
+        return head;
+    }
+
+    private ListNode reverse(ListNode temp) {
+        if (temp == null || temp.next == null) {
+            return temp;
+        }
+        ListNode newHead = reverse(temp.next);
+        ListNode front = temp.next;
+        front.next = temp;
+        temp.next = null;
+        return newHead;
+    }
+
+    private ListNode findKthNode(ListNode temp, int k) {
+        k -= 1;
+        while (temp != null && k > 0) {
+            k--;
+            temp = temp.next;
+        }
+        return temp;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

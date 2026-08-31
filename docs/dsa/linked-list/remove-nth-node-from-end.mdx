@@ -4,6 +4,8 @@ title: Remove Nth Node From End of List
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Remove Nth Node From End of List
 
@@ -36,6 +38,9 @@ Given the `head` of a linked list, remove the `nᵗʰ` node from the **end** of 
 - **Time Complexity:** $O(n)$ — single pass.
 - **Space Complexity:** $O(1)$ — only two pointers.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 var removeNthFromEnd = function(head, n) {
     let fast = head
@@ -63,6 +68,42 @@ var removeNthFromEnd = function(head, n) {
     return head
 }
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        // Move fast n steps ahead
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+
+        // If fast is null, remove head
+        if (fast == null) {
+            return head.next;
+        }
+
+        // Move both pointers
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        // Remove nth node
+        slow.next = slow.next.next;
+
+        return head;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

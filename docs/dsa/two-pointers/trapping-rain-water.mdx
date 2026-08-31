@@ -4,6 +4,8 @@ title: Trapping Rain Water
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Trapping Rain Water
 
@@ -35,6 +37,9 @@ Given `n` non-negative integers representing an elevation map where the width of
 - **Time Complexity:** $O(n)$ — single pass with two pointers.
 - **Space Complexity:** $O(1)$ — only a few variables.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} height
@@ -60,6 +65,36 @@ var trap = function(height) {
         return sum;
     }
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        int i = 0;
+        int j = height.length - 1;
+        int leftMax = height[i];
+        int rightMax = height[j];
+        int sum = 0;
+        while (i < j) {
+            if (leftMax <= rightMax) {
+                sum += leftMax - height[i];
+                i++;
+                leftMax = Math.max(leftMax, height[i]);
+            } else {
+                sum += rightMax - height[j];
+                j--;
+                rightMax = Math.max(rightMax, height[j]);
+            }
+        }
+        return sum;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

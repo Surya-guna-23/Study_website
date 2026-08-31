@@ -4,6 +4,8 @@ title: Reorder List
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Reorder List
 
@@ -42,6 +44,9 @@ You may not modify the values in the list's nodes. Only nodes themselves may be 
 - **Time Complexity:** $O(n)$ — one pass to build the stack, one pass to reorder.
 - **Space Complexity:** $O(n)$ — the stack holds `n-1` nodes.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 var reorderList = function(head) {
     if (!head || !head.next) return;
@@ -75,6 +80,51 @@ var reorderList = function(head) {
     }
 };
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) return;
+
+        Deque<ListNode> stack = new ArrayDeque<>();
+        ListNode temp = head.next;
+
+        // push NODES onto the stack
+        while (temp != null) {
+            stack.push(temp);
+            temp = temp.next;
+        }
+
+        ListNode curr = head;
+        int length = stack.size();
+
+        while (length > 0) {
+            ListNode last = stack.pop();
+            length--;
+
+            // stop at middle
+            if (curr == last || curr.next == last) {
+                last.next = null;
+                break;
+            }
+
+            ListNode next = curr.next;
+            curr.next = last;
+            last.next = next;
+            curr = next;
+        }
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 

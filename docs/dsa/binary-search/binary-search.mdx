@@ -4,6 +4,8 @@ title: Binary Search
 ---
 
 import DryRunSlider from '@site/src/components/DryRunSlider';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Binary Search
 
@@ -42,6 +44,9 @@ Split the array in half at every step. Compare the middle element with the targe
 - **Time Complexity:** $O(\log n)$ — the search space is halved each time.
 - **Space Complexity:** $O(\log n)$ — recursion stack depth.
 
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
 ```js
 /**
  * @param {number[]} nums
@@ -65,6 +70,33 @@ function helper(nums, low, high, target) {
     return helper(nums, low, mid - 1, target);
 }
 ```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        return helper(nums, 0, nums.length - 1, target);
+    }
+
+    private int helper(int[] nums, int low, int high, int target) {
+        if (low > high) {
+            return -1;
+        }
+        int mid = (int) Math.ceil((low + high) / 2.0);
+        if (nums[mid] == target) {
+            return mid;
+        } else if (target > nums[mid]) {
+            return helper(nums, mid + 1, high, target);
+        }
+        return helper(nums, low, mid - 1, target);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
 
 ---
 
