@@ -5,13 +5,13 @@ title: Introduction
 
 # JavaScript Polyfills
 
-Welcome to the Polyfills section! Here you'll find implementations and explanations of common JavaScript polyfills.
+Welcome to the Polyfills section! Here you'll re-implement core JavaScript features **from scratch** to understand how they work under the hood — exactly the kind of question that shows up in frontend interviews.
 
-## Topics
+## What's covered
 
-- Array methods (map, filter, reduce, etc.)
-- Promise & Promise methods
-- Object methods (assign, keys, values, etc.)
-- Function methods (bind, call, apply)
-- String methods
-- And more...
+- **Promise** — build the Promise class with `then`, `catch`, and state transitions
+- **Promise.all** — resolve an array of promises, failing fast on the first rejection
+- **Promise.race** — settle as soon as the first promise settles
+- **Cancellable Promise** — add cancellation semantics on top of a promise
+
+Each page includes the problem, a clean implementation, an explanation of the tricky parts, and usage examples.

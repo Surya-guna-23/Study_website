@@ -133,12 +133,6 @@ const config = {
             position: 'left',
             label: 'Polyfills',
           },
-          {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
-          },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/Surya-guna-23/Study_website',
@@ -151,28 +145,28 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Study Notes',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'DSA',
+                to: '/docs/dsa/intro',
+              },
+              {
+                label: 'Polyfills',
+                to: '/docs/polyfills/intro',
               },
             ],
           },
           {
-            title: 'Community',
+            title: 'Practice',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'LeetCode',
+                href: 'https://leetcode.com/',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: 'Striver (TakeUForward)',
+                href: 'https://takeuforward.org/',
               },
             ],
           },
