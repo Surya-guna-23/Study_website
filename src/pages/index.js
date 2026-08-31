@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import HomepageStats from '@site/src/components/HomepageStats';
 
 import Heading from '@theme/Heading';
 import styles from './index.module.css';
@@ -42,6 +43,7 @@ export default function Home() {
       description="DSA patterns with visual dry runs and JavaScript polyfills — study notes by Surya.">
       <HomepageHeader />
       <main>
+        <HomepageStats />
         <HomepageFeatures />
       </main>
     </Layout>
