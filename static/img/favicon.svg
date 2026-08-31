@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="SS">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#25c2a0"/>
+      <stop offset="100%" stop-color="#1a8870"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="46" height="46" rx="11" fill="url(#lg)"/>
+  <text x="24" y="33" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="800" fill="#ffffff" text-anchor="middle">SS</text>
+</svg>

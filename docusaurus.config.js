@@ -12,7 +12,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Surya Study Materials',
   tagline: 'DSA patterns with visual dry runs · JavaScript polyfills · clean solutions',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -119,6 +119,7 @@ const config = {
         logo: {
           alt: 'Surya Study Materials Logo',
           src: 'img/logo.svg',
+          srcDark: 'img/logo.svg',
         },
         items: [
           {
