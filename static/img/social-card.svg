@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Surya Study Materials">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#122b26"/>
+    </linearGradient>
+    <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#25c2a0"/>
+      <stop offset="100%" stop-color="#1a8870"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1050" cy="120" r="220" fill="#25c2a0" opacity="0.08"/>
+  <circle cx="120" cy="560" r="180" fill="#89b4fa" opacity="0.08"/>
+  <g transform="translate(96,150)">
+    <rect x="0" y="0" width="120" height="120" rx="28" fill="url(#badge)"/>
+    <text x="60" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="70" font-weight="700" fill="#ffffff" text-anchor="middle">SS</text>
+  </g>
+  <text x="96" y="360" font-family="Segoe UI, Arial, sans-serif" font-size="76" font-weight="800" fill="#ffffff">Surya Study Materials</text>
+  <text x="96" y="430" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="500" fill="#25c2a0">DSA patterns · Visual dry runs · JS polyfills</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#cbd5e1">
+    <rect x="96" y="480" width="230" height="64" rx="32" fill="#1e293b"/>
+    <text x="211" y="521" text-anchor="middle">Java &amp; JavaScript</text>
+    <rect x="346" y="480" width="270" height="64" rx="32" fill="#1e293b"/>
+    <text x="481" y="521" text-anchor="middle">Interactive slides</text>
+    <rect x="636" y="480" width="230" height="64" rx="32" fill="#1e293b"/>
+    <text x="751" y="521" text-anchor="middle">34+ problems</text>
+  </g>
+</svg>
