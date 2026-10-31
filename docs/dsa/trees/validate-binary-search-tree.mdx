@@ -1,0 +1,224 @@
+---
+sidebar_position: 6
+title: Validate Binary Search Tree
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Validate Binary Search Tree
+
+<Difficulty level="Medium" />
+
+> **LeetCode 98** – [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) | **Striver (TUF)** – [Check if a Tree is a BST or Not](https://takeuforward.org/data-structure/check-if-a-tree-is-a-bst-or-bst-or-not/)
+
+## Problem Statement
+
+Given the `root` of a binary tree, determine if it is a valid **binary search tree (BST)**.
+
+A valid BST requires:
+
+- The left subtree of a node contains only values **strictly less** than the node.
+- The right subtree contains only values **strictly greater** than the node.
+- Both subtrees are themselves valid BSTs.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `root = [2,1,3]` | `true` |
+| 2 | `root = [5,1,4,null,null,3,6]` | `false` |
+
+### Constraints
+
+- The number of nodes is in the range `[1, 10⁴]`.
+- `-2³¹ <= Node.val <= 2³¹ - 1`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Naive — compare each node with its children only | — | — | 
+| 2 | Inorder traversal must be strictly increasing | $O(n)$ | $O(n)$ |
+| 3 | **Range / bounds propagation (optimal)** | $O(n)$ | $O(h)$ |
+
+### Approach 1 — Why the obvious check fails
+
+Checking only `node.left.val < node.val < node.right.val` is **wrong**. In `[5,1,4,null,null,3,6]` the pair `(4, 3)` looks locally fine, yet 3 sits in 5's right subtree where everything must exceed 5.
+
+### Approach 2 — Inorder traversal
+
+An inorder traversal of a valid BST yields a **strictly increasing** sequence. Traverse, collect the values, and verify each is larger than the previous.
+
+```js
+var isValidBSTInorder = function(root) {
+    let prev = null, ok = true;
+    const inorder = (node) => {
+        if (!node || !ok) return;
+        inorder(node.left);
+        if (prev !== null && node.val <= prev) ok = false;
+        prev = node.val;
+        inorder(node.right);
+    };
+    inorder(root);
+    return ok;
+};
+```
+
+### Approach 3 — Bounds propagation (optimal)
+
+Carry a valid `(min, max)` interval down the recursion, tightening it at each turn. It catches violations as early as possible and needs no extra array.
+
+## Solution
+
+**Approach (bounds propagation):** Checking only `left < node < right` locally is **not enough** — a deep descendant can still violate an ancestor's constraint. Instead, carry an open interval `(min, max)` down the recursion:
+
+- Going **left**, the upper bound tightens to the current node's value.
+- Going **right**, the lower bound tightens to the current node's value.
+
+A node is valid only if its value lies strictly inside its inherited interval.
+
+- **Time Complexity:** $O(n)$ — each node is checked once.
+- **Space Complexity:** $O(h)$ — recursion stack.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isValidBST = function(root) {
+    const validate = (node, min, max) => {
+        if (node === null) return true;
+        if (min !== null && node.val <= min) return false;
+        if (max !== null && node.val >= max) return false;
+        return validate(node.left, min, node.val) &&
+               validate(node.right, node.val, max);
+    };
+    return validate(root, null, null);
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return validate(root, null, null);
+    }
+
+    private boolean validate(TreeNode node, Integer min, Integer max) {
+        if (node == null) return true;
+        if (min != null && node.val <= min) return false;
+        if (max != null && node.val >= max) return false;
+        return validate(node.left, min, node.val)
+            && validate(node.right, node.val, max);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Validate BST — root = [5,1,4,null,null,3,6]"
+  steps={[
+    {
+      caption: 'Root 5 with bounds (−∞, +∞). Always valid at the root.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[5], [1, 4], [null, null, 3, 6]],
+          states: {'0-0': 'active'},
+        },
+        notes: ['bounds = (−∞, +∞)', '5 is inside ✓'],
+      },
+      state: ['node = 5', 'min = −∞', 'max = +∞'],
+      details: (<>The root has no constraints yet; it will create constraints for its children.</>),
+    },
+    {
+      caption: 'Left child 1 inherits bounds (−∞, 5). 1 < 5 ✓ valid.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[5], [1, 4], [null, null, 3, 6]],
+          states: {'0-0': 'done', '1-0': 'match'},
+        },
+        notes: ['bounds = (−∞, 5)', '1 < 5 ✓'],
+      },
+      state: ['node = 1', 'max = 5', 'valid ✓'],
+      details: (<>Going left tightens the <b>upper</b> bound to the parent value.</>),
+    },
+    {
+      caption: 'Right child 4 inherits bounds (5, +∞) — but 4 < 5 ✗ INVALID.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[5], [1, 4], [null, null, 3, 6]],
+          states: {'0-0': 'done', '1-1': 'active'},
+        },
+        notes: ['bounds = (5, +∞)', '4 ≤ 5 → violation'],
+      },
+      state: ['node = 4', 'min = 5', 'invalid ✗'],
+      details: (
+        <>
+          Everything in the right subtree of 5 must be <b>greater than 5</b>,
+          but node 4 is not. The bound check catches this immediately.
+        </>
+      ),
+    },
+    {
+      caption: 'Why local checks fail: node 3 looks fine under 4, but 3 < 5 breaks the root rule.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[5], [1, 4], [null, null, 3, 6]],
+          states: {'0-0': 'window', '1-1': 'muted', '2-2': 'active'},
+        },
+        notes: ['3 < 4 (looks OK locally)', 'but 3 < 5 → still invalid'],
+      },
+      state: ['node = 3', 'min = 5', 'invalid ✗'],
+      details: (
+        <>
+          This is the classic trap. Comparing a node only with its{' '}
+          <i>parent</i> would wrongly accept this tree — the inherited{' '}
+          <code>min = 5</code> is what exposes the problem.
+        </>
+      ),
+    },
+    {
+      caption: 'A violation exists → return false. ★',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[5], [1, 4], [null, null, 3, 6]],
+          states: {'1-1': 'muted', '2-2': 'muted'},
+        },
+        notes: ['answer = false'],
+      },
+      state: ['answer = false'],
+      details: (<>The <code>&amp;&amp;</code> chain short-circuits the false all the way up.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+// [2,1,3]                  → true
+// [5,1,4,null,null,3,6]    → false
+// [2,2,2]                  → false  (duplicates are not allowed)
+```

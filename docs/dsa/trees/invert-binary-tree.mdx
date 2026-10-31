@@ -1,0 +1,177 @@
+---
+sidebar_position: 1
+title: Invert Binary Tree
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Invert Binary Tree
+
+<Difficulty level="Easy" />
+
+> **LeetCode 226** – [Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/) | **Striver (TUF)** – [Binary Tree Traversals](https://takeuforward.org/data-structure/binary-tree-traversal-inorder-preorder-postorder/)
+
+## Problem Statement
+
+Given the `root` of a binary tree, **invert** the tree (mirror it left-to-right) and return its root.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `root = [4,2,7,1,3,6,9]` | `[4,7,2,9,6,3,1]` |
+| 2 | `root = [2,1,3]` | `[2,3,1]` |
+| 3 | `root = []` | `[]` |
+
+### Constraints
+
+- The number of nodes is in the range `[0, 100]`.
+- `-100 <= Node.val <= 100`
+
+---
+
+## Solution
+
+**Approach:** At every node, swap its left and right children, then recurse into both subtrees. The base case is `null`, where there is nothing to swap.
+
+- **Time Complexity:** $O(n)$ — each node is visited once.
+- **Space Complexity:** $O(h)$ — recursion stack, where `h` is the tree height ($O(n)$ worst case, $O(\log n)$ if balanced).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+    if (root === null) return null;
+    // swap the two children
+    const temp = root.left;
+    root.left = root.right;
+    root.right = temp;
+    // recurse
+    invertTree(root.left);
+    invertTree(root.right);
+    return root;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) return null;
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Invert Binary Tree — root = [4,2,7,1,3,6,9]"
+  steps={[
+    {
+      caption: 'Start at the root (4). Its children are 2 (left) and 7 (right).',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[4], [2, 7], [1, 3, 6, 9]],
+          states: {'0-0': 'active'},
+        },
+        notes: ['visit node 4'],
+      },
+      state: ['node = 4'],
+      details: (
+        <>
+          Inverting is a pure <b>post-order-free</b> recursion: swap here, then
+          let recursion mirror everything below.
+        </>
+      ),
+    },
+    {
+      caption: 'Swap 4’s children: 2 ⇄ 7. Whole subtrees move together.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[4], [7, 2], [6, 9, 1, 3]],
+          states: {'0-0': 'done', '1-0': 'match', '1-1': 'match'},
+        },
+        notes: ['swap left/right of 4'],
+      },
+      state: ['node = 4', 'left = 7', 'right = 2'],
+      details: (
+        <>
+          Swapping pointers moves the <b>entire subtree</b>, not just the node
+          value — that is why one swap per node is enough.
+        </>
+      ),
+    },
+    {
+      caption: 'Recurse into 7: swap its children 6 ⇄ 9.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[4], [7, 2], [9, 6, 1, 3]],
+          states: {'1-0': 'active', '2-0': 'match', '2-1': 'match'},
+        },
+        notes: ['swap left/right of 7'],
+      },
+      state: ['node = 7', 'left = 9', 'right = 6'],
+      details: (<>Leaves 6 and 9 have no children, so their recursion returns immediately.</>),
+    },
+    {
+      caption: 'Recurse into 2: swap its children 1 ⇄ 3.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[4], [7, 2], [9, 6, 3, 1]],
+          states: {'1-1': 'active', '2-2': 'match', '2-3': 'match'},
+        },
+        notes: ['swap left/right of 2'],
+      },
+      state: ['node = 2', 'left = 3', 'right = 1'],
+      details: (<>Same story on the other side of the tree.</>),
+    },
+    {
+      caption: 'All nodes processed — the tree is fully mirrored. ★',
+      viz: {
+        tree: {
+          label: 'tree (inverted)',
+          levels: [[4], [7, 2], [9, 6, 3, 1]],
+          states: {'0-0': 'match', '1-0': 'match', '1-1': 'match', '2-0': 'match', '2-1': 'match', '2-2': 'match', '2-3': 'match'},
+        },
+        notes: ['result = [4,7,2,9,6,3,1]'],
+      },
+      state: ['done', 'return root'],
+      details: (<>Every level is now the left-right reflection of the original.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+// [4,2,7,1,3,6,9]  →  [4,7,2,9,6,3,1]
+// [2,1,3]          →  [2,3,1]
+// []               →  []
+```

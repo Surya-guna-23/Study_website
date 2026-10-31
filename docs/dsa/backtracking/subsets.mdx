@@ -1,0 +1,224 @@
+---
+sidebar_position: 1
+title: Subsets
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Subsets
+
+<Difficulty level="Medium" />
+
+> **LeetCode 78** – [Subsets](https://leetcode.com/problems/subsets/) | **Striver (TUF)** – [Power Set: Print All Subsequences](https://takeuforward.org/data-structure/power-set-print-all-the-possible-subsequences-of-the-string/)
+
+## Problem Statement
+
+Given an integer array `nums` of **unique** elements, return all possible subsets (the **power set**).
+
+The solution set must not contain duplicate subsets. Return the answer in any order.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [1,2,3]` | `[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]` |
+| 2 | `nums = [0]` | `[[],[0]]` |
+
+### Constraints
+
+- `1 <= nums.length <= 10`
+- `-10 <= nums[i] <= 10`
+- All numbers are unique.
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | **Recursion: pick / not-pick** | $O(n \cdot 2^n)$ | $O(n)$ |
+| 2 | Iterative — grow the result set | $O(n \cdot 2^n)$ | $O(1)$ extra |
+| 3 | Bitmask enumeration | $O(n \cdot 2^n)$ | $O(1)$ extra |
+
+All three are optimal in time — you cannot beat `2ⁿ` when you must *print* `2ⁿ` subsets. They differ only in style.
+
+### Approach 3 — Bitmask
+
+Every integer from `0` to `2ⁿ - 1` encodes one subset: bit `i` set means “include `nums[i]`”. Elegant and loop-only, but limited to `n ≤ 31`.
+
+```js
+var subsetsBitmask = function(nums) {
+    const n = nums.length, res = [];
+    for (let mask = 0; mask < (1 << n); mask++) {
+        const sub = [];
+        for (let i = 0; i < n; i++) {
+            if (mask & (1 << i)) sub.push(nums[i]);
+        }
+        res.push(sub);
+    }
+    return res;
+};
+```
+
+## Solution
+
+**Approach (include / exclude):** For every element there are exactly two choices — put it in the current subset or leave it out. Recursing on those two branches for all `n` elements enumerates all `2ⁿ` subsets. When the index reaches the end of the array, the current path is a complete subset.
+
+The key backtracking move is the `pop()` after the "include" branch: it undoes the choice so the "exclude" branch starts from a clean state.
+
+- **Time Complexity:** $O(n \cdot 2^n)$ — `2ⁿ` subsets, each costing `O(n)` to copy.
+- **Space Complexity:** $O(n)$ — recursion depth and the current path (excluding output).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function(nums) {
+    const res = [];
+    const path = [];
+
+    const backtrack = (i) => {
+        if (i === nums.length) {
+            res.push([...path]);   // copy — path keeps mutating
+            return;
+        }
+        // choice 1: include nums[i]
+        path.push(nums[i]);
+        backtrack(i + 1);
+        path.pop();                // undo the choice
+
+        // choice 2: exclude nums[i]
+        backtrack(i + 1);
+    };
+
+    backtrack(0);
+    return res;
+};
+```
+
+Iterative alternative — grow the result set one element at a time:
+
+```js
+var subsetsIterative = function(nums) {
+    let res = [[]];
+    for (const n of nums) {
+        res = res.concat(res.map((sub) => [...sub, n]));
+    }
+    return res;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(nums, 0, new ArrayList<>(), res);
+        return res;
+    }
+
+    private void backtrack(int[] nums, int i, List<Integer> path, List<List<Integer>> res) {
+        if (i == nums.length) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        path.add(nums[i]);
+        backtrack(nums, i + 1, path, res);
+        path.remove(path.size() - 1);
+
+        backtrack(nums, i + 1, path, res);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Subsets — nums = [1, 2, 3]"
+  steps={[
+    {
+      caption: 'i=0, path=[]. Two branches: include 1 or skip 1.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        notes: ['path = []', 'res = []'],
+      },
+      state: ['i=0', 'path = []'],
+      details: (<>Each level of recursion decides the fate of exactly one element.</>),
+    },
+    {
+      caption: 'Include 1 → path=[1]. Include 2 → path=[1,2]. Include 3 → path=[1,2,3].',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3], states: {0: 'match', 1: 'match', 2: 'match'}}],
+        notes: ['path = [1,2,3]', 'i = 3 = length → record'],
+      },
+      state: ['path = [1,2,3]', 'res += [1,2,3]'],
+      details: (<>The leftmost path of the decision tree takes everything.</>),
+    },
+    {
+      caption: 'Backtrack: pop 3, take the "skip 3" branch → record [1,2].',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3], states: {0: 'match', 1: 'match', 2: 'muted'}}],
+        notes: ['path = [1,2]', 'res = [[1,2,3],[1,2]]'],
+      },
+      state: ['path = [1,2]', 'res += [1,2]'],
+      details: (
+        <>
+          The <code>pop()</code> is what makes this <b>backtracking</b> — we
+          rewind one decision and explore the alternative.
+        </>
+      ),
+    },
+    {
+      caption: 'Rewind further: skip 2, include 3 → [1,3]; skip both → [1].',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3], states: {0: 'match', 1: 'muted', 2: 'window'}}],
+        notes: ['res += [1,3]', 'res += [1]'],
+      },
+      state: ['path = [1,3] then [1]'],
+      details: (<>All four subsets that contain 1 are now collected.</>),
+    },
+    {
+      caption: 'Rewind to i=0 and skip 1 — the same four shapes appear without 1.',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3], states: {0: 'muted', 1: 'window', 2: 'window'}}],
+        notes: ['res += [2,3], [2], [3], []'],
+      },
+      state: ['exploring the "skip 1" half'],
+      details: (<>The recursion tree is perfectly symmetric: 2 branches × 3 levels.</>),
+    },
+    {
+      caption: 'All 2³ = 8 subsets collected. ★',
+      viz: {
+        arrays: [{label: 'nums', values: [1, 2, 3], states: {0: 'match', 1: 'match', 2: 'match'}}],
+        notes: ['8 subsets total', '[], [1], [2], [3], [1,2], [1,3], [2,3], [1,2,3]'],
+      },
+      state: ['answer size = 8'],
+      details: (<>With <code>n</code> unique elements there are always <code>2ⁿ</code> subsets.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(subsets([1,2,3]).length); // 8
+console.log(subsets([0]));            // [[0],[]]
+```

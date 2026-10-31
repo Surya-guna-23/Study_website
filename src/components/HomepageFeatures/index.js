@@ -9,9 +9,10 @@ const FeatureList = [
     to: '/docs/dsa/intro',
     description: (
       <>
-        Curated LeetCode & Striver (TUF) problems grouped by pattern — Arrays &
-        Hashing, Two Pointers, Sliding Window, Binary Search, Linked List and
-        more, each with clean solutions and step-by-step dry runs.
+        Curated LeetCode &amp; Striver (TUF) problems across 10 patterns — Arrays
+        &amp; Hashing, Two Pointers, Sliding Window, Binary Search, Linked List,
+        Stack, Trees, Heap, Backtracking and Dynamic Programming — each worked
+        from brute force through to the optimal solution.
       </>
     ),
   },
@@ -20,9 +21,9 @@ const FeatureList = [
     to: '/docs/dsa/arrays-and-hashing/two-sum',
     description: (
       <>
-        Every problem ships with a diagram that walks through the algorithm one
-        step at a time. Click any diagram to zoom in and follow the logic just
-        like a whiteboard explanation.
+        Every problem ships with an interactive, step-by-step player that
+        animates arrays, hash maps, linked lists and binary trees — pointers,
+        windows and all — just like a whiteboard explanation.
       </>
     ),
   },

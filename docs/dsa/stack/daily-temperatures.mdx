@@ -1,0 +1,196 @@
+---
+sidebar_position: 4
+title: Daily Temperatures
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Daily Temperatures
+
+<Difficulty level="Medium" />
+
+> **LeetCode 739** – [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) | **Striver (TUF)** – [Next Greater Element (Monotonic Stack)](https://takeuforward.org/data-structure/next-greater-element-using-stack/)
+
+## Problem Statement
+
+Given an array of integers `temperatures` representing daily temperatures, return an array `answer` such that `answer[i]` is the **number of days** you have to wait after day `i` to get a warmer temperature. If there is no future day for which this is possible, set `answer[i] = 0`.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `[73,74,75,71,69,72,76,73]` | `[1,1,4,2,1,1,0,0]` |
+| 2 | `[30,40,50,60]` | `[1,1,1,0]` |
+| 3 | `[30,60,90]` | `[1,1,0]` |
+
+### Constraints
+
+- `1 <= temperatures.length <= 10⁵`
+- `30 <= temperatures[i] <= 100`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Brute force — for each day scan forward | $O(n^2)$ | $O(1)$ |
+| 2 | **Monotonic stack (optimal)** | $O(n)$ | $O(n)$ |
+
+### Approach 1 — Brute force
+
+For every day `i`, walk forward until a warmer day is found.
+
+```js
+var dailyTemperaturesBrute = function(temperatures) {
+    const n = temperatures.length;
+    const answer = new Array(n).fill(0);
+    for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+            if (temperatures[j] > temperatures[i]) { answer[i] = j - i; break; }
+        }
+    }
+    return answer;
+};
+```
+
+With `n = 10⁵` this is ~10¹⁰ operations — far too slow.
+
+### Approach 2 — Monotonic stack (optimal)
+
+The brute force re-scans the same cold stretch over and over. Instead, **remember** the unresolved days in a stack kept in decreasing temperature order. One warm day can then resolve many waiting days at once, and each index is pushed/popped only once.
+
+## Solution
+
+**Approach (monotonic stack):** Keep a stack of **indices** whose warmer day we haven't found yet, kept in decreasing temperature order. For each new day, while the current temperature is warmer than the day on top of the stack, that waiting day's answer is resolved — pop it and record the distance. Then push the current index.
+
+- **Time Complexity:** $O(n)$ — each index is pushed and popped at most once.
+- **Space Complexity:** $O(n)$ — the stack of unresolved indices.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[]} temperatures
+ * @return {number[]}
+ */
+var dailyTemperatures = function(temperatures) {
+    const n = temperatures.length;
+    const answer = new Array(n).fill(0);
+    const stack = []; // indices, decreasing temperature
+    for (let i = 0; i < n; i++) {
+        while (stack.length && temperatures[i] > temperatures[stack[stack.length - 1]]) {
+            const prev = stack.pop();
+            answer[prev] = i - prev;
+        }
+        stack.push(i);
+    }
+    return answer;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] answer = new int[n];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+                int prev = stack.pop();
+                answer[prev] = i - prev;
+            }
+            stack.push(i);
+        }
+        return answer;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Daily Temperatures — temps = [73, 74, 75, 71, 72]"
+  steps={[
+    {
+      caption: 'i=0 (73): stack empty → push index 0.',
+      viz: {
+        arrays: [{label: 'temps', values: [73, 74, 75, 71, 72], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'stack (indices)', entries: [['top', '0']]},
+        notes: ['answer = [0,0,0,0,0]'],
+      },
+      state: ['i=0', 'stack = [0]'],
+      details: (<>Nothing to resolve yet; remember day 0 is still waiting.</>),
+    },
+    {
+      caption: 'i=1 (74) > 73 → resolve day 0: answer[0] = 1-0 = 1. Push 1.',
+      viz: {
+        arrays: [{label: 'temps', values: [73, 74, 75, 71, 72], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'stack (indices)', entries: [['top', '1']]},
+        notes: ['74 > 73 → answer[0] = 1', 'answer = [1,0,0,0,0]'],
+      },
+      state: ['i=1', 'answer[0]=1', 'stack = [1]'],
+      details: (<>Day 1 is warmer than day 0, which had been waiting 1 day.</>),
+    },
+    {
+      caption: 'i=2 (75) > 74 → resolve day 1: answer[1] = 2-1 = 1. Push 2.',
+      viz: {
+        arrays: [{label: 'temps', values: [73, 74, 75, 71, 72], states: {0: 'done', 1: 'done', 2: 'active'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'stack (indices)', entries: [['top', '2']]},
+        notes: ['75 > 74 → answer[1] = 1', 'answer = [1,1,0,0,0]'],
+      },
+      state: ['i=2', 'answer[1]=1', 'stack = [2]'],
+      details: (<>The stack stays monotonically decreasing in temperature.</>),
+    },
+    {
+      caption: 'i=3 (71) < 75 → nothing resolves. Push 3.',
+      viz: {
+        arrays: [{label: 'temps', values: [73, 74, 75, 71, 72], states: {2: 'window', 3: 'active'}, pointers: [{index: 3, label: 'i'}]}],
+        map: {label: 'stack (indices)', entries: [['', '2'], ['top', '3']]},
+        notes: ['71 < 75 → wait', 'stack = [2, 3]'],
+      },
+      state: ['i=3', 'stack = [2, 3]'],
+      details: (<>Day 3 is colder, so it just waits on top of day 2.</>),
+    },
+    {
+      caption: 'i=4 (72) > 71 → resolve day 3: answer[3] = 4-3 = 1. 72 < 75 → stop, push 4.',
+      viz: {
+        arrays: [{label: 'temps', values: [73, 74, 75, 71, 72], states: {2: 'window', 3: 'done', 4: 'active'}, pointers: [{index: 4, label: 'i'}]}],
+        map: {label: 'stack (indices)', entries: [['', '2'], ['top', '4']]},
+        notes: ['72 > 71 → answer[3] = 1', 'answer = [1,1,0,1,0]'],
+      },
+      state: ['i=4', 'answer[3]=1', 'stack = [2, 4]'],
+      details: (
+        <>
+          Days 2 and 4 never see a warmer day, so their answers stay{' '}
+          <code>0</code>. Final: <code>[1,1,0,1,0]</code>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(dailyTemperatures([73,74,75,71,69,72,76,73])); // [1,1,4,2,1,1,0,0]
+console.log(dailyTemperatures([30,40,50,60]));             // [1,1,1,0]
+console.log(dailyTemperatures([30,60,90]));                // [1,1,0]
+```

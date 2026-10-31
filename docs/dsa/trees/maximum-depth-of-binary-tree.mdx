@@ -1,0 +1,188 @@
+---
+sidebar_position: 2
+title: Maximum Depth of Binary Tree
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Maximum Depth of Binary Tree
+
+<Difficulty level="Easy" />
+
+> **LeetCode 104** – [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/) | **Striver (TUF)** – [Maximum Depth of a Binary Tree](https://takeuforward.org/data-structure/maximum-depth-of-a-binary-tree/)
+
+## Problem Statement
+
+Given the `root` of a binary tree, return its **maximum depth** — the number of nodes along the longest path from the root down to the farthest leaf.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `root = [3,9,20,null,null,15,7]` | `3` |
+| 2 | `root = [1,null,2]` | `2` |
+| 3 | `root = []` | `0` |
+
+### Constraints
+
+- The number of nodes is in the range `[0, 10⁴]`.
+- `-100 <= Node.val <= 100`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | **Recursion (post-order)** | $O(n)$ | $O(h)$ |
+| 2 | Iterative BFS — count levels | $O(n)$ | $O(n)$ |
+
+Both are optimal in time; pick recursion for brevity, BFS if you must avoid deep call stacks (a skewed tree of 10⁴ nodes can overflow the stack).
+
+## Solution
+
+**Approach:** The depth of a tree is `1 + max(depth of left, depth of right)`. An empty tree has depth `0`. This recurrence translates directly into a three-line recursion.
+
+- **Time Complexity:** $O(n)$ — every node contributes one call.
+- **Space Complexity:** $O(h)$ — recursion stack equal to the tree height.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+    if (root === null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+};
+```
+
+Iterative BFS alternative (count the levels):
+
+```js
+var maxDepthBFS = function(root) {
+    if (!root) return 0;
+    let queue = [root], depth = 0;
+    while (queue.length) {
+        const next = [];
+        for (const node of queue) {
+            if (node.left) next.push(node.left);
+            if (node.right) next.push(node.right);
+        }
+        queue = next;
+        depth++;
+    }
+    return depth;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Maximum Depth — root = [3,9,20,null,null,15,7]"
+  steps={[
+    {
+      caption: 'Call maxDepth(3). It needs both subtree depths before it can answer.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[3], [9, 20], [null, null, 15, 7]],
+          states: {'0-0': 'active'},
+        },
+        notes: ['depth(3) = 1 + max(depth(9), depth(20))'],
+      },
+      state: ['node = 3'],
+      details: (<>Recursion goes all the way down first, then combines on the way back up.</>),
+    },
+    {
+      caption: 'maxDepth(9): a leaf. Both children are null → 1 + max(0,0) = 1.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[3], [9, 20], [null, null, 15, 7]],
+          states: {'1-0': 'match'},
+        },
+        notes: ['depth(9) = 1'],
+      },
+      state: ['node = 9', 'depth = 1'],
+      details: (<>A leaf always returns <code>1</code>.</>),
+    },
+    {
+      caption: 'maxDepth(15) and maxDepth(7): both leaves → 1 each.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[3], [9, 20], [null, null, 15, 7]],
+          states: {'2-2': 'match', '2-3': 'match'},
+        },
+        notes: ['depth(15) = 1', 'depth(7) = 1'],
+      },
+      state: ['depth(15) = 1', 'depth(7) = 1'],
+      details: (<>Deepest level reached; now results bubble upward.</>),
+    },
+    {
+      caption: 'maxDepth(20) = 1 + max(1, 1) = 2.',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[3], [9, 20], [null, null, 15, 7]],
+          states: {'1-1': 'active', '2-2': 'done', '2-3': 'done'},
+        },
+        notes: ['depth(20) = 1 + max(1,1) = 2'],
+      },
+      state: ['node = 20', 'depth = 2'],
+      details: (<>Node 20 sits above two leaves, so its subtree is 2 deep.</>),
+    },
+    {
+      caption: 'maxDepth(3) = 1 + max(depth(9)=1, depth(20)=2) = 3. ★',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[3], [9, 20], [null, null, 15, 7]],
+          states: {'0-0': 'match', '1-1': 'window', '2-3': 'window'},
+        },
+        notes: ['depth = 1 + max(1, 2) = 3', 'longest path 3 → 20 → 7'],
+      },
+      state: ['answer = 3'],
+      details: (
+        <>
+          The right subtree is deeper, so it decides the answer. The longest
+          root-to-leaf path is <code>3 → 20 → 7</code>, which has 3 nodes.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+// [3,9,20,null,null,15,7] → 3
+// [1,null,2]              → 2
+// []                      → 0
+```

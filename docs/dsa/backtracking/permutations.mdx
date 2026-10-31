@@ -1,0 +1,235 @@
+---
+sidebar_position: 3
+title: Permutations
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Permutations
+
+<Difficulty level="Medium" />
+
+> **LeetCode 46** – [Permutations](https://leetcode.com/problems/permutations/) | **Striver (TUF)** – [Print All Permutations of an Array/String](https://takeuforward.org/data-structure/print-all-permutations-of-a-string-array/)
+
+## Problem Statement
+
+Given an array `nums` of **distinct** integers, return all possible **permutations**. You may return the answer in any order.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [1,2,3]` | `[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]` |
+| 2 | `nums = [0,1]` | `[[0,1],[1,0]]` |
+| 3 | `nums = [1]` | `[[1]]` |
+
+### Constraints
+
+- `1 <= nums.length <= 6`
+- All integers are **unique**.
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Extra space |
+|---|----------|------|-------------|
+| 1 | **Backtracking with a `used[]` array** | $O(n \cdot n!)$ | $O(n)$ |
+| 2 | Backtracking by **swapping** in place | $O(n \cdot n!)$ | $O(1)$ |
+
+### Approach 2 — Swap-based (TUF's space-optimised version)
+
+Instead of tracking which values are used, fix one index at a time and swap every remaining candidate into it. No `used` array and no `path` list are needed.
+
+```js
+var permuteSwap = function(nums) {
+    const res = [];
+    const backtrack = (idx) => {
+        if (idx === nums.length) { res.push([...nums]); return; }
+        for (let i = idx; i < nums.length; i++) {
+            [nums[idx], nums[i]] = [nums[i], nums[idx]];   // choose
+            backtrack(idx + 1);
+            [nums[idx], nums[i]] = [nums[i], nums[idx]];   // un-choose
+        }
+    };
+    backtrack(0);
+    return res;
+};
+```
+
+Note the swap version emits permutations in a different order — fine here, since any order is accepted.
+
+## Solution
+
+**Approach:** Unlike subsets, **order matters** and every element must be used exactly once. So at each position we try *every* unused number. A `used[]` boolean array tracks which values are already in the current path.
+
+The pattern is always the same three lines: **choose → recurse → un-choose**.
+
+- **Time Complexity:** $O(n \cdot n!)$ — `n!` permutations, each `O(n)` to copy.
+- **Space Complexity:** $O(n)$ — recursion depth plus the `used` array.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
+    const res = [];
+    const path = [];
+    const used = new Array(nums.length).fill(false);
+
+    const backtrack = () => {
+        if (path.length === nums.length) {
+            res.push([...path]);
+            return;
+        }
+        for (let i = 0; i < nums.length; i++) {
+            if (used[i]) continue;      // already placed
+            used[i] = true;             // choose
+            path.push(nums[i]);
+            backtrack();                // explore
+            path.pop();                 // un-choose
+            used[i] = false;
+        }
+    };
+
+    backtrack();
+    return res;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(nums, new boolean[nums.length], new ArrayList<>(), res);
+        return res;
+    }
+
+    private void backtrack(int[] nums, boolean[] used,
+                           List<Integer> path, List<List<Integer>> res) {
+        if (path.size() == nums.length) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i]) continue;
+            used[i] = true;
+            path.add(nums[i]);
+            backtrack(nums, used, path, res);
+            path.remove(path.size() - 1);
+            used[i] = false;
+        }
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Permutations — nums = [1, 2, 3]"
+  steps={[
+    {
+      caption: 'path = []. Position 0 has 3 candidates: 1, 2 or 3.',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [1, 2, 3]},
+          {label: 'used', values: ['F', 'F', 'F']},
+        ],
+        notes: ['path = []', '3 choices for slot 0'],
+      },
+      state: ['path = []'],
+      details: (<>Every unused number is a legal choice for the next position.</>),
+    },
+    {
+      caption: 'Choose 1 → path=[1], used[0]=T. Two candidates remain.',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [1, 2, 3], states: {0: 'match'}},
+          {label: 'used', values: ['T', 'F', 'F'], states: {0: 'active'}},
+        ],
+        notes: ['path = [1]', '2 choices left'],
+      },
+      state: ['path = [1]', 'used = [T,F,F]'],
+      details: (<>Marking <code>used[0]</code> prevents 1 from being reused deeper down.</>),
+    },
+    {
+      caption: 'Choose 2 → path=[1,2]. Then 3 is forced → path=[1,2,3]. Record! ★',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [1, 2, 3], states: {0: 'match', 1: 'match', 2: 'match'}},
+          {label: 'used', values: ['T', 'T', 'T'], states: {0: 'active', 1: 'active', 2: 'active'}},
+        ],
+        notes: ['path = [1,2,3]', 'length = n → record'],
+      },
+      state: ['path = [1,2,3]', 'res += [1,2,3]'],
+      details: (<>A full-length path is a complete permutation.</>),
+    },
+    {
+      caption: 'Backtrack: un-choose 3 and 2. From [1], choose 3 instead → [1,3,2]. ★',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [1, 2, 3], states: {0: 'match', 2: 'match', 1: 'window'}},
+          {label: 'used', values: ['T', 'F', 'T'], states: {1: 'muted'}},
+        ],
+        notes: ['path = [1,3,2]', 'res += [1,3,2]'],
+      },
+      state: ['path = [1,3,2]'],
+      details: (
+        <>
+          Resetting <code>used[i] = false</code> on the way out is essential —
+          forget it and later branches silently lose candidates.
+        </>
+      ),
+    },
+    {
+      caption: 'Back to empty path, choose 2 first → [2,1,3] and [2,3,1].',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [1, 2, 3], states: {1: 'match'}},
+          {label: 'used', values: ['F', 'T', 'F'], states: {1: 'active'}},
+        ],
+        notes: ['res += [2,1,3], [2,3,1]'],
+      },
+      state: ['exploring branch starting with 2'],
+      details: (<>Each starting value contributes <code>(n−1)! = 2</code> permutations.</>),
+    },
+    {
+      caption: 'Finally branch 3 → [3,1,2] and [3,2,1]. Total 3! = 6. ★',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [1, 2, 3], states: {0: 'match', 1: 'match', 2: 'match'}},
+        ],
+        notes: ['6 permutations total'],
+      },
+      state: ['answer size = 6'],
+      details: (<>With <code>n</code> distinct values there are exactly <code>n!</code> permutations.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(permute([1,2,3]).length); // 6
+console.log(permute([0,1]));          // [[0,1],[1,0]]
+console.log(permute([1]));            // [[1]]
+```

@@ -1,0 +1,219 @@
+---
+sidebar_position: 1
+title: Last Stone Weight
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Last Stone Weight
+
+<Difficulty level="Easy" />
+
+> **LeetCode 1046** – [Last Stone Weight](https://leetcode.com/problems/last-stone-weight/)
+
+## Problem Statement
+
+You are given an array `stones` of stone weights. On each turn, smash the **two heaviest** stones `x <= y`:
+
+- If `x === y`, both stones are destroyed.
+- If `x !== y`, the stone of weight `x` is destroyed and the stone `y` becomes `y - x`.
+
+Return the weight of the last remaining stone, or `0` if none remain.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `stones = [2,7,4,1,8,1]` | `1` |
+| 2 | `stones = [1]` | `1` |
+
+### Constraints
+
+- `1 <= stones.length <= 30`
+- `1 <= stones[i] <= 1000`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Re-sort the array after every smash | $O(n^2 \log n)$ | $O(n)$ |
+| 2 | **Max-heap / priority queue (optimal)** | $O(n \log n)$ | $O(n)$ |
+
+### Approach 1 — Brute force
+
+Sort, pop the last two, push the difference, sort again — repeat. Correct but re-sorts `n` times for no reason.
+
+### Approach 2 — Max-heap (optimal)
+
+We never need the full ordering, only the two largest values. A heap delivers those in `O(log n)` and re-balances in `O(log n)` after each push.
+
+## Solution
+
+**Approach:** We repeatedly need the two largest values — exactly what a **max-heap** gives in `O(log n)`. Pop twice, push the difference back if it's non-zero, and repeat until at most one stone remains.
+
+JavaScript has no built-in heap, so the version below uses a small array-based max-heap.
+
+- **Time Complexity:** $O(n \log n)$ — up to `n` smashes, each `O(\log n)`.
+- **Space Complexity:** $O(n)$ — the heap.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+class MaxHeap {
+    constructor(arr = []) {
+        this.h = [...arr];
+        for (let i = (this.h.length >> 1) - 1; i >= 0; i--) this.down(i);
+    }
+    get size() { return this.h.length; }
+    push(v) { this.h.push(v); this.up(this.h.length - 1); }
+    pop() {
+        const top = this.h[0];
+        const last = this.h.pop();
+        if (this.h.length) { this.h[0] = last; this.down(0); }
+        return top;
+    }
+    up(i) {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.h[p] >= this.h[i]) break;
+            [this.h[p], this.h[i]] = [this.h[i], this.h[p]];
+            i = p;
+        }
+    }
+    down(i) {
+        const n = this.h.length;
+        for (;;) {
+            const l = 2 * i + 1, r = l + 1;
+            let big = i;
+            if (l < n && this.h[l] > this.h[big]) big = l;
+            if (r < n && this.h[r] > this.h[big]) big = r;
+            if (big === i) break;
+            [this.h[big], this.h[i]] = [this.h[i], this.h[big]];
+            i = big;
+        }
+    }
+}
+
+/**
+ * @param {number[]} stones
+ * @return {number}
+ */
+var lastStoneWeight = function(stones) {
+    const heap = new MaxHeap(stones);
+    while (heap.size > 1) {
+        const y = heap.pop();
+        const x = heap.pop();
+        if (y !== x) heap.push(y - x);
+    }
+    return heap.size ? heap.pop() : 0;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.PriorityQueue;
+import java.util.Collections;
+
+class Solution {
+    public int lastStoneWeight(int[] stones) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for (int s : stones) pq.offer(s);
+        while (pq.size() > 1) {
+            int y = pq.poll();
+            int x = pq.poll();
+            if (y != x) pq.offer(y - x);
+        }
+        return pq.isEmpty() ? 0 : pq.poll();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Last Stone Weight — stones = [2,7,4,1,8,1]"
+  steps={[
+    {
+      caption: 'Build a max-heap. The largest stone is always on top.',
+      viz: {
+        arrays: [{label: 'heap (sorted view)', values: [8, 7, 4, 2, 1, 1], states: {0: 'active', 1: 'active'}}],
+        notes: ['size = 6'],
+      },
+      state: ['heap = [8,7,4,2,1,1]'],
+      details: (
+        <>
+          We never need the full sorted order — only the top two — so a heap
+          beats re-sorting the array on every turn.
+        </>
+      ),
+    },
+    {
+      caption: 'Smash 8 and 7 → 8 − 7 = 1. Push 1 back.',
+      viz: {
+        arrays: [{label: 'heap (sorted view)', values: [4, 2, 1, 1, 1], states: {0: 'active', 1: 'active', 4: 'match'}}],
+        notes: ['8 − 7 = 1 → push 1', 'heap = [4,2,1,1,1]'],
+      },
+      state: ['y=8', 'x=7', 'push 1'],
+      details: (<>Unequal stones leave a remainder that rejoins the heap.</>),
+    },
+    {
+      caption: 'Smash 4 and 2 → 4 − 2 = 2. Push 2 back.',
+      viz: {
+        arrays: [{label: 'heap (sorted view)', values: [2, 1, 1, 1], states: {0: 'match', 1: 'active'}}],
+        notes: ['4 − 2 = 2 → push 2', 'heap = [2,1,1,1]'],
+      },
+      state: ['y=4', 'x=2', 'push 2'],
+      details: (<>The heap re-orders itself so 2 rises to the top.</>),
+    },
+    {
+      caption: 'Smash 2 and 1 → 1. Push 1 back. heap = [1,1,1].',
+      viz: {
+        arrays: [{label: 'heap (sorted view)', values: [1, 1, 1], states: {0: 'active', 1: 'active'}}],
+        notes: ['2 − 1 = 1 → push 1', 'heap = [1,1,1]'],
+      },
+      state: ['y=2', 'x=1', 'push 1'],
+      details: (<>Three equal stones remain.</>),
+    },
+    {
+      caption: 'Smash 1 and 1 → equal, both destroyed. One stone left.',
+      viz: {
+        arrays: [{label: 'heap (sorted view)', values: [1], states: {0: 'match'}}],
+        notes: ['1 == 1 → both destroyed', 'heap = [1]'],
+      },
+      state: ['y=1', 'x=1', 'nothing pushed'],
+      details: (<>Equal stones cancel out completely — nothing is pushed back.</>),
+    },
+    {
+      caption: 'Only one stone remains → return 1. ★',
+      viz: {
+        arrays: [{label: 'heap (sorted view)', values: [1], states: {0: 'match'}}],
+        notes: ['answer = 1'],
+      },
+      state: ['answer = 1'],
+      details: (<>If the heap had emptied instead, the answer would be <code>0</code>.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(lastStoneWeight([2,7,4,1,8,1])); // 1
+console.log(lastStoneWeight([1]));           // 1
+console.log(lastStoneWeight([2,2]));         // 0
+```

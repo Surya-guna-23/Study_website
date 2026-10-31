@@ -1,0 +1,173 @@
+---
+sidebar_position: 5
+title: Generate Parentheses
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Generate Parentheses
+
+<Difficulty level="Medium" />
+
+> **LeetCode 22** – [Generate Parentheses](https://leetcode.com/problems/generate-parentheses/) | **Striver (TUF)** – [Print All Combinations of Balanced Parentheses](https://takeuforward.org/data-structure/print-all-combinations-of-balanced-parentheses/)
+
+## Problem Statement
+
+Given `n` pairs of parentheses, generate **all combinations** of well-formed parentheses.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `n = 3` | `["((()))","(()())","(())()","()(())","()()()"]` |
+| 2 | `n = 1` | `["()"]` |
+
+### Constraints
+
+- `1 <= n <= 8`
+
+---
+
+## Solution
+
+**Approach (backtracking):** Build the string one character at a time. Track how many open and close brackets we've placed:
+
+- We may add `'('` while `open < n`.
+- We may add `')'` while `close < open` (never close more than we opened).
+
+When the string reaches length `2n` it is a valid combination — record it.
+
+- **Time Complexity:** $O(4^n / \sqrt n)$ — the *n*-th Catalan number of valid strings.
+- **Space Complexity:** $O(n)$ — recursion depth (excluding the output).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
+    const res = [];
+    const backtrack = (cur, open, close) => {
+        if (cur.length === 2 * n) {
+            res.push(cur);
+            return;
+        }
+        if (open < n) backtrack(cur + '(', open + 1, close);
+        if (close < open) backtrack(cur + ')', open, close + 1);
+    };
+    backtrack('', 0, 0);
+    return res;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.List;
+import java.util.ArrayList;
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        backtrack(res, new StringBuilder(), 0, 0, n);
+        return res;
+    }
+
+    private void backtrack(List<String> res, StringBuilder cur, int open, int close, int n) {
+        if (cur.length() == 2 * n) {
+            res.add(cur.toString());
+            return;
+        }
+        if (open < n) {
+            cur.append('(');
+            backtrack(res, cur, open + 1, close, n);
+            cur.deleteCharAt(cur.length() - 1);
+        }
+        if (close < open) {
+            cur.append(')');
+            backtrack(res, cur, open, close + 1, n);
+            cur.deleteCharAt(cur.length() - 1);
+        }
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Generate Parentheses — n = 2"
+  steps={[
+    {
+      caption: 'Start empty. open=0, close=0. We can only add "(".',
+      viz: {
+        arrays: [{label: 'current', values: ['_', '_', '_', '_']}],
+        notes: ['open = 0', 'close = 0', 'need length 4'],
+      },
+      state: ['cur = ""', 'open=0', 'close=0'],
+      details: (<>With nothing opened yet, only <code>(</code> is legal.</>),
+    },
+    {
+      caption: 'Add "(" → "(". open=1. Can add "(" (open<2) or ")" (close<open).',
+      viz: {
+        arrays: [{label: 'current', values: ['(', '_', '_', '_'], states: {0: 'active'}}],
+        notes: ['open = 1', 'close = 0'],
+      },
+      state: ['cur = "("', 'open=1', 'close=0'],
+      details: (<>Both choices are valid; explore the deeper <code>(</code> branch first.</>),
+    },
+    {
+      caption: 'Add "(" → "((". open=2 = n, so only ")" allowed now.',
+      viz: {
+        arrays: [{label: 'current', values: ['(', '(', '_', '_'], states: {0: 'done', 1: 'active'}}],
+        notes: ['open = 2 (maxed)', 'close = 0'],
+      },
+      state: ['cur = "(("', 'open=2', 'close=0'],
+      details: (<>We used all opens, so the rest must close.</>),
+    },
+    {
+      caption: 'Add ")" → "(()". close=1 < open=2, so ")" still allowed.',
+      viz: {
+        arrays: [{label: 'current', values: ['(', '(', ')', '_'], states: {0: 'done', 1: 'done', 2: 'active'}}],
+        notes: ['open = 2', 'close = 1'],
+      },
+      state: ['cur = "(()"', 'open=2', 'close=1'],
+      details: (<>Closing is legal because there is still an unmatched open.</>),
+    },
+    {
+      caption: 'Add ")" → "(())". Length 4 → record it! ★',
+      viz: {
+        arrays: [{label: 'current', values: ['(', '(', ')', ')'], states: {0: 'match', 1: 'match', 2: 'match', 3: 'match'}}],
+        notes: ['length = 4', 'res += "(())"'],
+      },
+      state: ['cur = "(())"', 'valid ✓'],
+      details: (
+        <>
+          A complete, balanced string of length <code>2n = 4</code>. Backtracking
+          then unwinds to explore <code>"()()"</code> as well.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(generateParenthesis(1)); // ["()"]
+console.log(generateParenthesis(2)); // ["(())","()()"]
+console.log(generateParenthesis(3)); // ["((()))","(()())","(())()","()(())","()()()"]
+```

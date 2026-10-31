@@ -1,0 +1,211 @@
+---
+sidebar_position: 3
+title: K Closest Points to Origin
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# K Closest Points to Origin
+
+<Difficulty level="Medium" />
+
+> **LeetCode 973** – [K Closest Points to Origin](https://leetcode.com/problems/k-closest-points-to-origin/)
+
+## Problem Statement
+
+Given an array of `points` where `points[i] = [xᵢ, yᵢ]` and an integer `k`, return the `k` closest points to the origin `(0, 0)`.
+
+The distance is the Euclidean distance `sqrt(x² + y²)`. The answer may be returned in any order.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `points = [[1,3],[-2,2]]`, `k = 1` | `[[-2,2]]` |
+| 2 | `points = [[3,3],[5,-1],[-2,4]]`, `k = 2` | `[[3,3],[-2,4]]` |
+
+### Constraints
+
+- `1 <= k <= points.length <= 10⁴`
+- `-10⁴ <= xᵢ, yᵢ <= 10⁴`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Sort all points by distance, take the first `k` | $O(n \log n)$ | $O(n)$ |
+| 2 | **Max-heap of size k** | $O(n \log k)$ | $O(k)$ |
+| 3 | Quickselect on distance | $O(n)$ average | $O(1)$ |
+
+Sorting is the simplest and is usually fast enough. The heap wins when `k ≪ n` (or the points stream in), and quickselect is asymptotically best but rarely needed at these constraints.
+
+## Solution
+
+**Approach:** Two useful observations:
+
+1. We can compare **squared** distances `x² + y²` and skip the square root entirely — it is monotonic, so the ordering is identical (and we avoid floating-point error).
+2. Keep a **max-heap of size `k`** keyed by squared distance. Whenever it overflows, evict the *farthest* point. What remains are the `k` closest.
+
+- **Time Complexity:** $O(n \log k)$ — better than sorting everything when `k ≪ n`.
+- **Space Complexity:** $O(k)$.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kClosest = function(points, k) {
+    // Simple and clear: sort by squared distance.  O(n log n)
+    return [...points]
+        .sort((a, b) => (a[0] ** 2 + a[1] ** 2) - (b[0] ** 2 + b[1] ** 2))
+        .slice(0, k);
+};
+```
+
+Heap version — `O(n log k)`, preferable when `k` is much smaller than `n`:
+
+```js
+var kClosestHeap = function(points, k) {
+    const heap = []; // max-heap of [dist, point] via manual sift
+    const dist = (p) => p[0] ** 2 + p[1] ** 2;
+    const swap = (i, j) => { [heap[i], heap[j]] = [heap[j], heap[i]]; };
+
+    const up = (i) => {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (dist(heap[p]) >= dist(heap[i])) break;
+            swap(p, i); i = p;
+        }
+    };
+    const down = (i) => {
+        for (;;) {
+            const l = 2 * i + 1, r = l + 1;
+            let big = i;
+            if (l < heap.length && dist(heap[l]) > dist(heap[big])) big = l;
+            if (r < heap.length && dist(heap[r]) > dist(heap[big])) big = r;
+            if (big === i) break;
+            swap(big, i); i = big;
+        }
+    };
+
+    for (const p of points) {
+        heap.push(p); up(heap.length - 1);
+        if (heap.length > k) { heap[0] = heap.pop(); down(0); }
+    }
+    return heap;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.PriorityQueue;
+
+class Solution {
+    public int[][] kClosest(int[][] points, int k) {
+        // max-heap by squared distance
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+            (a, b) -> (b[0] * b[0] + b[1] * b[1]) - (a[0] * a[0] + a[1] * a[1])
+        );
+        for (int[] p : points) {
+            pq.offer(p);
+            if (pq.size() > k) pq.poll();
+        }
+        int[][] res = new int[k][2];
+        for (int i = 0; i < k; i++) res[i] = pq.poll();
+        return res;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="K Closest — points = [[3,3],[5,-1],[-2,4]], k = 2"
+  steps={[
+    {
+      caption: 'Compute squared distances — no square roots needed.',
+      viz: {
+        arrays: [{label: 'points', values: ['[3,3]', '[5,-1]', '[-2,4]']}],
+        map: {label: 'x² + y²', entries: [['[3,3]', '18'], ['[5,-1]', '26'], ['[-2,4]', '20']]},
+        notes: ['k = 2', 'compare squared distances'],
+      },
+      state: ['d = [18, 26, 20]'],
+      details: (
+        <>
+          Since <code>√</code> is increasing, ordering by <code>x²+y²</code> is
+          the same as ordering by true distance — but stays in integers.
+        </>
+      ),
+    },
+    {
+      caption: 'Push [3,3] (d=18). Heap size 1 ≤ k.',
+      viz: {
+        arrays: [{label: 'points', values: ['[3,3]', '[5,-1]', '[-2,4]'], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'heap (max d on top)', entries: [['[3,3]', '18']], highlightKey: '[3,3]'},
+        notes: ['heap = {18}'],
+      },
+      state: ['heap size = 1'],
+      details: (<>Below capacity, so nothing is evicted.</>),
+    },
+    {
+      caption: 'Push [5,-1] (d=26). Heap size 2 = k. Top is now 26 (farthest).',
+      viz: {
+        arrays: [{label: 'points', values: ['[3,3]', '[5,-1]', '[-2,4]'], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'heap (max d on top)', entries: [['[5,-1]', '26'], ['[3,3]', '18']], highlightKey: '[5,-1]'},
+        notes: ['heap = {26, 18}'],
+      },
+      state: ['heap size = 2'],
+      details: (<>The max-heap keeps the <b>worst</b> candidate ready for eviction.</>),
+    },
+    {
+      caption: 'Push [-2,4] (d=20) → size 3 > k, so pop the largest (26).',
+      viz: {
+        arrays: [{label: 'points', values: ['[3,3]', '[5,-1]', '[-2,4]'], states: {0: 'match', 1: 'muted', 2: 'active'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'heap (max d on top)', entries: [['[-2,4]', '20'], ['[3,3]', '18']], highlightKey: '[-2,4]'},
+        notes: ['evict [5,-1] (d=26)', 'heap = {20, 18}'],
+      },
+      state: ['evicted [5,-1]', 'heap size = 2'],
+      details: (
+        <>
+          [5,-1] was the farthest, so it is dropped. This eviction step is what
+          bounds memory to <code>O(k)</code>.
+        </>
+      ),
+    },
+    {
+      caption: 'All points seen → heap holds [[3,3],[-2,4]]. ★',
+      viz: {
+        arrays: [{label: 'points', values: ['[3,3]', '[5,-1]', '[-2,4]'], states: {0: 'match', 1: 'muted', 2: 'match'}}],
+        map: {label: 'result', entries: [['[3,3]', '18'], ['[-2,4]', '20']]},
+        notes: ['answer = [[3,3],[-2,4]]'],
+      },
+      state: ['answer = [[3,3],[-2,4]]'],
+      details: (<>Order does not matter for this problem.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(kClosest([[1,3],[-2,2]], 1));         // [[-2,2]]
+console.log(kClosest([[3,3],[5,-1],[-2,4]], 2));  // [[3,3],[-2,4]]
+```

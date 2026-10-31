@@ -1,0 +1,145 @@
+---
+sidebar_position: 3
+title: Same Tree
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Same Tree
+
+<Difficulty level="Easy" />
+
+> **LeetCode 100** – [Same Tree](https://leetcode.com/problems/same-tree/) | **Striver (TUF)** – [Check if Two Trees are Identical](https://takeuforward.org/data-structure/check-if-two-trees-are-identical/)
+
+## Problem Statement
+
+Given the roots of two binary trees `p` and `q`, return `true` if they are **structurally identical** and the nodes have the **same values**.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `p = [1,2,3]`, `q = [1,2,3]` | `true` |
+| 2 | `p = [1,2]`, `q = [1,null,2]` | `false` |
+| 3 | `p = [1,2,1]`, `q = [1,1,2]` | `false` |
+
+### Constraints
+
+- The number of nodes in each tree is in the range `[0, 100]`.
+- `-10⁴ <= Node.val <= 10⁴`
+
+---
+
+## Solution
+
+**Approach:** Walk both trees in lock-step. Three checks at each pair of nodes:
+
+1. Both `null` → identical so far, return `true`.
+2. Exactly one `null`, or values differ → return `false`.
+3. Otherwise recurse on both left pairs and both right pairs.
+
+- **Time Complexity:** $O(n)$ — `n` is the size of the smaller tree.
+- **Space Complexity:** $O(h)$ — recursion stack.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function(p, q) {
+    if (p === null && q === null) return true;
+    if (p === null || q === null) return false;
+    if (p.val !== q.val) return false;
+    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) return true;
+        if (p == null || q == null) return false;
+        if (p.val != q.val) return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Same Tree — p = [1,2,1], q = [1,1,2]"
+  steps={[
+    {
+      caption: 'Compare roots: 1 vs 1 → equal, keep going.',
+      viz: {
+        tree: {label: 'p', levels: [[1], [2, 1]], states: {'0-0': 'match'}},
+        arrays: [{label: 'q (level order)', values: [1, 1, 2], states: {0: 'match'}}],
+        notes: ['p.val = 1, q.val = 1 ✓'],
+      },
+      state: ['p = 1', 'q = 1', 'equal ✓'],
+      details: (
+        <>
+          Both roots exist and carry the same value, so we recurse into the
+          left pair and the right pair.
+        </>
+      ),
+    },
+    {
+      caption: 'Compare left children: p.left = 2, q.left = 1 → values differ!',
+      viz: {
+        tree: {label: 'p', levels: [[1], [2, 1]], states: {'0-0': 'done', '1-0': 'active'}},
+        arrays: [{label: 'q (level order)', values: [1, 1, 2], states: {0: 'done', 1: 'active'}}],
+        notes: ['2 ≠ 1 → return false'],
+      },
+      state: ['p.left = 2', 'q.left = 1', 'mismatch ✗'],
+      details: (
+        <>
+          Structure matches but the values do not. Because the comparison uses{' '}
+          <code>&amp;&amp;</code>, this <code>false</code> short-circuits the
+          whole recursion.
+        </>
+      ),
+    },
+    {
+      caption: 'Result: the trees hold the same multiset of values but in different positions → false. ★',
+      viz: {
+        tree: {label: 'p', levels: [[1], [2, 1]], states: {'1-0': 'muted', '1-1': 'muted'}},
+        arrays: [{label: 'q (level order)', values: [1, 1, 2], states: {1: 'muted', 2: 'muted'}}],
+        notes: ['answer = false'],
+      },
+      state: ['answer = false'],
+      details: (
+        <>
+          A common trap: identical <i>values</i> are not enough — the{' '}
+          <b>shape and position</b> must match too.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+// p = [1,2,3], q = [1,2,3]   → true
+// p = [1,2],   q = [1,null,2] → false
+// p = [1,2,1], q = [1,1,2]   → false
+```

@@ -1,0 +1,245 @@
+---
+sidebar_position: 2
+title: Min Stack
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Min Stack
+
+<Difficulty level="Medium" />
+
+> **LeetCode 155** – [Min Stack](https://leetcode.com/problems/min-stack/) | **Striver (TUF)** – [Implement Min Stack](https://takeuforward.org/data-structure/implement-min-stack-o2n-and-on-space-complexity/)
+
+## Problem Statement
+
+Design a stack that supports `push`, `pop`, `top`, and retrieving the **minimum element** — all in **constant time** `O(1)`.
+
+Implement the `MinStack` class:
+
+- `push(val)` pushes `val` onto the stack.
+- `pop()` removes the element on the top of the stack.
+- `top()` gets the top element of the stack.
+- `getMin()` retrieves the minimum element in the stack.
+
+### Example
+
+| Operation | Result |
+|-----------|--------|
+| `push(-2)` | — |
+| `push(0)` | — |
+| `push(-3)` | — |
+| `getMin()` | `-3` |
+| `pop()` | — |
+| `top()` | `0` |
+| `getMin()` | `-2` |
+
+### Constraints
+
+- `-2³¹ <= val <= 2³¹ - 1`
+- Methods are always called on a non-empty stack for `pop`, `top`, `getMin`.
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | `push` | `pop` | `getMin` | Space |
+|---|----------|--------|-------|----------|-------|
+| 1 | Scan the stack on every `getMin` | $O(1)$ | $O(1)$ | $O(n)$ | $O(n)$ |
+| 2 | **Auxiliary min-stack (optimal)** | $O(1)$ | $O(1)$ | $O(1)$ | $O(2n)$ |
+| 3 | Single stack with encoded values | $O(1)$ | $O(1)$ | $O(1)$ | $O(n)$ |
+
+### Approach 1 — Brute force
+
+Store values normally and loop through the whole stack whenever `getMin()` is called. Simple, but `getMin` becomes $O(n)$ — which violates the problem's constant-time requirement.
+
+### Approach 2 — Two stacks (the standard TUF solution)
+
+Carry the running minimum alongside each element so the answer is always sitting on top. This is the approach implemented below.
+
+### Approach 3 — One stack, `O(n)` space
+
+TUF's follow-up trick: when a new minimum `val` arrives, push the encoded value `2*val - min` (which is strictly *less* than `val`) and update `min = val`. On `pop`, if the popped value is below `min`, the previous minimum is recovered as `2*min - popped`. It halves the memory at the cost of readability and overflow risk.
+
+## Solution
+
+**Approach:** Keep a **second stack** (`minStack`) that mirrors the main stack but stores the minimum seen *so far* at each level. When we push, we push `min(val, currentMin)`. When we pop, we pop from both. The top of `minStack` is always the current minimum, giving `O(1)` lookups.
+
+- **Time Complexity:** $O(1)$ for every operation.
+- **Space Complexity:** $O(n)$ — the auxiliary min stack.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+var MinStack = function() {
+    this.stack = [];
+    this.minStack = [];
+};
+
+MinStack.prototype.push = function(val) {
+    this.stack.push(val);
+    const min = this.minStack.length === 0
+        ? val
+        : Math.min(val, this.minStack[this.minStack.length - 1]);
+    this.minStack.push(min);
+};
+
+MinStack.prototype.pop = function() {
+    this.stack.pop();
+    this.minStack.pop();
+};
+
+MinStack.prototype.top = function() {
+    return this.stack[this.stack.length - 1];
+};
+
+MinStack.prototype.getMin = function() {
+    return this.minStack[this.minStack.length - 1];
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+class MinStack {
+    private Deque<Integer> stack = new ArrayDeque<>();
+    private Deque<Integer> minStack = new ArrayDeque<>();
+
+    public void push(int val) {
+        stack.push(val);
+        int min = minStack.isEmpty() ? val : Math.min(val, minStack.peek());
+        minStack.push(min);
+    }
+
+    public void pop() {
+        stack.pop();
+        minStack.pop();
+    }
+
+    public int top() {
+        return stack.peek();
+    }
+
+    public int getMin() {
+        return minStack.peek();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Min Stack — push(-2), push(0), push(-3), getMin, pop, getMin"
+  steps={[
+    {
+      caption: 'push(-2): stack becomes [-2]. minStack stores the running min = -2.',
+      viz: {
+        arrays: [
+          {label: 'stack', values: [-2], states: {0: 'active'}},
+          {label: 'minStack', values: [-2], states: {0: 'match'}},
+        ],
+        notes: ['getMin() = -2'],
+      },
+      state: ['push(-2)', 'min = -2'],
+      details: (<>First element, so the running minimum is just <code>-2</code>.</>),
+    },
+    {
+      caption: 'push(0): 0 > -2, so minStack repeats -2 (the min so far).',
+      viz: {
+        arrays: [
+          {label: 'stack', values: [-2, 0], states: {1: 'active'}},
+          {label: 'minStack', values: [-2, -2], states: {1: 'match'}},
+        ],
+        notes: ['min(0, -2) = -2', 'getMin() = -2'],
+      },
+      state: ['push(0)', 'min = -2'],
+      details: (
+        <>
+          We push <code>min(0, top of minStack) = min(0, -2) = -2</code>. The
+          minimum is unchanged.
+        </>
+      ),
+    },
+    {
+      caption: 'push(-3): -3 < -2, so the new min is -3.',
+      viz: {
+        arrays: [
+          {label: 'stack', values: [-2, 0, -3], states: {2: 'active'}},
+          {label: 'minStack', values: [-2, -2, -3], states: {2: 'match'}},
+        ],
+        notes: ['min(-3, -2) = -3', 'getMin() = -3  ★'],
+      },
+      state: ['push(-3)', 'min = -3'],
+      details: (<>The top of <code>minStack</code> is now <code>-3</code>.</>),
+    },
+    {
+      caption: 'getMin() → read the top of minStack = -3 in O(1).',
+      viz: {
+        arrays: [
+          {label: 'stack', values: [-2, 0, -3]},
+          {label: 'minStack', values: [-2, -2, -3], states: {2: 'match'}},
+        ],
+        notes: ['return -3'],
+      },
+      state: ['getMin() = -3'],
+      details: (<>No scanning needed — the answer sits right on top.</>),
+    },
+    {
+      caption: 'pop(): remove -3 from both stacks.',
+      viz: {
+        arrays: [
+          {label: 'stack', values: [-2, 0]},
+          {label: 'minStack', values: [-2, -2], states: {1: 'match'}},
+        ],
+        notes: ['popped -3'],
+      },
+      state: ['pop()', 'top() = 0'],
+      details: (<>Popping from both keeps them in lock-step.</>),
+    },
+    {
+      caption: 'getMin() → top of minStack is back to -2.',
+      viz: {
+        arrays: [
+          {label: 'stack', values: [-2, 0]},
+          {label: 'minStack', values: [-2, -2], states: {1: 'match'}},
+        ],
+        notes: ['return -2'],
+      },
+      state: ['getMin() = -2'],
+      details: (
+        <>
+          Because <code>minStack</code> stored the min at every level, removing
+          the top automatically restores the previous minimum.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+const st = new MinStack();
+st.push(-2);
+st.push(0);
+st.push(-3);
+console.log(st.getMin()); // -3
+st.pop();
+console.log(st.top());    // 0
+console.log(st.getMin()); // -2
+```

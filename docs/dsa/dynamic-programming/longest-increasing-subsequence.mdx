@@ -1,0 +1,264 @@
+---
+sidebar_position: 4
+title: Longest Increasing Subsequence
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Longest Increasing Subsequence
+
+<Difficulty level="Medium" />
+
+> **LeetCode 300** – [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | **Striver (TUF)** – [Longest Increasing Subsequence (DP-41)](https://takeuforward.org/data-structure/longest-increasing-subsequence-dp-41/)
+
+## Problem Statement
+
+Given an integer array `nums`, return the length of the **longest strictly increasing subsequence**.
+
+A subsequence is derived by deleting some or no elements **without changing the order** of the remaining ones.
+
+### Examples
+
+| # | Input | Output | LIS |
+|---|-------|--------|-----|
+| 1 | `nums = [10,9,2,5,3,7,101,18]` | `4` | `[2,3,7,101]` |
+| 2 | `nums = [0,1,0,3,2,3]` | `4` | `[0,1,2,3]` |
+| 3 | `nums = [7,7,7,7,7]` | `1` | `[7]` |
+
+### Constraints
+
+- `1 <= nums.length <= 2500`
+- `-10⁴ <= nums[i] <= 10⁴`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Recursion (take / not-take) | $O(2^n)$ | $O(n)$ |
+| 2 | Memoization (index, prevIndex) | $O(n^2)$ | $O(n^2)$ |
+| 3 | **Tabulation (1-D dp)** | $O(n^2)$ | $O(n)$ |
+| 4 | Binary search / patience sorting | $O(n \log n)$ | $O(n)$ |
+
+### Step 1 — The 1-D formulation
+
+Define `dp[i]` = **length of the LIS that ends exactly at index `i`**.
+
+Anchoring the subsequence at `i` is the key idea: to extend it we only need some earlier index `j` with a smaller value.
+
+$$
+dp[i] = 1 + \max \big( dp[j] \big)
+$$
+
+…taken over all `j < i` where `nums[j] < nums[i]`.
+
+If no such `j` exists, `dp[i] = 1` (the element alone).
+
+### Step 2 — The answer
+
+The LIS can end anywhere, so the answer is `max(dp)` — **not** `dp[n-1]`. This is the single most common bug in this problem.
+
+### Step 3 — The `O(n log n)` optimisation
+
+Maintain a `tails` array where `tails[k]` is the **smallest possible tail value** of an increasing subsequence of length `k+1`. For each number, binary search for the first tail `>=` it and overwrite it; if none exists, append. The length of `tails` is the LIS length.
+
+:::warning
+`tails` is **not** a valid LIS itself — only its *length* is meaningful.
+:::
+
+---
+
+## Solution
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+**Approach 3 — Tabulation, `O(n²)`:**
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function(nums) {
+    const n = nums.length;
+    const dp = new Array(n).fill(1);   // every element alone is an LIS of 1
+    let best = 1;
+
+    for (let i = 1; i < n; i++) {
+        for (let j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) {
+                dp[i] = Math.max(dp[i], 1 + dp[j]);
+            }
+        }
+        best = Math.max(best, dp[i]);
+    }
+    return best;
+};
+```
+
+**Approach 4 — Binary search, `O(n log n)`:**
+
+```js
+var lengthOfLISFast = function(nums) {
+    const tails = [];
+    for (const x of nums) {
+        // first index with tails[idx] >= x
+        let lo = 0, hi = tails.length;
+        while (lo < hi) {
+            const mid = (lo + hi) >> 1;
+            if (tails[mid] < x) lo = mid + 1;
+            else hi = mid;
+        }
+        if (lo === tails.length) tails.push(x);
+        else tails[lo] = x;
+    }
+    return tails.length;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.Arrays;
+
+class Solution {
+    // Tabulation — O(n^2)
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        int best = 1;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) dp[i] = Math.max(dp[i], 1 + dp[j]);
+            }
+            best = Math.max(best, dp[i]);
+        }
+        return best;
+    }
+
+    // Binary search — O(n log n)
+    public int lengthOfLISFast(int[] nums) {
+        int[] tails = new int[nums.length];
+        int size = 0;
+        for (int x : nums) {
+            int idx = Arrays.binarySearch(tails, 0, size, x);
+            if (idx < 0) idx = -(idx + 1);
+            tails[idx] = x;
+            if (idx == size) size++;
+        }
+        return size;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="LIS — nums = [10, 9, 2, 5, 3, 7]"
+  steps={[
+    {
+      caption: 'Init: every dp[i] = 1 — each element alone is a subsequence of length 1.',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [10, 9, 2, 5, 3, 7]},
+          {label: 'dp', values: [1, 1, 1, 1, 1, 1], states: {0: 'match'}},
+        ],
+        notes: ['best = 1'],
+      },
+      state: ['dp = [1,1,1,1,1,1]'],
+      details: (<><code>dp[i]</code> = length of the LIS <b>ending at</b> index <code>i</code>.</>),
+    },
+    {
+      caption: 'i=1 (9): look left — 10 is not < 9, so no extension. dp[1] = 1.',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [10, 9, 2, 5, 3, 7], states: {0: 'muted', 1: 'active'}, pointers: [{index: 1, label: 'i'}]},
+          {label: 'dp', values: [1, 1, 1, 1, 1, 1], states: {1: 'active'}},
+        ],
+        notes: ['10 > 9 → cannot extend', 'dp[1] = 1'],
+      },
+      state: ['i=1', 'dp[1] = 1'],
+      details: (<>A descending prefix leaves every dp at 1.</>),
+    },
+    {
+      caption: 'i=3 (5): 2 < 5 at j=2 → dp[3] = 1 + dp[2] = 2.',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [10, 9, 2, 5, 3, 7], states: {2: 'window', 3: 'active'}, pointers: [{index: 3, label: 'i'}, {index: 2, label: 'j'}]},
+          {label: 'dp', values: [1, 1, 1, 2, 1, 1], states: {2: 'window', 3: 'match'}},
+        ],
+        notes: ['2 < 5 → 1 + dp[2] = 2', 'best = 2'],
+      },
+      state: ['i=3', 'dp[3] = 2', 'best = 2'],
+      details: (<>Subsequence <code>[2, 5]</code> has length 2.</>),
+    },
+    {
+      caption: 'i=4 (3): only 2 < 3 → dp[4] = 1 + dp[2] = 2. (5 is too big.)',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [10, 9, 2, 5, 3, 7], states: {2: 'window', 3: 'muted', 4: 'active'}, pointers: [{index: 4, label: 'i'}]},
+          {label: 'dp', values: [1, 1, 1, 2, 2, 1], states: {4: 'match'}},
+        ],
+        notes: ['2 < 3 → dp[4] = 2', '[2, 3]'],
+      },
+      state: ['i=4', 'dp[4] = 2'],
+      details: (<>Both <code>[2,5]</code> and <code>[2,3]</code> have length 2 — we keep both options alive.</>),
+    },
+    {
+      caption: 'i=5 (7): 2→2, 5→dp[3]+1=3, 3→dp[4]+1=3. dp[5] = 3.',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [10, 9, 2, 5, 3, 7], states: {2: 'window', 3: 'window', 4: 'window', 5: 'active'}, pointers: [{index: 5, label: 'i'}]},
+          {label: 'dp', values: [1, 1, 1, 2, 2, 3], states: {5: 'match'}},
+        ],
+        notes: ['max over j → 3', '[2,5,7] or [2,3,7]'],
+      },
+      state: ['i=5', 'dp[5] = 3'],
+      details: (
+        <>
+          The inner loop scans every earlier index and takes the best —
+          that is the <code>O(n²)</code> cost.
+        </>
+      ),
+    },
+    {
+      caption: 'Answer = max(dp) = 3, not dp[n-1]. ★',
+      viz: {
+        arrays: [
+          {label: 'nums', values: [10, 9, 2, 5, 3, 7], states: {2: 'match', 4: 'match', 5: 'match'}},
+          {label: 'dp', values: [1, 1, 1, 2, 2, 3], states: {5: 'match'}},
+        ],
+        notes: ['best = max(dp) = 3', 'LIS = [2, 3, 7]'],
+      },
+      state: ['answer = 3'],
+      details: (
+        <>
+          Here the maximum happens to sit at the last index, but in general the
+          LIS can end anywhere — always take <code>max(dp)</code>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(lengthOfLIS([10,9,2,5,3,7,101,18])); // 4
+console.log(lengthOfLIS([0,1,0,3,2,3]));         // 4
+console.log(lengthOfLIS([7,7,7,7,7]));           // 1
+```

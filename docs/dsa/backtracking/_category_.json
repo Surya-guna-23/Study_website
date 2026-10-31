@@ -1,0 +1,8 @@
+{
+  "label": "Backtracking",
+  "position": 10,
+  "link": {
+    "type": "generated-index",
+    "description": "Exhaustive search with pruning — subsets, combinations, permutations and grid search."
+  }
+}

@@ -39,9 +39,49 @@ const PROBLEMS = [
   { name: 'Find the Duplicate Number', pattern: 'Linked List', level: 'Medium', slug: 'linked-list/find-the-duplicate-number' },
   { name: 'Merge K Sorted Lists', pattern: 'Linked List', level: 'Hard', slug: 'linked-list/merge-k-sorted-lists' },
   { name: 'Reverse Nodes in K-Group', pattern: 'Linked List', level: 'Hard', slug: 'linked-list/reverse-nodes-in-k-group' },
+  // Stack
+  { name: 'Valid Parentheses', pattern: 'Stack', level: 'Easy', slug: 'stack/valid-parentheses' },
+  { name: 'Min Stack', pattern: 'Stack', level: 'Medium', slug: 'stack/min-stack' },
+  { name: 'Evaluate Reverse Polish Notation', pattern: 'Stack', level: 'Medium', slug: 'stack/evaluate-reverse-polish-notation' },
+  { name: 'Daily Temperatures', pattern: 'Stack', level: 'Medium', slug: 'stack/daily-temperatures' },
+  { name: 'Generate Parentheses', pattern: 'Stack', level: 'Medium', slug: 'stack/generate-parentheses' },
+  // Trees
+  { name: 'Invert Binary Tree', pattern: 'Trees', level: 'Easy', slug: 'trees/invert-binary-tree' },
+  { name: 'Maximum Depth of Binary Tree', pattern: 'Trees', level: 'Easy', slug: 'trees/maximum-depth-of-binary-tree' },
+  { name: 'Same Tree', pattern: 'Trees', level: 'Easy', slug: 'trees/same-tree' },
+  { name: 'Binary Tree Level Order Traversal', pattern: 'Trees', level: 'Medium', slug: 'trees/binary-tree-level-order-traversal' },
+  { name: 'Lowest Common Ancestor of a BST', pattern: 'Trees', level: 'Medium', slug: 'trees/lowest-common-ancestor-of-a-bst' },
+  { name: 'Validate Binary Search Tree', pattern: 'Trees', level: 'Medium', slug: 'trees/validate-binary-search-tree' },
+  // Heap / Priority Queue
+  { name: 'Last Stone Weight', pattern: 'Heap / Priority Queue', level: 'Easy', slug: 'heap/last-stone-weight' },
+  { name: 'Kth Largest Element in a Stream', pattern: 'Heap / Priority Queue', level: 'Easy', slug: 'heap/kth-largest-element-in-a-stream' },
+  { name: 'K Closest Points to Origin', pattern: 'Heap / Priority Queue', level: 'Medium', slug: 'heap/k-closest-points-to-origin' },
+  { name: 'Kth Largest Element in an Array', pattern: 'Heap / Priority Queue', level: 'Medium', slug: 'heap/kth-largest-element-in-an-array' },
+  // Backtracking
+  { name: 'Subsets', pattern: 'Backtracking', level: 'Medium', slug: 'backtracking/subsets' },
+  { name: 'Combination Sum', pattern: 'Backtracking', level: 'Medium', slug: 'backtracking/combination-sum' },
+  { name: 'Permutations', pattern: 'Backtracking', level: 'Medium', slug: 'backtracking/permutations' },
+  { name: 'Word Search', pattern: 'Backtracking', level: 'Medium', slug: 'backtracking/word-search' },
+  // 1-D Dynamic Programming
+  { name: 'Climbing Stairs', pattern: '1-D Dynamic Programming', level: 'Easy', slug: 'dynamic-programming/climbing-stairs' },
+  { name: 'House Robber', pattern: '1-D Dynamic Programming', level: 'Medium', slug: 'dynamic-programming/house-robber' },
+  { name: 'Coin Change', pattern: '1-D Dynamic Programming', level: 'Medium', slug: 'dynamic-programming/coin-change' },
+  { name: 'Longest Increasing Subsequence', pattern: '1-D Dynamic Programming', level: 'Medium', slug: 'dynamic-programming/longest-increasing-subsequence' },
 ];
 
-const PATTERNS = ['All', 'Arrays & Hashing', 'Two Pointers', 'Sliding Window', 'Binary Search', 'Linked List'];
+const PATTERNS = [
+  'All',
+  'Arrays & Hashing',
+  'Two Pointers',
+  'Sliding Window',
+  'Binary Search',
+  'Linked List',
+  'Stack',
+  'Trees',
+  'Heap / Priority Queue',
+  'Backtracking',
+  '1-D Dynamic Programming',
+];
 const LEVELS = ['All', 'Easy', 'Medium', 'Hard'];
 
 const LEVEL_COLOR = {

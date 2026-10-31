@@ -1,0 +1,201 @@
+---
+sidebar_position: 1
+title: Valid Parentheses
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Valid Parentheses
+
+<Difficulty level="Easy" />
+
+> **LeetCode 20** – [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) | **Striver (TUF)** – [Check for Balanced Parentheses](https://takeuforward.org/data-structure/check-for-balanced-parentheses/)
+
+## Problem Statement
+
+Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is **valid**.
+
+A string is valid if:
+
+1. Open brackets are closed by the **same type** of bracket.
+2. Open brackets are closed in the **correct order**.
+3. Every close bracket has a corresponding open bracket of the same type.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `s = "()"` | `true` |
+| 2 | `s = "()[]{}"` | `true` |
+| 3 | `s = "(]"` | `false` |
+| 4 | `s = "([)]"` | `false` |
+
+### Constraints
+
+- `1 <= s.length <= 10⁴`
+- `s` consists of parentheses only `'()[]{}'`.
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Brute force — repeatedly delete `"()"`, `"[]"`, `"{}"` | $O(n^2)$ | $O(n)$ |
+| 2 | **Stack (optimal)** | $O(n)$ | $O(n)$ |
+
+### Approach 1 — Brute force
+
+Keep scanning the string and removing any adjacent matching pair. If the string eventually becomes empty it was valid. Each removal costs a full rescan, so this is $O(n^2)$.
+
+```js
+var isValidBrute = function(s) {
+    let prev;
+    do {
+        prev = s;
+        s = s.replace('()', '').replace('[]', '').replace('{}', '');
+    } while (s !== prev);
+    return s.length === 0;
+};
+```
+
+### Approach 2 — Stack (optimal)
+
+The brute force repeatedly hunts for the *innermost* pair. A stack finds it in one pass: the top of the stack is always the most recent unmatched open bracket.
+
+## Solution
+
+**Approach:** Push every opening bracket onto a stack. When we hit a closing bracket, the most recently opened bracket (top of the stack) **must** be its matching pair — otherwise the string is invalid. At the end the stack must be empty.
+
+- **Time Complexity:** $O(n)$ — one pass over the string.
+- **Space Complexity:** $O(n)$ — the stack holds at most `n` opening brackets.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+    const stack = [];
+    const pairs = { ')': '(', ']': '[', '}': '{' };
+    for (const ch of s) {
+        if (ch === '(' || ch === '[' || ch === '{') {
+            stack.push(ch);
+        } else {
+            if (stack.pop() !== pairs[ch]) return false;
+        }
+    }
+    return stack.length === 0;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+class Solution {
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char ch : s.toCharArray()) {
+            if (ch == '(' || ch == '[' || ch == '{') {
+                stack.push(ch);
+            } else {
+                if (stack.isEmpty()) return false;
+                char open = stack.pop();
+                if ((ch == ')' && open != '(') ||
+                    (ch == ']' && open != '[') ||
+                    (ch == '}' && open != '{')) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Valid Parentheses — s = "([)]"'
+  steps={[
+    {
+      caption: 'Setup: an empty stack tracks the still-open brackets.',
+      viz: {
+        arrays: [{label: 's', values: ['(', '[', ')', ']']}],
+        map: {label: 'stack (top → right)', entries: []},
+        notes: ['stack = []'],
+      },
+      state: ['stack = []'],
+      details: (
+        <>
+          A closing bracket must match the <b>most recent</b> unmatched open
+          bracket. That “last-in, first-out” rule is exactly what a stack gives
+          us.
+        </>
+      ),
+    },
+    {
+      caption: "i = 0: '(' is an opening bracket → push it.",
+      viz: {
+        arrays: [{label: 's', values: ['(', '[', ')', ']'], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '(']]},
+        notes: ["push '('"],
+      },
+      state: ['i = 0', "ch = '('", 'stack = [ ( ]'],
+      details: (<>Opening brackets are simply pushed and remembered for later.</>),
+    },
+    {
+      caption: "i = 1: '[' is an opening bracket → push it.",
+      viz: {
+        arrays: [{label: 's', values: ['(', '[', ')', ']'], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '('], ['1', '[']]},
+        notes: ["push '['"],
+      },
+      state: ['i = 1', "ch = '['", 'stack = [ (, [ ]'],
+      details: (<>The top of the stack is now <code>[</code>.</>),
+    },
+    {
+      caption: "i = 2: ')' closes — top is '[', not '(' → mismatch!",
+      viz: {
+        arrays: [{label: 's', values: ['(', '[', ')', ']'], states: {0: 'done', 1: 'match', 2: 'active'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '('], ['1', '[']], highlightKey: '1'},
+        notes: ["')' needs '(' but top = '['", 'return false'],
+      },
+      state: ['i = 2', "ch = ')'", 'top = [', 'mismatch → false'],
+      details: (
+        <>
+          <code>)</code> expects the top to be <code>(</code>, but it is{' '}
+          <code>[</code>. The order is wrong, so we return{' '}
+          <code>false</code> immediately.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(isValid("()"));       // true
+console.log(isValid("()[]{}"));   // true
+console.log(isValid("(]"));       // false
+console.log(isValid("([)]"));     // false
+console.log(isValid("{[]}"));     // true
+```

@@ -1,0 +1,258 @@
+---
+sidebar_position: 4
+title: Word Search
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Word Search
+
+<Difficulty level="Medium" />
+
+> **LeetCode 79** – [Word Search](https://leetcode.com/problems/word-search/) | **Striver (TUF)** – [Word Search](https://takeuforward.org/data-structure/word-search-leetcode/)
+
+## Problem Statement
+
+Given an `m x n` grid of characters `board` and a string `word`, return `true` if `word` exists in the grid.
+
+The word can be constructed from letters of **sequentially adjacent** cells (horizontally or vertically neighbouring). The **same cell may not be used more than once**.
+
+### Examples
+
+Board:
+
+|   | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| **0** | A | B | C | E |
+| **1** | S | F | C | S |
+| **2** | A | D | E | E |
+
+| # | Word | Output |
+|---|------|--------|
+| 1 | `"ABCCED"` | `true` |
+| 2 | `"SEE"` | `true` |
+| 3 | `"ABCB"` | `false` |
+
+### Constraints
+
+- `1 <= m, n <= 6`
+- `1 <= word.length <= 15`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | DFS + separate `visited` matrix | $O(m \cdot n \cdot 4^L)$ | $O(m \cdot n)$ |
+| 2 | **DFS + in-place marking (optimal space)** | $O(m \cdot n \cdot 4^L)$ | $O(L)$ |
+
+### Approach 1 — With a visited matrix
+
+The straightforward version allocates an `m x n` boolean grid, sets `visited[r][c] = true` before recursing and resets it afterwards. Correct, but it costs `O(m·n)` extra memory.
+
+### Approach 2 — In-place marking (optimal)
+
+Since the board holds only letters, we can temporarily overwrite the current cell with a sentinel `'#'` that can never match any character of the word, then restore the original letter while backtracking. Extra space drops to just the recursion depth `O(L)`.
+
+:::tip Useful pruning
+If any character of `word` appears more often than it does in the whole board, return `false` immediately. Also, if `word` starts with the rarer of its first/last characters, searching the reversed word is often much faster.
+:::
+
+## Solution
+
+**Approach (DFS + backtracking):** Try starting the word at every cell. From a cell, if the character matches `word[k]`, mark the cell as visited and recurse into its four neighbours looking for `word[k+1]`. If no branch succeeds, **un-mark** the cell so other starting positions can still use it.
+
+A neat trick avoids an extra `visited` matrix: temporarily overwrite the cell with a sentinel like `'#'`, then restore it on the way out.
+
+- **Time Complexity:** $O(m \cdot n \cdot 4^L)$ — `L` is the word length; each step has at most 4 (really 3) directions.
+- **Space Complexity:** $O(L)$ — recursion depth.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    const rows = board.length, cols = board[0].length;
+
+    const dfs = (r, c, k) => {
+        if (k === word.length) return true;                    // matched everything
+        if (r < 0 || c < 0 || r >= rows || c >= cols) return false;
+        if (board[r][c] !== word[k]) return false;
+
+        const temp = board[r][c];
+        board[r][c] = '#';                                     // mark visited
+
+        const found =
+            dfs(r + 1, c, k + 1) ||
+            dfs(r - 1, c, k + 1) ||
+            dfs(r, c + 1, k + 1) ||
+            dfs(r, c - 1, k + 1);
+
+        board[r][c] = temp;                                    // restore (backtrack)
+        return found;
+    };
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (dfs(r, c, 0)) return true;
+        }
+    }
+    return false;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
+                if (dfs(board, word, r, c, 0)) return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] b, String w, int r, int c, int k) {
+        if (k == w.length()) return true;
+        if (r < 0 || c < 0 || r >= b.length || c >= b[0].length) return false;
+        if (b[r][c] != w.charAt(k)) return false;
+
+        char temp = b[r][c];
+        b[r][c] = '#';
+        boolean found = dfs(b, w, r + 1, c, k + 1)
+                     || dfs(b, w, r - 1, c, k + 1)
+                     || dfs(b, w, r, c + 1, k + 1)
+                     || dfs(b, w, r, c - 1, k + 1);
+        b[r][c] = temp;
+        return found;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Word Search — word = "ABCCED"'
+  steps={[
+    {
+      caption: 'Scan for a cell matching word[0] = "A". Found at (0,0).',
+      viz: {
+        arrays: [
+          {label: 'row 0', values: ['A', 'B', 'C', 'E'], states: {0: 'active'}},
+          {label: 'row 1', values: ['S', 'F', 'C', 'S']},
+          {label: 'row 2', values: ['A', 'D', 'E', 'E']},
+        ],
+        notes: ['word = "ABCCED"', 'k = 0, match "A"'],
+      },
+      state: ['(0,0) = A', 'k = 0'],
+      details: (<>Every cell is a potential starting point, so the outer loop tries them all.</>),
+    },
+    {
+      caption: 'k=1 "B": neighbour (0,1) matches. Mark (0,0) as visited.',
+      viz: {
+        arrays: [
+          {label: 'row 0', values: ['#', 'B', 'C', 'E'], states: {0: 'muted', 1: 'active'}},
+          {label: 'row 1', values: ['S', 'F', 'C', 'S']},
+          {label: 'row 2', values: ['A', 'D', 'E', 'E']},
+        ],
+        notes: ['k = 1, match "B"', '(0,0) → "#"'],
+      },
+      state: ['(0,1) = B', 'k = 1'],
+      details: (<>Overwriting with <code>#</code> guarantees the path never revisits a cell.</>),
+    },
+    {
+      caption: 'k=2 "C": move right to (0,2).',
+      viz: {
+        arrays: [
+          {label: 'row 0', values: ['#', '#', 'C', 'E'], states: {0: 'muted', 1: 'muted', 2: 'active'}},
+          {label: 'row 1', values: ['S', 'F', 'C', 'S']},
+          {label: 'row 2', values: ['A', 'D', 'E', 'E']},
+        ],
+        notes: ['k = 2, match "C"'],
+      },
+      state: ['(0,2) = C', 'k = 2'],
+      details: (<>The path so far is A → B → C along the top row.</>),
+    },
+    {
+      caption: 'k=3 "C": right is "E" ✗, but down to (1,2) is "C" ✓.',
+      viz: {
+        arrays: [
+          {label: 'row 0', values: ['#', '#', '#', 'E'], states: {0: 'muted', 1: 'muted', 2: 'muted'}},
+          {label: 'row 1', values: ['S', 'F', 'C', 'S'], states: {2: 'active'}},
+          {label: 'row 2', values: ['A', 'D', 'E', 'E']},
+        ],
+        notes: ['k = 3, match "C"', 'turned downward'],
+      },
+      state: ['(1,2) = C', 'k = 3'],
+      details: (
+        <>
+          The first direction failed, so the <code>||</code> chain simply tries
+          the next one — that is the backtracking at work.
+        </>
+      ),
+    },
+    {
+      caption: 'k=4 "E": down to (2,2) matches.',
+      viz: {
+        arrays: [
+          {label: 'row 0', values: ['#', '#', '#', 'E'], states: {0: 'muted', 1: 'muted', 2: 'muted'}},
+          {label: 'row 1', values: ['S', 'F', '#', 'S'], states: {2: 'muted'}},
+          {label: 'row 2', values: ['A', 'D', 'E', 'E'], states: {2: 'active'}},
+        ],
+        notes: ['k = 4, match "E"'],
+      },
+      state: ['(2,2) = E', 'k = 4'],
+      details: (<>Five of six characters are placed.</>),
+    },
+    {
+      caption: 'k=5 "D": left to (2,1) matches. k reaches 6 = length → true! ★',
+      viz: {
+        arrays: [
+          {label: 'row 0', values: ['A', 'B', 'C', 'E'], states: {0: 'match', 1: 'match', 2: 'match'}},
+          {label: 'row 1', values: ['S', 'F', 'C', 'S'], states: {2: 'match'}},
+          {label: 'row 2', values: ['A', 'D', 'E', 'E'], states: {1: 'match', 2: 'match'}},
+        ],
+        notes: ['path: (0,0)→(0,1)→(0,2)→(1,2)→(2,2)→(2,1)', 'answer = true'],
+      },
+      state: ['answer = true'],
+      details: (
+        <>
+          The success propagates back up and every marked cell is restored on
+          the way out, leaving the board unchanged.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+const board = [
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E'],
+];
+console.log(exist(board, "ABCCED")); // true
+console.log(exist(board, "SEE"));    // true
+console.log(exist(board, "ABCB"));   // false
+```

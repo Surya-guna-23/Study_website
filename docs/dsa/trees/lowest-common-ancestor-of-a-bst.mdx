@@ -1,0 +1,193 @@
+---
+sidebar_position: 5
+title: Lowest Common Ancestor of a BST
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Lowest Common Ancestor of a Binary Search Tree
+
+<Difficulty level="Medium" />
+
+> **LeetCode 235** – [Lowest Common Ancestor of a BST](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) | **Striver (TUF)** – [LCA in Binary Search Tree](https://takeuforward.org/data-structure/lca-in-binary-search-tree/)
+
+## Problem Statement
+
+Given a **binary search tree**, find the **lowest common ancestor (LCA)** of two given nodes `p` and `q`.
+
+The LCA is the lowest node that has both `p` and `q` as descendants (a node may be a descendant of itself).
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `root = [6,2,8,0,4,7,9]`, `p = 2`, `q = 8` | `6` |
+| 2 | `root = [6,2,8,0,4,7,9]`, `p = 2`, `q = 4` | `2` |
+
+### Constraints
+
+- All `Node.val` are **unique**.
+- `p != q` and both exist in the BST.
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Store root-to-node paths, compare them | $O(n)$ | $O(n)$ |
+| 2 | Generic binary-tree LCA (recursive) | $O(n)$ | $O(h)$ |
+| 3 | **Exploit BST ordering (optimal)** | $O(h)$ | $O(1)$ |
+
+### Approach 1 — Path comparison (brute force)
+
+Find the path from the root to `p` and to `q`, then walk both lists together; the last common node is the LCA. Needs `O(n)` time and `O(n)` memory for the two paths.
+
+### Approach 2 — Generic tree LCA
+
+The standard binary-tree algorithm ignores ordering: recurse left and right; if both sides return non-null, the current node is the LCA. Works on *any* binary tree but still visits every node.
+
+### Approach 3 — BST ordering (optimal)
+
+Because a BST tells us which direction each target lies in, we never explore a wrong branch. The walk is a single descent — `O(h)` time, and iterative so `O(1)` space.
+
+## Solution
+
+**Approach:** Exploit the BST ordering. Starting at the root:
+
+- If **both** `p` and `q` are **smaller** than the current node, the LCA must be in the left subtree.
+- If **both** are **larger**, go right.
+- Otherwise they **split** here (or one equals the current node) — this node *is* the LCA.
+
+No recursion or extra storage is needed; a simple loop works.
+
+- **Time Complexity:** $O(h)$ — we descend one level per step.
+- **Space Complexity:** $O(1)$ — iterative, no extra memory.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+var lowestCommonAncestor = function(root, p, q) {
+    let node = root;
+    while (node) {
+        if (p.val < node.val && q.val < node.val) {
+            node = node.left;
+        } else if (p.val > node.val && q.val > node.val) {
+            node = node.right;
+        } else {
+            return node; // split point → LCA
+        }
+    }
+    return null;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode node = root;
+        while (node != null) {
+            if (p.val < node.val && q.val < node.val) {
+                node = node.left;
+            } else if (p.val > node.val && q.val > node.val) {
+                node = node.right;
+            } else {
+                return node;
+            }
+        }
+        return null;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="LCA of BST — root = [6,2,8,0,4,7,9], p = 0, q = 4"
+  steps={[
+    {
+      caption: 'Start at root 6. Both 0 and 4 are less than 6 → go left.',
+      viz: {
+        tree: {
+          label: 'BST',
+          levels: [[6], [2, 8], [0, 4, 7, 9]],
+          states: {'0-0': 'active', '2-0': 'window', '2-1': 'window'},
+        },
+        notes: ['0 < 6 and 4 < 6', 'move to left child (2)'],
+      },
+      state: ['node = 6', 'p = 0', 'q = 4'],
+      details: (
+        <>
+          In a BST, everything smaller than 6 lives in its left subtree, so
+          both targets must be there. Node 6 cannot be the <i>lowest</i>{' '}
+          ancestor.
+        </>
+      ),
+    },
+    {
+      caption: 'At node 2: p = 0 is smaller, q = 4 is larger → they split here!',
+      viz: {
+        tree: {
+          label: 'BST',
+          levels: [[6], [2, 8], [0, 4, 7, 9]],
+          states: {'0-0': 'done', '1-0': 'active', '2-0': 'window', '2-1': 'window'},
+        },
+        notes: ['0 < 2 < 4 → split point'],
+      },
+      state: ['node = 2', '0 < 2', '4 > 2'],
+      details: (
+        <>
+          One target is in the left subtree and the other in the right subtree.
+          Going either direction would lose one of them, so <b>2 is the LCA</b>.
+        </>
+      ),
+    },
+    {
+      caption: 'Return node 2 — the lowest node with both 0 and 4 below it. ★',
+      viz: {
+        tree: {
+          label: 'BST',
+          levels: [[6], [2, 8], [0, 4, 7, 9]],
+          states: {'1-0': 'match', '2-0': 'match', '2-1': 'match'},
+        },
+        notes: ['answer = 2'],
+      },
+      state: ['LCA = 2'],
+      details: (
+        <>
+          Note that if <code>p</code> had been 2 itself, the same condition
+          (<code>p.val === node.val</code>) still stops here — a node counts as
+          its own descendant.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+// root = [6,2,8,0,4,7,9], p = 2, q = 8 → 6
+// root = [6,2,8,0,4,7,9], p = 2, q = 4 → 2
+// root = [6,2,8,0,4,7,9], p = 0, q = 4 → 2
+```

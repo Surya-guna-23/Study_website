@@ -1,0 +1,243 @@
+---
+sidebar_position: 3
+title: Coin Change
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Coin Change
+
+<Difficulty level="Medium" />
+
+> **LeetCode 322** – [Coin Change](https://leetcode.com/problems/coin-change/) | **Striver (TUF)** – [Minimum Coins (DP-20)](https://takeuforward.org/data-structure/minimum-coins-dp-20/)
+
+## Problem Statement
+
+You are given an array `coins` representing coin denominations and an integer `amount`. Return the **fewest number of coins** needed to make up that amount. If it cannot be made, return `-1`.
+
+You have an **infinite** supply of each coin (unbounded knapsack).
+
+### Examples
+
+| # | Input | Output | Explanation |
+|---|-------|--------|-------------|
+| 1 | `coins = [1,2,5]`, `amount = 11` | `3` | `5 + 5 + 1` |
+| 2 | `coins = [2]`, `amount = 3` | `-1` | Impossible |
+| 3 | `coins = [1]`, `amount = 0` | `0` | Use no coins |
+
+### Constraints
+
+- `1 <= coins.length <= 12`
+- `1 <= coins[i] <= 2³¹ - 1`
+- `0 <= amount <= 10⁴`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Recursion (pick / not-pick) | Exponential | $O(amount)$ |
+| 2 | Memoization | $O(n \times amount)$ | $O(n \times amount)$ |
+| 3 | **Tabulation (1-D)** | $O(n \times amount)$ | $O(amount)$ |
+
+:::danger Greedy does not work
+Taking the largest coin first is tempting but **incorrect**. For `coins = [1, 3, 4]`, `amount = 6`, greedy gives `4 + 1 + 1 = 3` coins, while the optimum is `3 + 3 = 2` coins. We must explore all options — hence DP.
+:::
+
+### Step 1 — Express the recurrence
+
+Let `dp[a]` be the minimum coins needed to build amount `a`. To reach `a`, the **last coin** used was some `c` from `coins`, leaving `a - c`:
+
+$$
+dp[a] = \min \big( 1 + dp[a - c] \big)
+$$
+
+…taken over every coin `c` in `coins` with `c <= a`.
+
+### Step 2 — Base case
+
+`dp[0] = 0` — zero coins are needed to make zero.
+
+### Step 3 — Unreachable amounts
+
+Initialise every other entry to `Infinity`. If `dp[amount]` is still `Infinity` at the end, the amount cannot be formed → return `-1`.
+
+Because each coin is reusable, we iterate amounts **forwards**, which naturally allows a coin to be picked many times.
+
+---
+
+## Solution
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+**Approach 1 — Recursion (for understanding):**
+
+```js
+const solve = (coins, a) => {
+    if (a === 0) return 0;
+    if (a < 0) return Infinity;
+    let best = Infinity;
+    for (const c of coins) {
+        best = Math.min(best, 1 + solve(coins, a - c));
+    }
+    return best;
+};
+```
+
+**Approach 2 — Memoization:**
+
+```js
+var coinChangeMemo = function(coins, amount) {
+    const dp = new Array(amount + 1).fill(-1);
+    const solve = (a) => {
+        if (a === 0) return 0;
+        if (a < 0) return Infinity;
+        if (dp[a] !== -1) return dp[a];
+        let best = Infinity;
+        for (const c of coins) best = Math.min(best, 1 + solve(a - c));
+        return dp[a] = best;
+    };
+    const res = solve(amount);
+    return res === Infinity ? -1 : res;
+};
+```
+
+**Approach 3 — Tabulation (final answer):**
+
+```js
+/**
+ * @param {number[]} coins
+ * @param {number} amount
+ * @return {number}
+ */
+var coinChange = function(coins, amount) {
+    const dp = new Array(amount + 1).fill(Infinity);
+    dp[0] = 0;                              // base case
+
+    for (let a = 1; a <= amount; a++) {
+        for (const c of coins) {
+            if (c <= a && dp[a - c] !== Infinity) {
+                dp[a] = Math.min(dp[a], 1 + dp[a - c]);
+            }
+        }
+    }
+    return dp[amount] === Infinity ? -1 : dp[amount];
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.Arrays;
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+
+        for (int a = 1; a <= amount; a++) {
+            for (int c : coins) {
+                if (c <= a && dp[a - c] != Integer.MAX_VALUE) {
+                    dp[a] = Math.min(dp[a], 1 + dp[a - c]);
+                }
+            }
+        }
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Coin Change — coins = [1, 2, 5], amount = 11"
+  steps={[
+    {
+      caption: 'Init: dp[0] = 0, everything else = ∞ (unreachable so far).',
+      viz: {
+        arrays: [{label: 'dp', values: [0, '∞', '∞', '∞', '∞', '∞', '∞'], states: {0: 'match'}}],
+        notes: ['coins = [1,2,5]', 'dp[0] = 0'],
+      },
+      state: ['dp[0] = 0'],
+      details: (
+        <>
+          <code>∞</code> marks “not yet reachable”. Showing amounts 0–6 here;
+          the array actually runs to 11.
+        </>
+      ),
+    },
+    {
+      caption: 'a=1: only coin 1 fits → dp[1] = 1 + dp[0] = 1.',
+      viz: {
+        arrays: [{label: 'dp', values: [0, 1, '∞', '∞', '∞', '∞', '∞'], states: {0: 'window', 1: 'active'}}],
+        notes: ['coin 1 → 1 + dp[0] = 1'],
+      },
+      state: ['a=1', 'dp[1] = 1'],
+      details: (<>Coins 2 and 5 are larger than the amount, so they are skipped.</>),
+    },
+    {
+      caption: 'a=2: coin 1 → 1+dp[1]=2;  coin 2 → 1+dp[0]=1. Min = 1.',
+      viz: {
+        arrays: [{label: 'dp', values: [0, 1, 1, '∞', '∞', '∞', '∞'], states: {0: 'window', 2: 'active'}}],
+        notes: ['via coin 1 → 2', 'via coin 2 → 1  ✓', 'dp[2] = 1'],
+      },
+      state: ['a=2', 'dp[2] = 1'],
+      details: (<>We try <b>every</b> coin as the last one and keep the best.</>),
+    },
+    {
+      caption: 'a=3: coin 1 → 1+dp[2]=2;  coin 2 → 1+dp[1]=2. dp[3] = 2.',
+      viz: {
+        arrays: [{label: 'dp', values: [0, 1, 1, 2, '∞', '∞', '∞'], states: {1: 'window', 2: 'window', 3: 'active'}}],
+        notes: ['both routes give 2', 'dp[3] = 2'],
+      },
+      state: ['a=3', 'dp[3] = 2'],
+      details: (<>Either 1+2 or 2+1 — both use two coins.</>),
+    },
+    {
+      caption: 'a=5: coin 5 → 1 + dp[0] = 1, beating 1+dp[4]=3. dp[5] = 1.',
+      viz: {
+        arrays: [{label: 'dp', values: [0, 1, 1, 2, 2, 1, 2], states: {0: 'window', 5: 'match'}}],
+        notes: ['coin 5 → 1 + dp[0] = 1  ✓', 'dp[5] = 1'],
+      },
+      state: ['a=5', 'dp[5] = 1'],
+      details: (<>A single 5-coin is obviously optimal for amount 5.</>),
+    },
+    {
+      caption: 'Continuing to a=11: dp[11] = 1 + dp[6] = 1 + 2 = 3. ★',
+      viz: {
+        arrays: [{label: 'dp[0..11]', values: [0, 1, 1, 2, 2, 1, 2, 2, 3, 3, 2, 3], states: {6: 'window', 11: 'match'}}],
+        notes: ['best via coin 5: 1 + dp[6] = 3', 'answer = 3  →  5 + 5 + 1'],
+      },
+      state: ['dp[11] = 3', 'answer = 3'],
+      details: (
+        <>
+          Since <code>dp[11]</code> is finite the amount is reachable. Tracing
+          back: <code>11 → 6 → 1 → 0</code> uses coins <code>5, 5, 1</code>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(coinChange([1,2,5], 11)); // 3
+console.log(coinChange([2], 3));      // -1
+console.log(coinChange([1], 0));      // 0
+console.log(coinChange([1,3,4], 6));  // 2  (greedy would wrongly say 3)
+```

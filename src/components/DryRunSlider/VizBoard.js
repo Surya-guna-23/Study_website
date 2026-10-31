@@ -85,11 +85,79 @@ function MapBox({label, entries = [], highlightKey}) {
   );
 }
 
+/**
+ * TreeBox — renders a binary tree as centered levels.
+ *
+ * tree shape: {
+ *   label: 'root',
+ *   // one array per depth; use null for a missing child slot
+ *   levels: [[4], [2, 7], [1, 3, 6, 9]],
+ *   // states keyed by "level-index", e.g. {'1-0': 'active'}
+ *   states: {'0-0': 'active'},
+ * }
+ */
+function TreeBox({label, levels = [], states = {}}) {
+  return (
+    <div className={styles.treeBox}>
+      {label && <span className={styles.arrayLabel}>{label}</span>}
+      <div className={styles.treeLevels}>
+        {levels.map((row, d) => (
+          <div key={d} className={styles.treeLevel}>
+            {row.map((v, i) =>
+              v === null || v === undefined ? (
+                <span key={i} className={styles.treeGap} />
+              ) : (
+                <div key={i} className={`${cellClass(states[`${d}-${i}`])} ${styles.treeNode}`}>
+                  {String(v)}
+                </div>
+              ),
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * ListRow — renders a linked list as value boxes joined by arrows.
+ *
+ * list shape: {label, values: [1, 2, 3], states: {0: 'active'}, pointers: [{index, label}]}
+ */
+function ListRow({label, values = [], states = {}, pointers = [], tail = 'null'}) {
+  const pointerByIndex = {};
+  pointers.forEach((p) => {
+    pointerByIndex[p.index] = pointerByIndex[p.index]
+      ? `${pointerByIndex[p.index]} ${p.label}`
+      : p.label;
+  });
+
+  return (
+    <div className={styles.arrayRow}>
+      {label && <span className={styles.arrayLabel}>{label}</span>}
+      <div className={styles.cells}>
+        {values.map((v, i) => (
+          <React.Fragment key={i}>
+            <div className={styles.cellWrap}>
+              <div className={cellClass(states[i])}>{String(v)}</div>
+              {pointerByIndex[i] && <div className={styles.pointer}>{pointerByIndex[i]}</div>}
+            </div>
+            <span className={styles.arrow}>→</span>
+          </React.Fragment>
+        ))}
+        <span className={styles.nullNode}>{tail}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function VizBoard({viz}) {
   if (!viz) return null;
-  const {arrays = [], map, notes = []} = viz;
+  const {arrays = [], map, tree, list, notes = []} = viz;
   return (
     <div className={styles.board}>
+      {tree && <TreeBox {...tree} />}
+      {list && <ListRow {...list} />}
       {arrays.map((a, i) => (
         <ArrayRow key={i} {...a} />
       ))}

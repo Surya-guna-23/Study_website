@@ -1,0 +1,237 @@
+---
+sidebar_position: 2
+title: Combination Sum
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Combination Sum
+
+<Difficulty level="Medium" />
+
+> **LeetCode 39** – [Combination Sum](https://leetcode.com/problems/combination-sum/) | **Striver (TUF)** – [Combination Sum – 1](https://takeuforward.org/data-structure/combination-sum-1/)
+
+## Problem Statement
+
+Given an array of **distinct** integers `candidates` and a `target`, return all **unique combinations** of candidates that sum to `target`.
+
+The **same number may be chosen an unlimited number of times**. Two combinations are unique if the frequency of at least one chosen number differs.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `candidates = [2,3,6,7]`, `target = 7` | `[[2,2,3],[7]]` |
+| 2 | `candidates = [2,3,5]`, `target = 8` | `[[2,2,2,2],[2,3,3],[3,5]]` |
+| 3 | `candidates = [2]`, `target = 1` | `[]` |
+
+### Constraints
+
+- `1 <= candidates.length <= 30`
+- `2 <= candidates[i] <= 40`
+- `1 <= target <= 40`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Notes |
+|---|----------|-------|
+| 1 | Generate every combination, dedupe with a Set | Wasteful — produces `[2,3]` and `[3,2]` then throws one away |
+| 2 | **Pick / not-pick with a non-decreasing index** | Generates each multiset exactly once |
+| 3 | Loop-based backtracking with sorting + early break | Same complexity, prunes sooner |
+
+### Approach 3 — Sort and break early
+
+Sorting `candidates` lets us `break` out of the loop the moment a candidate exceeds the remainder — every later candidate is larger too.
+
+```js
+var combinationSumSorted = function(candidates, target) {
+    candidates.sort((a, b) => a - b);
+    const res = [], path = [];
+    const backtrack = (start, remain) => {
+        if (remain === 0) { res.push([...path]); return; }
+        for (let i = start; i < candidates.length; i++) {
+            if (candidates[i] > remain) break;   // pruning
+            path.push(candidates[i]);
+            backtrack(i, remain - candidates[i]);
+            path.pop();
+        }
+    };
+    backtrack(0, target);
+    return res;
+};
+```
+
+## Solution
+
+**Approach:** Backtrack with a `start` index. At each call we may either:
+
+- **Reuse** `candidates[start]` — recurse with the *same* start index (unlimited reuse) and a reduced remainder.
+- **Move on** — recurse with `start + 1`, never looking at this candidate again.
+
+Never allowing the index to go backwards is what prevents permutations of the same multiset (`[2,3]` and `[3,2]`) from both appearing.
+
+**Pruning:** stop as soon as the remainder goes negative, or the start index runs off the end.
+
+- **Time Complexity:** roughly `O(n^(T/m))` — where `T` is the target and `m` the smallest candidate (bounded by the recursion tree size).
+- **Space Complexity:** $O(T/m)$ — maximum recursion depth.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function(candidates, target) {
+    const res = [];
+    const path = [];
+
+    const backtrack = (start, remain) => {
+        if (remain === 0) {
+            res.push([...path]);
+            return;
+        }
+        if (remain < 0 || start === candidates.length) return;
+
+        // choice 1: use candidates[start] again
+        path.push(candidates[start]);
+        backtrack(start, remain - candidates[start]);
+        path.pop();
+
+        // choice 2: skip candidates[start] forever
+        backtrack(start + 1, remain);
+    };
+
+    backtrack(0, target);
+    return res;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(candidates, 0, target, new ArrayList<>(), res);
+        return res;
+    }
+
+    private void backtrack(int[] c, int start, int remain,
+                           List<Integer> path, List<List<Integer>> res) {
+        if (remain == 0) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        if (remain < 0 || start == c.length) return;
+
+        path.add(c[start]);
+        backtrack(c, start, remain - c[start], path, res);
+        path.remove(path.size() - 1);
+
+        backtrack(c, start + 1, remain, path, res);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Combination Sum — candidates = [2,3,6,7], target = 7"
+  steps={[
+    {
+      caption: 'Start: path = [], remain = 7, start = 0 (candidate 2).',
+      viz: {
+        arrays: [{label: 'candidates', values: [2, 3, 6, 7], states: {0: 'active'}, pointers: [{index: 0, label: 'start'}]}],
+        notes: ['path = []', 'remain = 7'],
+      },
+      state: ['start=0', 'remain=7'],
+      details: (<>Each step either reuses the current candidate or abandons it permanently.</>),
+    },
+    {
+      caption: 'Take 2 three times: path=[2,2,2], remain = 7−6 = 1.',
+      viz: {
+        arrays: [{label: 'candidates', values: [2, 3, 6, 7], states: {0: 'active'}, pointers: [{index: 0, label: 'start'}]}],
+        notes: ['path = [2,2,2]', 'remain = 1'],
+      },
+      state: ['path=[2,2,2]', 'remain=1'],
+      details: (
+        <>
+          <code>start</code> stays at 0 because reuse is allowed. The remainder
+          shrinks each time.
+        </>
+      ),
+    },
+    {
+      caption: 'Take 2 again → remain = −1 < 0 → dead end, prune and backtrack.',
+      viz: {
+        arrays: [{label: 'candidates', values: [2, 3, 6, 7], states: {0: 'muted'}}],
+        notes: ['remain = −1 → prune', 'pop back to [2,2]'],
+      },
+      state: ['remain = −1', 'pruned ✗'],
+      details: (
+        <>
+          Pruning on a negative remainder is what keeps the search tree from
+          exploding.
+        </>
+      ),
+    },
+    {
+      caption: 'From [2,2] (remain 3), skip to candidate 3 → take it. remain = 0! ★',
+      viz: {
+        arrays: [{label: 'candidates', values: [2, 3, 6, 7], states: {0: 'match', 1: 'match'}, pointers: [{index: 1, label: 'start'}]}],
+        notes: ['path = [2,2,3]', 'remain = 0 → record'],
+      },
+      state: ['path=[2,2,3]', 'remain=0 ✓'],
+      details: (<>A remainder of exactly zero means the combination is valid — record a copy.</>),
+    },
+    {
+      caption: 'Backtrack all the way to start=3 with remain=7 → take 7. remain = 0! ★',
+      viz: {
+        arrays: [{label: 'candidates', values: [2, 3, 6, 7], states: {3: 'match'}, pointers: [{index: 3, label: 'start'}]}],
+        notes: ['path = [7]', 'remain = 0 → record'],
+      },
+      state: ['path=[7]', 'remain=0 ✓'],
+      details: (<>Candidate 6 leaves remainder 1, which no candidate can fill, so it dies out.</>),
+    },
+    {
+      caption: 'Search exhausted → [[2,2,3],[7]].',
+      viz: {
+        arrays: [{label: 'candidates', values: [2, 3, 6, 7], states: {0: 'window', 1: 'window', 3: 'window'}}],
+        notes: ['answer = [[2,2,3],[7]]'],
+      },
+      state: ['answer = [[2,2,3],[7]]'],
+      details: (
+        <>
+          Because the start index never moves backwards, <code>[3,2,2]</code>{' '}
+          is never generated as a separate answer.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(combinationSum([2,3,6,7], 7)); // [[2,2,3],[7]]
+console.log(combinationSum([2,3,5], 8));   // [[2,2,2,2],[2,3,3],[3,5]]
+console.log(combinationSum([2], 1));       // []
+```

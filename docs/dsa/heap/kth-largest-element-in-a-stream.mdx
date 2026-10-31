@@ -1,0 +1,203 @@
+---
+sidebar_position: 2
+title: Kth Largest Element in a Stream
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Kth Largest Element in a Stream
+
+<Difficulty level="Easy" />
+
+> **LeetCode 703** – [Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream/)
+
+## Problem Statement
+
+Design a class to find the **k-th largest** element in a stream of numbers (not the k-th distinct element).
+
+- `KthLargest(k, nums)` initialises the object with an integer `k` and a stream of numbers.
+- `add(val)` appends `val` to the stream and returns the k-th largest element **so far**.
+
+### Example
+
+With `k = 3`, `nums = [4, 5, 8, 2]`:
+
+| Call | Returns |
+|------|---------|
+| `add(3)` | `4` |
+| `add(5)` | `5` |
+| `add(10)` | `5` |
+| `add(9)` | `8` |
+| `add(4)` | `8` |
+
+### Constraints
+
+- `1 <= k <= 10⁴`
+- `-10⁴ <= val <= 10⁴`
+- At most `10⁴` calls to `add`.
+
+---
+
+## Solution
+
+**Approach:** Keep a **min-heap of size `k`** holding the `k` largest values seen so far. The smallest of those `k` values sits on top — and that *is* the k-th largest overall. On each `add`, push the value and, if the heap grew past `k`, pop the minimum.
+
+- **Time Complexity:** $O(\log k)$ per `add`.
+- **Space Complexity:** $O(k)$ — the heap never exceeds `k` elements.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+class MinHeap {
+    constructor() { this.h = []; }
+    get size() { return this.h.length; }
+    peek() { return this.h[0]; }
+    push(v) { this.h.push(v); this.up(this.h.length - 1); }
+    pop() {
+        const top = this.h[0];
+        const last = this.h.pop();
+        if (this.h.length) { this.h[0] = last; this.down(0); }
+        return top;
+    }
+    up(i) {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.h[p] <= this.h[i]) break;
+            [this.h[p], this.h[i]] = [this.h[i], this.h[p]];
+            i = p;
+        }
+    }
+    down(i) {
+        const n = this.h.length;
+        for (;;) {
+            const l = 2 * i + 1, r = l + 1;
+            let small = i;
+            if (l < n && this.h[l] < this.h[small]) small = l;
+            if (r < n && this.h[r] < this.h[small]) small = r;
+            if (small === i) break;
+            [this.h[small], this.h[i]] = [this.h[i], this.h[small]];
+            i = small;
+        }
+    }
+}
+
+var KthLargest = function(k, nums) {
+    this.k = k;
+    this.heap = new MinHeap();
+    for (const n of nums) this.add(n);
+};
+
+KthLargest.prototype.add = function(val) {
+    this.heap.push(val);
+    if (this.heap.size > this.k) this.heap.pop();
+    return this.heap.peek();
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.PriorityQueue;
+
+class KthLargest {
+    private final int k;
+    private final PriorityQueue<Integer> heap = new PriorityQueue<>(); // min-heap
+
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        for (int n : nums) add(n);
+    }
+
+    public int add(int val) {
+        heap.offer(val);
+        if (heap.size() > k) heap.poll();
+        return heap.peek();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Kth Largest in Stream — k = 3, nums = [4, 5, 8, 2]"
+  steps={[
+    {
+      caption: 'After seeding with [4,5,8,2] the min-heap keeps only the top 3: {4, 5, 8}.',
+      viz: {
+        arrays: [{label: 'heap (min on left)', values: [4, 5, 8], states: {0: 'match'}}],
+        notes: ['k = 3', '2 was evicted', 'top = 4 = 3rd largest'],
+      },
+      state: ['heap = {4,5,8}', '3rd largest = 4'],
+      details: (
+        <>
+          The heap holds the 3 largest values; its <b>minimum</b> is therefore
+          the 3rd largest of the whole stream.
+        </>
+      ),
+    },
+    {
+      caption: 'add(3): push 3 → size 4 > k, pop the min (3). Answer stays 4.',
+      viz: {
+        arrays: [{label: 'heap (min on left)', values: [4, 5, 8], states: {0: 'match'}}],
+        notes: ['3 is too small → evicted', 'return 4'],
+      },
+      state: ['add(3)', 'return 4'],
+      details: (<>A value smaller than the current 3rd largest changes nothing.</>),
+    },
+    {
+      caption: 'add(5): push 5 → {4,5,5,8}, pop min 4 → {5,5,8}. Answer 5.',
+      viz: {
+        arrays: [{label: 'heap (min on left)', values: [5, 5, 8], states: {0: 'match'}}],
+        notes: ['4 evicted', 'return 5'],
+      },
+      state: ['add(5)', 'return 5'],
+      details: (<>Duplicates are allowed — we want the k-th largest, not k-th distinct.</>),
+    },
+    {
+      caption: 'add(10): push → {5,5,8,10}, pop min 5 → {5,8,10}. Answer 5.',
+      viz: {
+        arrays: [{label: 'heap (min on left)', values: [5, 8, 10], states: {0: 'match'}}],
+        notes: ['5 evicted', 'return 5'],
+      },
+      state: ['add(10)', 'return 5'],
+      details: (<>A large value pushes the boundary up by one position.</>),
+    },
+    {
+      caption: 'add(9): push → {5,8,9,10}, pop min 5 → {8,9,10}. Answer 8. ★',
+      viz: {
+        arrays: [{label: 'heap (min on left)', values: [8, 9, 10], states: {0: 'match'}}],
+        notes: ['5 evicted', 'return 8'],
+      },
+      state: ['add(9)', 'return 8'],
+      details: (
+        <>
+          Only <code>k</code> items are ever stored, so memory stays tiny even
+          for a very long stream.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+const kth = new KthLargest(3, [4, 5, 8, 2]);
+console.log(kth.add(3));  // 4
+console.log(kth.add(5));  // 5
+console.log(kth.add(10)); // 5
+console.log(kth.add(9));  // 8
+console.log(kth.add(4));  // 8
+```

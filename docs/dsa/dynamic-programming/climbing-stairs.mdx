@@ -1,0 +1,230 @@
+---
+sidebar_position: 1
+title: Climbing Stairs
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Climbing Stairs
+
+<Difficulty level="Easy" />
+
+> **LeetCode 70** – [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/) | **Striver (TUF)** – [Climbing Stairs (DP-2)](https://takeuforward.org/data-structure/dynamic-programming-climbing-stairs/)
+
+## Problem Statement
+
+You are climbing a staircase. It takes `n` steps to reach the top. Each time you can climb either **1** or **2** steps. In how many **distinct ways** can you climb to the top?
+
+### Examples
+
+| # | Input | Output | Ways |
+|---|-------|--------|------|
+| 1 | `n = 2` | `2` | `1+1`, `2` |
+| 2 | `n = 3` | `3` | `1+1+1`, `1+2`, `2+1` |
+| 3 | `n = 5` | `8` | — |
+
+### Constraints
+
+- `1 <= n <= 45`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Pure recursion | $O(2^n)$ | $O(n)$ |
+| 2 | Memoization (top-down) | $O(n)$ | $O(n) + O(n)$ |
+| 3 | Tabulation (bottom-up) | $O(n)$ | $O(n)$ |
+| 4 | **Space optimised** | $O(n)$ | $O(1)$ |
+
+### Step 1 — Express in terms of index
+
+To reach step `n`, the **last move** was either a 1-step (arriving from `n-1`) or a 2-step (arriving from `n-2`). Those two groups of paths are disjoint and cover everything, so:
+
+$$
+f(n) = f(n-1) + f(n-2)
+$$
+
+### Step 2 — Base cases
+
+`f(0) = 1` (one way to "stand still") and `f(1) = 1`.
+
+### Step 3 — Observation
+
+Each state only needs the **previous two** values, so the whole `dp` array collapses into two variables. This is the classic TUF space-optimisation step — and it reveals the answer is just the Fibonacci sequence.
+
+---
+
+## Solution
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+**Approach 1 — Recursion (exponential, times out):**
+
+```js
+var climbStairsRec = function(n) {
+    if (n <= 1) return 1;
+    return climbStairsRec(n - 1) + climbStairsRec(n - 2);
+};
+```
+
+**Approach 2 — Memoization:**
+
+```js
+var climbStairsMemo = function(n, dp = new Array(n + 1).fill(-1)) {
+    if (n <= 1) return 1;
+    if (dp[n] !== -1) return dp[n];
+    return dp[n] = climbStairsMemo(n - 1, dp) + climbStairsMemo(n - 2, dp);
+};
+```
+
+**Approach 3 — Tabulation:**
+
+```js
+var climbStairsTab = function(n) {
+    const dp = new Array(n + 1).fill(0);
+    dp[0] = 1;
+    dp[1] = 1;
+    for (let i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n];
+};
+```
+
+**Approach 4 — Space optimised (final answer):**
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function(n) {
+    let prev2 = 1; // f(i-2)
+    let prev1 = 1; // f(i-1)
+    for (let i = 2; i <= n; i++) {
+        const cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+class Solution {
+    // Space optimised — O(n) time, O(1) space
+    public int climbStairs(int n) {
+        int prev2 = 1, prev1 = 1;
+        for (int i = 2; i <= n; i++) {
+            int cur = prev1 + prev2;
+            prev2 = prev1;
+            prev1 = cur;
+        }
+        return prev1;
+    }
+
+    // Tabulation — O(n) time, O(n) space
+    public int climbStairsTab(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        if (n >= 1) dp[1] = 1;
+        for (int i = 2; i <= n; i++) dp[i] = dp[i - 1] + dp[i - 2];
+        return dp[n];
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Climbing Stairs — n = 5 (space optimised)"
+  steps={[
+    {
+      caption: 'Base cases: f(0) = 1 and f(1) = 1. Track them in prev2 and prev1.',
+      viz: {
+        arrays: [{label: 'dp', values: [1, 1, '?', '?', '?', '?'], states: {0: 'match', 1: 'match'}}],
+        notes: ['prev2 = f(0) = 1', 'prev1 = f(1) = 1'],
+      },
+      state: ['prev2 = 1', 'prev1 = 1'],
+      details: (
+        <>
+          There is exactly one way to be at the ground (do nothing) and one way
+          to reach step 1 (a single 1-step).
+        </>
+      ),
+    },
+    {
+      caption: 'i = 2: f(2) = f(1) + f(0) = 1 + 1 = 2.',
+      viz: {
+        arrays: [{label: 'dp', values: [1, 1, 2, '?', '?', '?'], states: {0: 'window', 1: 'window', 2: 'active'}}],
+        notes: ['1 + 1 = 2', 'ways: 1+1, 2'],
+      },
+      state: ['i = 2', 'f(2) = 2', 'prev2=1, prev1=2'],
+      details: (
+        <>
+          Arrive from step 1 with a 1-step, or from step 0 with a 2-step — two
+          distinct routes.
+        </>
+      ),
+    },
+    {
+      caption: 'i = 3: f(3) = f(2) + f(1) = 2 + 1 = 3.',
+      viz: {
+        arrays: [{label: 'dp', values: [1, 1, 2, 3, '?', '?'], states: {1: 'window', 2: 'window', 3: 'active'}}],
+        notes: ['2 + 1 = 3', 'ways: 1+1+1, 1+2, 2+1'],
+      },
+      state: ['i = 3', 'f(3) = 3'],
+      details: (<>The two variables slide forward; no array is ever needed.</>),
+    },
+    {
+      caption: 'i = 4: f(4) = f(3) + f(2) = 3 + 2 = 5.',
+      viz: {
+        arrays: [{label: 'dp', values: [1, 1, 2, 3, 5, '?'], states: {2: 'window', 3: 'window', 4: 'active'}}],
+        notes: ['3 + 2 = 5'],
+      },
+      state: ['i = 4', 'f(4) = 5'],
+      details: (<>Recognise the pattern — 1, 1, 2, 3, 5 is the Fibonacci sequence.</>),
+    },
+    {
+      caption: 'i = 5: f(5) = f(4) + f(3) = 5 + 3 = 8. Answer = 8. ★',
+      viz: {
+        arrays: [{label: 'dp', values: [1, 1, 2, 3, 5, 8], states: {3: 'window', 4: 'window', 5: 'match'}}],
+        notes: ['5 + 3 = 8', 'answer = 8'],
+      },
+      state: ['i = 5', 'answer = 8'],
+      details: (
+        <>
+          We computed 8 distinct climbing routes using only two integers of
+          memory — the full TUF optimisation chain from{' '}
+          <code>O(2ⁿ)</code> down to <code>O(n)</code> time and{' '}
+          <code>O(1)</code> space.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(climbStairs(2));  // 2
+console.log(climbStairs(3));  // 3
+console.log(climbStairs(5));  // 8
+console.log(climbStairs(45)); // 1836311903
+```

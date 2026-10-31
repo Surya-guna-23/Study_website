@@ -141,3 +141,58 @@
   color: var(--ifm-color-emphasis-800);
   border: 1px solid var(--ifm-color-emphasis-200);
 }
+
+/* ---------- Binary tree ---------- */
+
+.treeBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.treeLevels {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.treeLevel {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.treeNode {
+  border-radius: 50%;
+  min-width: 42px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  position: relative;
+}
+
+.treeGap {
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px dashed var(--ifm-color-emphasis-300);
+  opacity: 0.35;
+}
+
+/* ---------- Linked list ---------- */
+
+.arrow {
+  align-self: flex-start;
+  line-height: 40px;
+  color: var(--ifm-color-emphasis-600);
+  font-weight: 700;
+}
+
+.nullNode {
+  align-self: flex-start;
+  line-height: 40px;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+}

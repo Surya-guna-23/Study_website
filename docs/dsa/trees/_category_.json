@@ -1,0 +1,8 @@
+{
+  "label": "Trees",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Binary tree and binary search tree problems — traversals, recursion and BFS."
+  }
+}

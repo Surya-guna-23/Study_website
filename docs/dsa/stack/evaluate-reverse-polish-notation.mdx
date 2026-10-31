@@ -1,0 +1,173 @@
+---
+sidebar_position: 3
+title: Evaluate Reverse Polish Notation
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Evaluate Reverse Polish Notation
+
+<Difficulty level="Medium" />
+
+> **LeetCode 150** – [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/) | **Striver (TUF)** – [Postfix Expression Evaluation](https://takeuforward.org/data-structure/prefix-infix-postfix-conversion/)
+
+## Problem Statement
+
+You are given an array of strings `tokens` that represents an arithmetic expression in **Reverse Polish Notation** (postfix). Evaluate the expression and return an integer.
+
+Valid operators are `+`, `-`, `*`, and `/`. Division between two integers should **truncate toward zero**.
+
+### Examples
+
+| # | Input | Output | Meaning |
+|---|-------|--------|---------|
+| 1 | `["2","1","+","3","*"]` | `9` | `((2 + 1) * 3)` |
+| 2 | `["4","13","5","/","+"]` | `6` | `(4 + (13 / 5))` |
+
+### Constraints
+
+- `1 <= tokens.length <= 10⁴`
+- Each token is an operator or an integer in the range `[-200, 200]`.
+
+---
+
+## Solution
+
+**Approach:** Scan left to right. Push numbers onto a stack. When you meet an operator, pop the **top two** operands (the second popped is the left operand), apply the operator, and push the result back. The final value on the stack is the answer.
+
+- **Time Complexity:** $O(n)$ — one pass over the tokens.
+- **Space Complexity:** $O(n)$ — the operand stack.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {string[]} tokens
+ * @return {number}
+ */
+var evalRPN = function(tokens) {
+    const stack = [];
+    const ops = {
+        '+': (a, b) => a + b,
+        '-': (a, b) => a - b,
+        '*': (a, b) => a * b,
+        '/': (a, b) => Math.trunc(a / b),
+    };
+    for (const t of tokens) {
+        if (t in ops) {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(ops[t](a, b));
+        } else {
+            stack.push(Number(t));
+        }
+    }
+    return stack.pop();
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (String t : tokens) {
+            switch (t) {
+                case "+": { int b = stack.pop(), a = stack.pop(); stack.push(a + b); break; }
+                case "-": { int b = stack.pop(), a = stack.pop(); stack.push(a - b); break; }
+                case "*": { int b = stack.pop(), a = stack.pop(); stack.push(a * b); break; }
+                case "/": { int b = stack.pop(), a = stack.pop(); stack.push(a / b); break; }
+                default: stack.push(Integer.parseInt(t));
+            }
+        }
+        return stack.pop();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title='Evaluate RPN — tokens = ["2","1","+","3","*"]'
+  steps={[
+    {
+      caption: "Push 2.",
+      viz: {
+        arrays: [{label: 'tokens', values: ['2', '1', '+', '3', '*'], states: {0: 'active'}, pointers: [{index: 0, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '2']]},
+        notes: ['push 2'],
+      },
+      state: ['stack = [2]'],
+      details: (<>Numbers are pushed as-is.</>),
+    },
+    {
+      caption: "Push 1.",
+      viz: {
+        arrays: [{label: 'tokens', values: ['2', '1', '+', '3', '*'], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '2'], ['1', '1']]},
+        notes: ['push 1'],
+      },
+      state: ['stack = [2, 1]'],
+      details: (<>Stack now holds the two operands for the next operator.</>),
+    },
+    {
+      caption: "'+' : pop 1 and 2 → 2 + 1 = 3, push 3.",
+      viz: {
+        arrays: [{label: 'tokens', values: ['2', '1', '+', '3', '*'], states: {0: 'done', 1: 'done', 2: 'active'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '3']], highlightKey: '0'},
+        notes: ['a=2, b=1 → 2+1=3', 'push 3'],
+      },
+      state: ["op = '+'", 'result = 3', 'stack = [3]'],
+      details: (
+        <>
+          The <b>second</b> value popped is the left operand:{' '}
+          <code>a = 2</code>, <code>b = 1</code>, so <code>a + b = 3</code>.
+        </>
+      ),
+    },
+    {
+      caption: "Push 3.",
+      viz: {
+        arrays: [{label: 'tokens', values: ['2', '1', '+', '3', '*'], states: {2: 'done', 3: 'active'}, pointers: [{index: 3, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '3'], ['1', '3']]},
+        notes: ['push 3'],
+      },
+      state: ['stack = [3, 3]'],
+      details: (<>Ready for the multiplication.</>),
+    },
+    {
+      caption: "'*' : pop 3 and 3 → 3 * 3 = 9. Answer = 9.",
+      viz: {
+        arrays: [{label: 'tokens', values: ['2', '1', '+', '3', '*'], states: {3: 'done', 4: 'active'}, pointers: [{index: 4, label: 'i'}]}],
+        map: {label: 'stack (top → right)', entries: [['0', '9']], highlightKey: '0'},
+        notes: ['3 * 3 = 9', 'return 9  ★'],
+      },
+      state: ["op = '*'", 'result = 9'],
+      details: (<>The single remaining value is the evaluated expression.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(evalRPN(["2","1","+","3","*"]));                         // 9
+console.log(evalRPN(["4","13","5","/","+"]));                        // 6
+console.log(evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"])); // 22
+```

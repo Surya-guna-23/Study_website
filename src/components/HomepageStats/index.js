@@ -2,11 +2,11 @@ import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
 const STATS = [
-  { value: '34+', label: 'Problems solved', color: '#25c2a0' },
-  { value: '9', label: 'Easy', color: '#7ee2b8' },
-  { value: '18', label: 'Medium', color: '#f5d67b' },
+  { value: '57+', label: 'Problems solved', color: '#25c2a0' },
+  { value: '14', label: 'Easy', color: '#7ee2b8' },
+  { value: '36', label: 'Medium', color: '#f5d67b' },
   { value: '7', label: 'Hard', color: '#f79a9a' },
-  { value: '5', label: 'Patterns', color: '#89b4fa' },
+  { value: '10', label: 'Patterns', color: '#89b4fa' },
   { value: '2', label: 'Languages', color: '#b4befe' },
 ];
 

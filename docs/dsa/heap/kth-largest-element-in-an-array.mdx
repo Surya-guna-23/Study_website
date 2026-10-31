@@ -1,0 +1,218 @@
+---
+sidebar_position: 4
+title: Kth Largest Element in an Array
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Kth Largest Element in an Array
+
+<Difficulty level="Medium" />
+
+> **LeetCode 215** – [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) | **Striver (TUF)** – [Kth Largest/Smallest Element in an Array](https://takeuforward.org/data-structure/kth-largest-smallest-element-in-an-array/)
+
+## Problem Statement
+
+Given an integer array `nums` and an integer `k`, return the **k-th largest element** in the array.
+
+Note that it is the k-th largest in **sorted order**, not the k-th distinct element.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `nums = [3,2,1,5,6,4]`, `k = 2` | `5` |
+| 2 | `nums = [3,2,3,1,2,4,5,5,6]`, `k = 4` | `4` |
+
+### Constraints
+
+- `1 <= k <= nums.length <= 10⁵`
+- `-10⁴ <= nums[i] <= 10⁴`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | Sort descending, take index `k-1` | $O(n \log n)$ | $O(1)$ |
+| 2 | **Min-heap of size k** | $O(n \log k)$ | $O(k)$ |
+| 3 | **Quickselect** | $O(n)$ average | $O(1)$ |
+
+### Approach 1 — Sorting (brute force)
+
+```js
+var findKthLargestSort = (nums, k) =>
+    [...nums].sort((a, b) => b - a)[k - 1];
+```
+
+Correct and one line, but it does far more work than needed — we only care about one position, not the full ordering.
+
+### Approach 2 — Min-heap of size k (better)
+
+Keep only the `k` largest values. The heap top is the k-th largest. Ideal when `k` is small relative to `n`, or when the data arrives as a stream.
+
+### Approach 3 — Quickselect (optimal)
+
+Partition like quicksort, but recurse into **only the side containing the target index**. The expected work halves each round, giving `n + n/2 + n/4 + ... = O(n)` on average.
+
+## Solution
+
+**Approach 1 — min-heap of size k:** Keep the `k` largest values; the heap's minimum is the answer. `O(n log k)` time, `O(k)` space.
+
+**Approach 2 — Quickselect:** A partial quicksort. Partition around a pivot; the pivot lands at its final sorted index. If that index is the one we want, we're done — otherwise recurse into **only one side**. Average `O(n)` time, `O(1)` extra space.
+
+The k-th largest is the element at index `n - k` in ascending order.
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * Quickselect — average O(n) time, O(1) space.
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findKthLargest = function(nums, k) {
+    const target = nums.length - k; // index in ascending order
+    let lo = 0, hi = nums.length - 1;
+
+    while (lo <= hi) {
+        // random pivot keeps the average case safe on sorted input
+        const pivotIdx = lo + Math.floor(Math.random() * (hi - lo + 1));
+        const p = partition(nums, lo, hi, pivotIdx);
+        if (p === target) return nums[p];
+        if (p < target) lo = p + 1;
+        else hi = p - 1;
+    }
+    return -1;
+};
+
+function partition(nums, lo, hi, pivotIdx) {
+    const pivot = nums[pivotIdx];
+    [nums[pivotIdx], nums[hi]] = [nums[hi], nums[pivotIdx]];
+    let store = lo;
+    for (let i = lo; i < hi; i++) {
+        if (nums[i] < pivot) {
+            [nums[i], nums[store]] = [nums[store], nums[i]];
+            store++;
+        }
+    }
+    [nums[store], nums[hi]] = [nums[hi], nums[store]];
+    return store;
+}
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.PriorityQueue;
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (int n : nums) {
+            minHeap.offer(n);
+            if (minHeap.size() > k) minHeap.poll();
+        }
+        return minHeap.peek();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Kth Largest — nums = [3,2,1,5,6,4], k = 2 (min-heap of size 2)"
+  steps={[
+    {
+      caption: 'k = 2, so keep a min-heap holding the 2 largest values seen so far.',
+      viz: {
+        arrays: [{label: 'nums', values: [3, 2, 1, 5, 6, 4]}],
+        notes: ['k = 2', 'heap = {}'],
+      },
+      state: ['k = 2', 'heap = {}'],
+      details: (
+        <>
+          The heap top is always the <b>smallest of the k largest</b> — exactly
+          the k-th largest.
+        </>
+      ),
+    },
+    {
+      caption: 'Push 3, then 2. Heap = {2, 3}, size = k.',
+      viz: {
+        arrays: [{label: 'nums', values: [3, 2, 1, 5, 6, 4], states: {0: 'done', 1: 'active'}, pointers: [{index: 1, label: 'i'}]}],
+        map: {label: 'heap (min first)', entries: [['min', '2'], ['', '3']], highlightKey: 'min'},
+        notes: ['heap = {2, 3}', 'current answer = 2'],
+      },
+      state: ['heap = {2,3}'],
+      details: (<>With only two values seen, the 2nd largest is 2.</>),
+    },
+    {
+      caption: '1 < heap min (2) → push then evict, heap unchanged {2,3}.',
+      viz: {
+        arrays: [{label: 'nums', values: [3, 2, 1, 5, 6, 4], states: {2: 'muted'}, pointers: [{index: 2, label: 'i'}]}],
+        map: {label: 'heap (min first)', entries: [['min', '2'], ['', '3']], highlightKey: 'min'},
+        notes: ['1 is too small → evicted'],
+      },
+      state: ['heap = {2,3}'],
+      details: (<>Values below the current threshold can never be in the top k.</>),
+    },
+    {
+      caption: '5 arrives → heap {2,3,5}, evict min 2 → {3,5}. Answer now 3.',
+      viz: {
+        arrays: [{label: 'nums', values: [3, 2, 1, 5, 6, 4], states: {3: 'active'}, pointers: [{index: 3, label: 'i'}]}],
+        map: {label: 'heap (min first)', entries: [['min', '3'], ['', '5']], highlightKey: 'min'},
+        notes: ['evict 2', 'heap = {3, 5}'],
+      },
+      state: ['heap = {3,5}'],
+      details: (<>The threshold rises as bigger values stream in.</>),
+    },
+    {
+      caption: '6 arrives → heap {3,5,6}, evict 3 → {5,6}. Answer now 5.',
+      viz: {
+        arrays: [{label: 'nums', values: [3, 2, 1, 5, 6, 4], states: {4: 'active'}, pointers: [{index: 4, label: 'i'}]}],
+        map: {label: 'heap (min first)', entries: [['min', '5'], ['', '6']], highlightKey: 'min'},
+        notes: ['evict 3', 'heap = {5, 6}'],
+      },
+      state: ['heap = {5,6}'],
+      details: (<>Only the two biggest values survive.</>),
+    },
+    {
+      caption: '4 < 5 → rejected. Heap stays {5,6} → answer = 5. ★',
+      viz: {
+        arrays: [{label: 'nums', values: [3, 2, 1, 5, 6, 4], states: {3: 'match', 4: 'match', 5: 'muted'}, pointers: [{index: 5, label: 'i'}]}],
+        map: {label: 'heap (min first)', entries: [['min', '5'], ['', '6']], highlightKey: 'min'},
+        notes: ['answer = 5'],
+      },
+      state: ['answer = 5'],
+      details: (
+        <>
+          Sorted, the array is <code>[1,2,3,4,5,6]</code> — the 2nd largest is
+          indeed <code>5</code>.
+        </>
+      ),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+console.log(findKthLargest([3,2,1,5,6,4], 2));         // 5
+console.log(findKthLargest([3,2,3,1,2,4,5,5,6], 4));   // 4
+console.log(findKthLargest([1], 1));                   // 1
+```

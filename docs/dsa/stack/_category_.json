@@ -1,0 +1,8 @@
+{
+  "label": "Stack",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Problems solved using stacks and monotonic stacks."
+  }
+}

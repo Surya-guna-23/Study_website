@@ -1,0 +1,207 @@
+---
+sidebar_position: 4
+title: Binary Tree Level Order Traversal
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DryRunSlider from '@site/src/components/DryRunSlider';
+import Difficulty from '@site/src/components/Difficulty';
+
+# Binary Tree Level Order Traversal
+
+<Difficulty level="Medium" />
+
+> **LeetCode 102** – [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/) | **Striver (TUF)** – [Level Order Traversal of a Binary Tree](https://takeuforward.org/data-structure/level-order-traversal-of-a-binary-tree/)
+
+## Problem Statement
+
+Given the `root` of a binary tree, return the **level order traversal** of its nodes' values — that is, node values grouped level by level, from left to right.
+
+### Examples
+
+| # | Input | Output |
+|---|-------|--------|
+| 1 | `root = [3,9,20,null,null,15,7]` | `[[3],[9,20],[15,7]]` |
+| 2 | `root = [1]` | `[[1]]` |
+| 3 | `root = []` | `[]` |
+
+### Constraints
+
+- The number of nodes is in the range `[0, 2000]`.
+- `-1000 <= Node.val <= 1000`
+
+---
+
+## Approaches (Striver / TUF progression)
+
+| # | Approach | Time | Space |
+|---|----------|------|-------|
+| 1 | DFS with a depth parameter | $O(n)$ | $O(h)$ |
+| 2 | **BFS with a queue (standard)** | $O(n)$ | $O(n)$ |
+
+### Approach 1 — DFS by depth
+
+Recurse while tracking the current depth, appending each value into `res[depth]`. It works and uses less memory on deep, narrow trees, but the traversal order is not truly “level by level”.
+
+```js
+var levelOrderDFS = function(root) {
+    const res = [];
+    const dfs = (node, depth) => {
+        if (!node) return;
+        if (res.length === depth) res.push([]);
+        res[depth].push(node.val);
+        dfs(node.left, depth + 1);
+        dfs(node.right, depth + 1);
+    };
+    dfs(root, 0);
+    return res;
+};
+```
+
+### Approach 2 — BFS (the standard TUF solution)
+
+A queue processes nodes in exactly the order we want. Capturing the queue size at the start of each round is what separates one level from the next.
+
+## Solution
+
+**Approach (BFS):** Process the tree one level at a time with a queue. Before each round, record the queue's current size — that is exactly how many nodes belong to this level. Pop that many nodes, collect their values, and push their children for the next round.
+
+- **Time Complexity:** $O(n)$ — each node is enqueued and dequeued once.
+- **Space Complexity:** $O(n)$ — the queue can hold a whole level (up to `n/2` nodes).
+
+<Tabs groupId="lang">
+<TabItem value="js" label="JavaScript">
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    if (!root) return [];
+    const res = [];
+    let queue = [root];
+    while (queue.length) {
+        const level = [];
+        const next = [];
+        for (const node of queue) {
+            level.push(node.val);
+            if (node.left) next.push(node.left);
+            if (node.right) next.push(node.right);
+        }
+        res.push(level);
+        queue = next;
+    }
+    return res;
+};
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> level = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                level.add(node.val);
+                if (node.left != null) queue.offer(node.left);
+                if (node.right != null) queue.offer(node.right);
+            }
+            res.add(level);
+        }
+        return res;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## Dry Run
+
+<DryRunSlider
+  title="Level Order — root = [3,9,20,null,null,15,7]"
+  steps={[
+    {
+      caption: 'Start: queue holds just the root.',
+      viz: {
+        tree: {label: 'tree', levels: [[3], [9, 20], [null, null, 15, 7]], states: {'0-0': 'active'}},
+        arrays: [{label: 'queue', values: [3], states: {0: 'active'}}],
+        notes: ['res = []'],
+      },
+      state: ['queue = [3]', 'res = []'],
+      details: (<>BFS always expands the shallowest nodes first, which is what gives us level grouping for free.</>),
+    },
+    {
+      caption: 'Level 0: drain the queue → [3]. Push its children 9 and 20.',
+      viz: {
+        tree: {label: 'tree', levels: [[3], [9, 20], [null, null, 15, 7]], states: {'0-0': 'done', '1-0': 'active', '1-1': 'active'}},
+        arrays: [{label: 'queue', values: [9, 20], states: {0: 'active', 1: 'active'}}],
+        notes: ['res = [[3]]'],
+      },
+      state: ['level = [3]', 'queue = [9, 20]'],
+      details: (<>The queue now contains exactly the nodes of the next level.</>),
+    },
+    {
+      caption: 'Level 1: drain → [9, 20]. Node 9 is a leaf; 20 pushes 15 and 7.',
+      viz: {
+        tree: {label: 'tree', levels: [[3], [9, 20], [null, null, 15, 7]], states: {'1-0': 'done', '1-1': 'done', '2-2': 'active', '2-3': 'active'}},
+        arrays: [{label: 'queue', values: [15, 7], states: {0: 'active', 1: 'active'}}],
+        notes: ['res = [[3],[9,20]]'],
+      },
+      state: ['level = [9, 20]', 'queue = [15, 7]'],
+      details: (
+        <>
+          Recording the queue size <i>before</i> the loop is what keeps levels
+          from bleeding into each other.
+        </>
+      ),
+    },
+    {
+      caption: 'Level 2: drain → [15, 7]. Both are leaves, so the queue empties.',
+      viz: {
+        tree: {label: 'tree', levels: [[3], [9, 20], [null, null, 15, 7]], states: {'2-2': 'done', '2-3': 'done'}},
+        arrays: [{label: 'queue', values: []}],
+        notes: ['res = [[3],[9,20],[15,7]]'],
+      },
+      state: ['level = [15, 7]', 'queue = []'],
+      details: (<>No children to enqueue, so the next iteration ends the loop.</>),
+    },
+    {
+      caption: 'Queue is empty → return [[3],[9,20],[15,7]]. ★',
+      viz: {
+        tree: {
+          label: 'tree',
+          levels: [[3], [9, 20], [null, null, 15, 7]],
+          states: {'0-0': 'match', '1-0': 'match', '1-1': 'match', '2-2': 'match', '2-3': 'match'},
+        },
+        notes: ['answer = [[3],[9,20],[15,7]]'],
+      },
+      state: ['done'],
+      details: (<>Each inner array corresponds to one depth of the tree.</>),
+    },
+  ]}
+/>
+
+---
+
+## Test Cases
+
+```js
+// [3,9,20,null,null,15,7] → [[3],[9,20],[15,7]]
+// [1]                     → [[1]]
+// []                      → []
+```
