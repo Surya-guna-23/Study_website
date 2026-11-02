@@ -1,0 +1,325 @@
+[
+	{
+		"id": "pattern-factory-method",
+		"title": "Factory Method",
+		"slug": "patterns/creational#factory-method",
+		"kind": "Learning guide",
+		"category": "Creational patterns",
+		"summary": "Let subclasses select a formatter while a reporting workflow stays stable; distinguish Factory Method from a switch-based Simple Factory.",
+		"sourceNote": "Original guide; ShapeFactory creation hook inspected at 5afdde64cd138ed7a8e273870598b41d63914e91. Supplied PDF not reviewed.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1nsb2UJ1y8YTYSCllNDu7xx-YuxfRRUAg/view?usp=drive_link"},
+			{"label": "Inspected creator (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/creationalpatterns/factory/factorymethod/ShapeFactory.java"}
+		]
+	},
+	{
+		"id": "pattern-abstract-factory",
+		"title": "Abstract Factory",
+		"slug": "patterns/creational#abstract-factory",
+		"kind": "Learning guide",
+		"category": "Creational patterns",
+		"summary": "Create compatible UI product families together and understand why adding a product kind affects every factory.",
+		"sourceNote": "Original guide; CarFactory interior/exterior methods inspected at 5afdde64cd138ed7a8e273870598b41d63914e91. Supplied PDF not reviewed.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1iyouXyHYdbhTyptjN17oqFW8RmGKTQ87/view?usp=drive_link"},
+			{"label": "Inspected family interface (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/creationalpatterns/abstractfactory/CarFactory.java"}
+		]
+	},
+	{
+		"id": "pattern-builder",
+		"title": "Builder",
+		"slug": "patterns/creational#builder",
+		"kind": "Learning guide",
+		"category": "Creational patterns",
+		"summary": "Assemble readable search-request options, validate complete configuration, and keep built values independent of mutable builders.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1V5qnfvYpNiEzb3bu9221HMD8QDaTkVC9/view?usp=drive_link"},
+			{"label": "Creational category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/creationalpatterns"}
+		]
+	},
+	{
+		"id": "pattern-singleton",
+		"title": "Singleton",
+		"slug": "patterns/creational#singleton",
+		"kind": "Learning guide",
+		"category": "Creational patterns",
+		"summary": "Define instance scope with an immutable registry, compare dependency injection, and separate safe initialization from mutable-state thread safety.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1P_ptiVovd0ERLtMqVbgJVd9r5mYme-k_/view?usp=drive_link"},
+			{"label": "Creational category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/creationalpatterns"}
+		]
+	},
+	{
+		"id": "pattern-object-pool",
+		"title": "Object Pool",
+		"slug": "patterns/creational#object-pool",
+		"kind": "Learning guide",
+		"category": "Creational patterns",
+		"summary": "Lease scarce database resources with explicit ownership, return-on-failure, capacity, timeout, reset, and eviction policies.",
+		"sourceNote": "Original lease-contract sketch, not a concurrent pool implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1NymzCEjJq7c_w1XQrjpt77xk-M1KrvWo/view?usp=drive_link"},
+			{"label": "Creational category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/creationalpatterns"}
+		]
+	},
+	{
+		"id": "pattern-prototype",
+		"title": "Prototype (supplemental)",
+		"slug": "patterns/creational#prototype",
+		"kind": "Learning guide",
+		"category": "Creational patterns",
+		"summary": "Duplicate configured labels with explicit mutable-reference and identity policies; inspect a real field-preservation pitfall.",
+		"sourceNote": "Supplemental repository topic. Student.clone inspected at 5afdde64cd138ed7a8e273870598b41d63914e91; its inHighSchool field is not copied. No supplied PDF.",
+		"sources": [
+			{"label": "Inspected prototype (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/creationalpatterns/prototype/solution/Student.java"}
+		]
+	},
+	{
+		"id": "pattern-decorator",
+		"title": "Decorator",
+		"slug": "patterns/structural#decorator",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Compose coffee additions without a subclass for every combination; reason about wrapper order and when plain data is simpler.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/19W73JBOtOtOzIHmKBA-4ACqCXwv60pB0/view?usp=drive_link"},
+			{"label": "Structural category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-proxy",
+		"title": "Proxy",
+		"slug": "patterns/structural#proxy",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Guard directory access through the same subject interface and verify denied requests never reach the delegate.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1S0fRkyGAmhGupC02Xqi6YEfMmeaBxi_K/view?usp=drive_link"},
+			{"label": "Structural category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-composite",
+		"title": "Composite: file system",
+		"slug": "patterns/structural#composite",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Calculate nested file and folder sizes through one interface, then discuss symlinks, cycles, and logical versus physical storage.",
+		"sourceNote": "Original guide; Directory child delegation inspected at 5afdde64cd138ed7a8e273870598b41d63914e91. Supplied PDF not reviewed.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1FIBgNSJY-YkZYJO7WIKsY_io6tVIBkCa/view?usp=drive_link"},
+			{"label": "Inspected file-system composite (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns/composite/filestructure/solution/Directory.java"}
+		]
+	},
+	{
+		"id": "pattern-adapter",
+		"title": "Adapter",
+		"slug": "patterns/structural#adapter",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Translate a pounds-based legacy scale into a metric domain contract while making units, precision, and errors explicit.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1BKx6HITzyw-c1RjX4372aH_L4b1-5S1w/view?usp=drive_link"},
+			{"label": "Structural category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-facade",
+		"title": "Facade",
+		"slug": "patterns/structural#facade",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Offer one movie-start operation over projector and lighting subsystems without mistaking orchestration for atomic rollback.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1YpWHwZmOFIlFd-ftign3jtZWhOWEjwy0/view?usp=drive_link"},
+			{"label": "Structural category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-bridge",
+		"title": "Bridge",
+		"slug": "patterns/structural#bridge",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Separate notification urgency from delivery channel and avoid a hierarchy containing every cross-product combination.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1byU7bYbjdkhIFU2je3Ck8IqjrFZvrRkr/view?usp=drive_link"},
+			{"label": "Structural category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-flyweight",
+		"title": "Flyweight: word processor",
+		"slug": "patterns/structural#flyweight",
+		"kind": "Learning guide",
+		"category": "Structural patterns",
+		"summary": "Share immutable glyph data while keeping positions per occurrence; design a cache key covering character, font, and size.",
+		"sourceNote": "LetterFactory and DocumentCharacter inspected at 5afdde64cd138ed7a8e273870598b41d63914e91; source cache assumes fixed Arial/10 styling. PDF not reviewed.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1oCmas08vpcpiEMqYkIYEvjkNWIQ9lDGm/view?usp=drive_link"},
+			{"label": "Inspected glyph factory (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/structuralpatterns/flyweight/wordprocessor/solution/LetterFactory.java"}
+		]
+	},
+	{
+		"id": "pattern-strategy",
+		"title": "Strategy",
+		"slug": "patterns/behavioral#strategy",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Choose flat or weight-based shipping through injection, with a deeper Java example, relationship diagram, rounding dry run, and boundary tests.",
+		"sourceNote": "Strategy PDF extracted text reviewed; Vehicle delegation inspected at 5afdde64cd138ed7a8e273870598b41d63914e91. Shipping code is original, not a verified source implementation.",
+		"sources": [
+			{"label": "Strategy PDF (extracted text reviewed)", "url": "https://drive.google.com/file/d/1smTeCvuc9aQwZS7gd-vxPs75wezuYAFp/view?usp=drive_link"},
+			{"label": "Inspected strategy context (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns/strategy/vehicledrivemodes/solution/context/Vehicle.java"}
+		]
+	},
+	{
+		"id": "pattern-observer",
+		"title": "Observer",
+		"slug": "patterns/behavioral#observer",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Publish stock changes to independent subscribers while reasoning about unsubscribe, synchronous failures, reentrancy, and ordering.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1l3T-TsuhWyQx8us5lxeh-bt4KR_8tr9w/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-chain-of-responsibility",
+		"title": "Chain of Responsibility",
+		"slug": "patterns/behavioral#chain-of-responsibility",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Route expense approvals through ordered handlers with explicit first-handler-wins and terminal rejection semantics.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1niWAA5Vy3gC8i6xU96igcYVR_ygZmboT/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-null-object",
+		"title": "Null Object",
+		"slug": "patterns/behavioral#null-object",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Represent intentionally disabled progress reporting with a no-op collaborator, without hiding missing mandatory behavior.",
+		"sourceNote": "Pragmatic behavioral grouping, not an original GoF pattern. PDF not reviewed; category source only, with no exact Null Object implementation established.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1LUQFI4vDRn6mAsgmDMVCO4lmOXX50dDc/view?usp=drive_link"},
+			{"label": "Behavioral category source (not exact implementation)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-command",
+		"title": "Command: undo and redo",
+		"slug": "patterns/behavioral#command",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Encapsulate text edits, manage undo/redo stacks, clear abandoned redo branches, and distinguish reversal from compensation.",
+		"sourceNote": "Original single-threaded history sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/183IjgJ6pQDHswDQiwWMazetTpdK6SWaV/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-iterator",
+		"title": "Iterator",
+		"slug": "patterns/behavioral#iterator",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Give playlist clients independent traversal cursors with clear exhaustion and snapshot-versus-live mutation contracts.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1-AR6mJkZydatqHIxA58EreRzDt33_MqQ/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-mediator",
+		"title": "Mediator",
+		"slug": "patterns/behavioral#mediator",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Coordinate chat-room peers through one routing policy instead of maintaining every participant-to-participant dependency.",
+		"sourceNote": "Original local coordination sketch, not authenticated production chat. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1SVx1ZYrJ_nqdHQ6Uq390wSt1TMX5vPOU/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-visitor",
+		"title": "Visitor",
+		"slug": "patterns/behavioral#visitor",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Add operations across stable text/image node types using accept and type-specific visits; understand the cost of new element types.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1vX_USKxmI-wqOwsV3tMD4OGj6a-usJdn/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-memento",
+		"title": "Memento",
+		"slug": "patterns/behavioral#memento",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Save and restore editor state through opaque owner-bound snapshots, with explicit copy depth and history-memory tradeoffs.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1hc0cbjPKURcsvlMMkfMsq4yFXisS9Z2b/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-template-method",
+		"title": "Template Method",
+		"slug": "patterns/behavioral#template-method",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Fix import workflow order while allowing parsing and persistence steps to vary; compare inherited hooks with injected strategies.",
+		"sourceNote": "Original Java teaching sketch, not a verified repository implementation. PDF not reviewed; repository link is a pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/15qaWbbBxXeZD3uC_7jfVHwPZxxiAm-jV/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-interpreter",
+		"title": "Interpreter",
+		"slug": "patterns/behavioral#interpreter",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Evaluate a small boolean-rule expression tree while separating parsing, name validation, short-circuit evaluation, and resource limits.",
+		"sourceNote": "Original Java evaluator sketch, not a complete parser or verified repository implementation. PDF not reviewed; pinned category source.",
+		"sources": [
+			{"label": "Supplied PDF (not reviewed)", "url": "https://drive.google.com/file/d/1jnzOCqy1ICoPkI0d-N9HolZacVtlbeJD/view?usp=drive_link"},
+			{"label": "Behavioral category source (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/behavioralpatterns"}
+		]
+	},
+	{
+		"id": "pattern-state",
+		"title": "State: vending machine and ATM (supplemental)",
+		"slug": "patterns/behavioral#state",
+		"kind": "Learning guide",
+		"category": "Behavioral patterns",
+		"summary": "Model legal vending events with state handlers and a transition diagram; distinguish ATM card presence from authentication and cash consistency.",
+		"sourceNote": "Supplemental topic; ATM IdleState card-insertion transition inspected at 5afdde64cd138ed7a8e273870598b41d63914e91. Vending sketch is original; no supplied PDF.",
+		"sources": [
+			{"label": "Inspected ATM transition (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/atm/ATMStates/IdleState.java"}
+		]
+	}
+]

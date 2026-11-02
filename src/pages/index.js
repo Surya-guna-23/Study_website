@@ -20,12 +20,16 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
+            to="/docs/system-design/intro">
+            System Design 🏗️
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
             to="/docs/dsa/intro">
             Start with DSA 🚀
           </Link>
           <Link
             className="button button--outline button--secondary button--lg"
-            style={{marginLeft: '1rem'}}
             to="/docs/polyfills/intro">
             JS Polyfills ⚙️
           </Link>
@@ -40,7 +44,7 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="DSA patterns with visual dry runs and JavaScript polyfills — study notes by Surya.">
+      description="DSA visual dry runs, System Design interview playbooks, and JavaScript polyfills — study notes by Surya.">
       <HomepageHeader />
       <main>
         <HomepageStats />

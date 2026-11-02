@@ -1,0 +1,60 @@
+---
+title: System Design — Learn, Draw, Explain
+sidebar_position: 1
+description: A beginner-first LLD learning path with SOLID, design patterns, interview cases and source-aware study guides.
+---
+
+import SystemDesignCatalog from '@site/src/components/SystemDesignCatalog';
+
+# System Design — Learn, Draw, Explain
+
+**[START HERE] This area currently focuses on Low-Level Design (LLD)**: responsibilities, object relationships, runtime collaboration, and correctness. Distributed-system architecture and HLD are not covered yet.
+
+You do not need to memorize a large UML diagram. Start with one use case, name its invariants, draw the smallest useful model, and explain what changes when a requirement changes.
+
+## Your first study session
+
+1. Learn the five principles in [SOLID](foundations/solid.md). Focus on responsibilities before patterns.
+2. Read [Strategy](patterns/behavioral.md#strategy): separate a variable policy from the workflow using it.
+3. Open the [Parking Lot playbook](case-studies/parking-lot.md). Start with the interactive walkthrough above the detailed notes.
+4. Draw the recommended first diagram and practise the exact speaking script aloud.
+5. Rehearse one success path and one failure path before adding advanced features.
+
+## Learn it like a dry run
+
+**Every one of the 15 case studies has a ten-step interview walkthrough**, similar to the DSA slider. Start with [Tic Tac Toe](case-studies/tic-tac-toe.md) for a small model or [Parking Lot](case-studies/parking-lot.md) for resource allocation.
+
+1. **Learn:** choose a step or use Previous/Next. Build the class diagram gradually, then trace success and failure one call at a time.
+2. **Draw and say:** keep the whiteboard beside the exact speaking script. Use **Widen whiteboard** when a diagram needs more space.
+3. **Rehearse:** attempt the prompt with the suggested diagram, script, and code hidden. Select **Show coaching** when you want to compare your answer.
+4. **Practise deliberately:** mark a step only when you can explain it yourself. Position and practised steps are saved locally for each problem; reading alone does not count as practice.
+5. **Go deeper:** jump to the full notes at any time. The final slide includes a complete compact presentation and three topic-specific follow-ups. An optional five-minute timer never advances slides automatically.
+
+These are **consistent, original interview models**, not transcripts of GitLab APIs. The Parking Lot slides deliberately start with one manager-owned inventory before multi-level extensions; the full playbook retains its wider design and source audit. Practice stays in your browser—there is no microphone or automatic scoring. Clear progress with the confirmation control for that lesson only.
+
+## Choose a topic
+
+**Full playbook** means an extended interview rehearsal. **Learning guide** means a focused explanation and practice starting point, not a claim that the entire linked codebase or PDF has been reproduced.
+
+<SystemDesignCatalog />
+
+## How to read source claims
+
+| Label | Meaning |
+|---|---|
+| Source-reviewed | Specific source files or PDF text were actually read; the guide states the scope. |
+| Interview model | Original educational examples; not a transcription of the repository. |
+| [SOURCE UNVERIFIED] | A link is supplied, but implementation behavior is not established. |
+| [OPTIONAL] | Add only when the requirements justify the complexity. |
+
+The [source library](sources.mdx) keeps the original notes and code links together. Public access is not permission to republish entire PDFs or third-party implementations: this site links those resources and provides explanations and illustrative examples.
+
+## A repeatable 40-minute interview
+
+| Minutes | Work | Checkpoint |
+|---|---|---|
+| 0–5 | Requirements and assumptions | Name the main use case and three invariants. |
+| 5–15 | Minimal classes and relationships | Every box has one explainable responsibility. |
+| 15–22 | Runtime sequence | Trace one success and one failure. |
+| 22–32 | Important Java methods | Implement the invariant, not every getter. |
+| 32–40 | Trade-offs and follow-ups | Justify each abstraction and a simpler alternative. |

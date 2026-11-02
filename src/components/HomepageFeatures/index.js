@@ -17,13 +17,13 @@ const FeatureList = [
     ),
   },
   {
-    title: '🖼️ Visual Dry Runs',
-    to: '/docs/dsa/arrays-and-hashing/two-sum',
+    title: '🏗️ System Design',
+    to: '/docs/system-design/intro',
     description: (
       <>
-        Every problem ships with an interactive, step-by-step player that
-        animates arrays, hash maps, linked lists and binary trees — pointers,
-        windows and all — just like a whiteboard explanation.
+        Learn SOLID, choose patterns for real requirements, and practise LLD
+        interviews with class diagrams, runtime walkthroughs and a complete
+        beginner-friendly Parking Lot playbook.
       </>
     ),
   },

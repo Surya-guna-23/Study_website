@@ -1,0 +1,51 @@
+[
+	{
+		"id": "foundation-solid",
+		"title": "SOLID principles",
+		"slug": "foundations/solid",
+		"category": "Foundations",
+		"kind": "Learning guide",
+		"summary": "Five concrete counterexamples and refactors, original Java, a dependency drawing, speaking scripts, and contract checkpoints.",
+		"sourceNote": "All five SOLID PDF extracted texts reviewed; representative violation/solution Java inspected at 5afdde64cd138ed7a8e273870598b41d63914e91. Examples here are original; PDF images were not visually reviewed.",
+		"sources": [
+			{"label": "SRP PDF (extracted text reviewed)", "url": "https://drive.google.com/file/d/1p7W4QghiwQOdu_Mx4TjzAbqy78gFY64j/view?usp=drive_link"},
+			{"label": "OCP PDF (extracted text reviewed)", "url": "https://drive.google.com/file/d/1zniJ2vzjHIhuY4uK8rP-o4mZCYQzo-PU/view?usp=drive_link"},
+			{"label": "LSP PDF (extracted text reviewed)", "url": "https://drive.google.com/file/d/1p9n3In8Zfc-FIQe2V3zFJs0iCW88DNET/view?usp=drive_link"},
+			{"label": "ISP PDF (extracted text reviewed)", "url": "https://drive.google.com/file/d/1vitVuk7CedTL_xQ4aUTh4HlEaDi6IsTS/view?usp=drive_link"},
+			{"label": "DIP PDF (extracted text reviewed)", "url": "https://drive.google.com/file/d/1oIRML-gBFcYI7LYuWFZq52JFV1AQc2ga/view?usp=drive_link"},
+			{"label": "Reviewed SRP counterexample (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/video1solid/singleresponsibility/violation/Invoice.java"},
+			{"label": "Reviewed OCP interface (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/video1solid/openclosed/solution/InvoiceDao.java"},
+			{"label": "Reviewed LSP counterexample (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/video1solid/liskovsubstitution/example1/violation/Bicycle.java"},
+			{"label": "Reviewed ISP role (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/video1solid/interfacesegregation/solution/WaiterTasks.java"},
+			{"label": "Reviewed DIP solution (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/video1solid/dependencyinversion/solution/MacBook.java"}
+		]
+	},
+	{
+		"id": "foundation-mvc",
+		"title": "Model–View–Controller (MVC)",
+		"slug": "foundations/mvc",
+		"category": "Foundations",
+		"kind": "Learning guide",
+		"summary": "Separate model invariants, input orchestration, and rendering; trace valid and rejected edits with an original Java example.",
+		"sourceNote": "MVC demo, Blog, BlogView and BlogController reviewed at 5afdde64cd138ed7a8e273870598b41d63914e91. Supplied MVC PDF linked, not reviewed.",
+		"sources": [
+			{"label": "MVC PDF (not reviewed)", "url": "https://drive.google.com/file/d/1oKEaL_-2SnfeRIJUDzX7WNEOtqqcMTJ0/view?usp=drive_link"},
+			{"label": "Supplied MVC directory (moving main)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/additionalpatterns/mvc?ref_type=heads"},
+			{"label": "Reviewed MVC directory (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/additionalpatterns/mvc"},
+			{"label": "Reviewed controller (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/additionalpatterns/mvc/controller/BlogController.java"}
+		]
+	},
+	{
+		"id": "foundation-hashmap",
+		"title": "Design a HashMap",
+		"slug": "foundations/hashmap",
+		"category": "Foundations",
+		"kind": "Learning guide",
+		"summary": "Implement an original separate-chaining map with logical equality, safe indexing, resizing, explicit null policy, and collision tests.",
+		"sourceNote": "Supplied MyHashMap source accessible and reviewed at separate-repository commit 86f5cba306799544cb10f9b57adf00dedf16253f. Original corrected teaching implementation, not Java HashMap parity.",
+		"sources": [
+			{"label": "Supplied MyHashMap (moving main)", "url": "https://gitlab.com/shrayansh8/interviewcodingpractise/-/blob/main/src/main/java/com/conceptandcoding/LowLevelDesign/DesignDataStructures/MyHashMap.java?ref_type=heads"},
+			{"label": "Reviewed MyHashMap (separate repository, pinned)", "url": "https://gitlab.com/shrayansh8/interviewcodingpractise/-/raw/86f5cba306799544cb10f9b57adf00dedf16253f/src/main/java/com/conceptandcoding/LowLevelDesign/DesignDataStructures/MyHashMap.java"}
+		]
+	}
+]

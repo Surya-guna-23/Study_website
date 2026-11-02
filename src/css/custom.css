@@ -68,3 +68,16 @@
 .markdown table thead tr {
   background: var(--ifm-color-emphasis-100);
 }
+
+/* Keep wide LLD comparison tables inside the mobile document column. */
+#lld-detailed-notes {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+#lld-detailed-notes .markdown table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}

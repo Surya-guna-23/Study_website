@@ -1,0 +1,86 @@
+---
+title: Source library and review scope
+sidebar_position: 5
+description: Topic sources drawn from the catalog metadata, collection directories, and explicit review boundaries.
+---
+
+import Link from '@docusaurus/Link';
+import Heading from '@theme/Heading';
+import foundations from '@site/src/data/system-design/foundations.json';
+import patterns from '@site/src/data/system-design/patterns.json';
+import parking from '@site/src/data/system-design/parking.json';
+import cases from '@site/src/data/system-design/cases.json';
+
+export const topics = [...foundations, ...patterns, ...parking, ...cases];
+export const categories = [...new Set(topics.map((topic) => topic.category))];
+export const reviewedCommit = '5afdde64cd138ed7a8e273870598b41d63914e91';
+export const collections = [
+  {name: 'SOLID', folder: '14Bigi6TB53HHjFJX8h5SjwZky4hJOO-W', directory: 'video1solid'},
+  {name: 'Creational patterns', folder: '19th5gDxaDXI15eXolORUhWh_Uoclm8LP', directory: 'creationalpatterns'},
+  {name: 'Structural patterns', folder: '13hg1N0piFmP4uBEH3jd9fvjIoA4SK4Dt', directory: 'structuralpatterns'},
+  {name: 'Behavioral patterns', folder: '1lWvP56SEei_xrKFupFvxQNI96VPQHvp-', directory: 'behavioralpatterns'},
+  {name: 'Interview questions', folder: '1N9m-IYyzokSvFK0ALSToDkqo_fglrvu6', directory: 'interviewquestions'},
+];
+
+# Source library
+
+Use the local guide to learn and rehearse; use the linked material to inspect the original context. Topic titles, routes, source URLs, and per-topic review notes below come directly from the **same four JSON datasets as the catalog**. They are not a second hand-maintained bibliography.
+
+See the supplementary [PDF access audit (2026-11-01)](source-access.md) for bounded public-download, page-count, and text-extraction results. Access or extraction does **not** establish semantic review or audit the guides against every PDF; the detailed review labels below remain unchanged.
+
+## What has actually been reviewed?
+
+- **PDF text reviewed:** Parking Lot, Strategy, and all five SOLID extracted texts (single responsibility, open/closed, Liskov substitution, interface segregation, dependency inversion). This is text review, not visual verification of embedded UML images, page layouts, or videos.
+- **Other PDFs:** downloaded and extracted in the access audit, but most have only opening-sample inspection. MVC, Adapter, and Proxy additionally received full extracted-text reading with limited observations in that audit. This does not mean the teaching guides have been checked against every PDF. Listing a collection does not mean every file in it has been read.
+- **Java:** review claims apply only to the files identified in each topic's note and guide. LLD repository details are pinned to **5afdde64cd138ed7a8e273870598b41d63914e91**; a directory link alone is not evidence that every implementation was reviewed.
+- **Separate HashMap repository:** the supplied source was accessible and read at **86f5cba306799544cb10f9b57adf00dedf16253f**. The LLD repository commit above does not apply to this repository. Inventory-management source remains unverified as noted in its metadata.
+- **Original interview models:** site diagrams, refactors, scripts, and Java teaching examples are not transcriptions or claims of production readiness. Static source review is not execution or a correctness certification.
+- **[SOURCE UNVERIFIED]:** where used, a URL is known but its implementation behavior has not been established. A reachable landing page alone does not count as code review.
+
+Public access does not grant permission to republish an entire external PDF or codebase. This library links the originals and limits the guides to original explanations, examples, and scoped observations.
+
+## Collection directories, not extra lessons
+
+These five collections organize the supplied PDF folders and GitLab directories. They are **directories, not additional lessons** and do not inflate the topic count. The SOLID collection has five reviewed text extracts; the other folders contain a mix of reviewed and unreviewed resources as specified above.
+
+<table>
+  <thead><tr><th scope="col">Collection</th><th scope="col">PDF folder</th><th scope="col">Code directory</th></tr></thead>
+  <tbody>
+    {collections.map((collection) => (
+      <tr key={collection.directory}>
+        <th scope="row">{collection.name}</th>
+        <td><a href={`https://drive.google.com/drive/folders/${collection.folder}?usp=drive_link`}>Open PDF collection</a></td>
+        <td><a href={`https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/${reviewedCommit}/src/main/java/com/conceptcoding/${collection.directory}`}>Open pinned GitLab directory</a></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+Additional structural resource: [supplied Zoho notes (not reviewed)](https://notebook.zohopublic.in/public/notes/74tdo33c5b7060d544b1c986e519dd3ba4d1b).
+
+**Normalization of the supplied list:** Splitwise and its implementation follow-up are merged into the [same Splitwise guide](case-studies/splitwise.md), not represented as duplicate lessons. The user's original list skips **40**; no missing topic has been invented to fill that numbering gap. Supplemental topics are labelled in their catalog entries.
+
+## Topic guides and original sources
+
+Each section preserves the per-topic review scope. A moving `main` URL is a discovery link; use the pinned link when checking a statement about reviewed code.
+
+{categories.map((category) => (
+  <section key={category} aria-label={`${category} sources`}>
+    <Heading as="h3">{category}</Heading>
+    <ul>
+      {topics.filter((topic) => topic.category === category).map((topic) => (
+        <li key={topic.id} id={topic.id}>
+          <p><Link to={`/docs/system-design/${topic.slug}`}>{topic.title}</Link> — {topic.kind}</p>
+          <p>{topic.sourceNote}</p>
+          {(topic.sources || []).length > 0 ? (
+            <ul>
+              {topic.sources.map((source) => (
+                <li key={source.url}><a href={source.url}>{source.label}</a></li>
+              ))}
+            </ul>
+          ) : <p>No external source supplied.</p>}
+        </li>
+      ))}
+    </ul>
+  </section>
+))}

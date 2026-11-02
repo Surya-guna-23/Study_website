@@ -1,0 +1,8 @@
+{
+  "label": "Case studies",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Beginner-first LLD interview playbooks with explicit source audits and illustrative design models."
+  }
+}

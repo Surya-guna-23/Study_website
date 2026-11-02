@@ -1,0 +1,189 @@
+[
+	{
+		"id": "tic-tac-toe",
+		"title": "Tic Tac Toe",
+		"slug": "case-studies/tic-tac-toe",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Model turns, validate moves, and distinguish wins from draws before introducing rule variation.",
+		"sourceNote": "Reviewed PlayGame and TicTacToeGame at the pinned commit; original teaching model. PDF unreviewed.",
+		"sources": [
+			{"label": "Supplied PDF (unreviewed)", "url": "https://drive.google.com/file/d/1JgTipI2hutFrd3YxDpE8L2KukIr0VC7H/view?usp=drive_link"},
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/tictactoe"},
+			{"label": "Reviewed game class (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/tictactoe/TicTacToeGame.java"}
+		]
+	},
+	{
+		"id": "elevator",
+		"title": "Elevator",
+		"slug": "case-studies/elevator",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Separate car assignment from stop scheduling and protect movement with explicit door and service-state rules.",
+		"sourceNote": "Reviewed Demo and ElevatorController at the pinned commit; not a safety-certified design. PDF unreviewed.",
+		"sources": [
+			{"label": "Supplied PDF (unreviewed)", "url": "https://drive.google.com/file/d/1MGudMSiJj2JMC75qq3o34gW2Kz-UAYPl/view?usp=drive_link"},
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/elevator"},
+			{"label": "Reviewed controller (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/elevator/ElevatorController.java"}
+		]
+	},
+	{
+		"id": "car-rental",
+		"title": "Car Rental",
+		"slug": "case-studies/car-rental",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Reserve non-overlapping vehicle intervals, trace pickup and return, and separate billing from availability.",
+		"sourceNote": "Discovered carrental source: reviewed Demo and ReservationManager at the pinned commit. Both PDFs unreviewed.",
+		"sources": [
+			{"label": "Supplied PDF 1 (unreviewed)", "url": "https://drive.google.com/file/d/1QR51mRs_1cM7Cq5aDlPLKAvrjHMtLiU0/view?usp=drive_link"},
+			{"label": "Supplied PDF 2 (unreviewed)", "url": "https://drive.google.com/file/d/11UNsQAciYNTr1iDkkR_H9hJ5lj4A4kr4/view?usp=drive_link"},
+			{"label": "Discovered code directory (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/carrental"},
+			{"label": "Reviewed reservation manager (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/carrental/reservation/ReservationManager.java"}
+		]
+	},
+	{
+		"id": "snake-and-ladder",
+		"title": "Snake and Ladder",
+		"slug": "case-studies/snake-and-ladder",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Build a deterministic turn engine with configurable jumps and an explicit exact-finish rule.",
+		"sourceNote": "Reviewed SnakeNLadderDemo and Game at the pinned commit; teaching finish rule intentionally differs. PDF unreviewed.",
+		"sources": [
+			{"label": "Supplied PDF (unreviewed)", "url": "https://drive.google.com/file/d/1cGyGGWOrp_b4Jm2xHFlI_FitPivDHgiN/view?usp=drive_link"},
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/snakeNladder"},
+			{"label": "Reviewed game class (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/snakeNladder/Game.java"}
+		]
+	},
+	{
+		"id": "bookmyshow",
+		"title": "BookMyShow",
+		"slug": "case-studies/bookmyshow",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Separate physical seats from show inventory and design expiring holds, payment confirmation, and compensation.",
+		"sourceNote": "Reviewed BookMyShowApp and BookingService at the pinned commit; hold expiry is an original extension. PDF unreviewed.",
+		"sources": [
+			{"label": "Supplied PDF (unreviewed)", "url": "https://drive.google.com/file/d/1XbWo8m1hOOdKGww0UO1x3zIskdQjqf2i/view?usp=drive_link"},
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/book_my_show"},
+			{"label": "Reviewed booking service (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/book_my_show/service/BookingService.java"}
+		]
+	},
+	{
+		"id": "vending-machine",
+		"title": "Vending Machine",
+		"slug": "case-studies/vending-machine",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Design an original state model for selection, credit, exact change, dispensing, and uncertain hardware outcomes.",
+		"sourceNote": "Original teaching model only. Supplied PDF unreviewed; no repository implementation reviewed.",
+		"sources": [
+			{"label": "Supplied PDF (unreviewed)", "url": "https://drive.google.com/file/d/1FDEdh2xhvlZpftC_392pml9h2lcl_q3A/view?usp=drive_link"}
+		]
+	},
+	{
+		"id": "atm",
+		"title": "ATM",
+		"slug": "case-studies/atm",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Model authenticated sessions, plan feasible note combinations, and distinguish rejection from uncertain cash delivery.",
+		"sourceNote": "Reviewed ATMRoom and CashWithdrawalState at the pinned commit; cash planning and recovery are teaching extensions.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/atm"},
+			{"label": "Reviewed withdrawal state (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/atm/ATMStates/CashWithdrawalState.java"}
+		]
+	},
+	{
+		"id": "chess",
+		"title": "Chess",
+		"slug": "case-studies/chess",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Separate piece movement from legal game moves, simulate king safety, and explain checkmate without king capture.",
+		"sourceNote": "Reviewed ChessDemo and Game at the pinned commit; reviewed Game uses king capture, not full checkmate validation.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/chess"},
+			{"label": "Reviewed game class (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/chess/Game.java"}
+		]
+	},
+	{
+		"id": "splitwise",
+		"title": "Splitwise",
+		"slug": "case-studies/splitwise",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Learn expense splitting and merged implementation notes: integer money, deterministic remainders, balanced postings, and retries.",
+		"sourceNote": "Reviewed ExpenseController and BalanceSheetController at the pinned commit; ledger/idempotency model is original.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/splitwise"},
+			{"label": "Reviewed expense controller (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/splitwise/Expense/ExpenseController.java"}
+		]
+	},
+	{
+		"id": "cricbuzz",
+		"title": "Cricbuzz",
+		"slug": "case-studies/cricbuzz",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Process ordered delivery events into score projections with explicit extras, duplicate detection, and correction rules.",
+		"sourceNote": "Reviewed BallDetails and BattingScoreUpdater at the pinned commit; ordered event ingestion is an original extension.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/cricbuzz"},
+			{"label": "Reviewed delivery class (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/cricbuzz/Inning/BallDetails.java"}
+		]
+	},
+	{
+		"id": "inventory-management",
+		"title": "Inventory Management",
+		"slug": "case-studies/inventory-management",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Distinguish on-hand, reserved, and available stock; implement atomic holds and idempotent fulfillment.",
+		"sourceNote": "Original teaching model. Separate interviewcodingpractise repository was not fetched or reviewed.",
+		"sources": [
+			{"label": "Supplied separate repository (unverified)", "url": "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/LowLevelDesign/DesignOrderManagementSystem?ref_type=heads"}
+		]
+	},
+	{
+		"id": "shopping-cart-coupons",
+		"title": "Shopping Cart Coupons",
+		"slug": "case-studies/shopping-cart-coupons",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Compose discounts while making eligibility, stacking order, rounding, and redemption limits explicit.",
+		"sourceNote": "Reviewed ShoppingCart and PercentageCouponDecorator at the pinned commit; pricing excerpt is original.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/couponappln"},
+			{"label": "Reviewed cart class (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/couponappln/ShoppingCart.java"}
+		]
+	},
+	{
+		"id": "payment-gateway",
+		"title": "Payment Gateway",
+		"slug": "case-studies/payment-gateway",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Design idempotent payment attempts, provider adapters, unknown outcomes, webhook handling, and reconciliation.",
+		"sourceNote": "Reviewed TransactionService and Processor at the pinned commit; Processor is a stub. Zoho notes unreviewed.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/paymentgateway"},
+			{"label": "Reviewed transaction service (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/paymentgateway/transaction/TransactionService.java"},
+			{"label": "Supplied Zoho notes (unreviewed)", "url": "https://notebook.zohopublic.in/public/notes/bietv6993f5a023ec4e9f89436149ac3ed2f7"}
+		]
+	},
+	{
+		"id": "meeting-scheduler",
+		"title": "Meeting Scheduler",
+		"slug": "case-studies/meeting-scheduler",
+		"kind": "Learning guide",
+		"category": "Case studies",
+		"summary": "Reserve room intervals atomically, distinguish invitations from availability, and handle cancellation and notifications.",
+		"sourceNote": "Reviewed MeetingScheduler and Calendar at the pinned commit; atomic booking and time-zone policy are teaching extensions.",
+		"sources": [
+			{"label": "Supplied code directory", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/main/src/main/java/com/conceptcoding/interviewquestions/meetingscheduler"},
+			{"label": "Reviewed scheduler (pinned)", "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/blob/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/meetingscheduler/MeetingScheduler.java"}
+		]
+	}
+]

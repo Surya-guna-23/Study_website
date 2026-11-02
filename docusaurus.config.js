@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Surya Study Materials',
-  tagline: 'DSA patterns with visual dry runs · JavaScript polyfills · clean solutions',
+  tagline: 'DSA visual dry runs · System Design interview practice · JavaScript polyfills',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -21,7 +21,9 @@ const config = {
 
   markdown: {
     format: 'detect', // .md → CommonMark (no JSX), .mdx → MDX
+    mermaid: true,
   },
+  themes: ['@docusaurus/theme-mermaid'],
 
   // Set the production url of your site here
   url: 'https://surya-studymaterial.vercel.app',
@@ -130,6 +132,12 @@ const config = {
           },
           {
             type: 'docSidebar',
+            sidebarId: 'systemDesignSidebar',
+            position: 'left',
+            label: 'System Design',
+          },
+          {
+            type: 'docSidebar',
             sidebarId: 'polyfillsSidebar',
             position: 'left',
             label: 'Polyfills',
@@ -151,6 +159,10 @@ const config = {
               {
                 label: 'DSA',
                 to: '/docs/dsa/intro',
+              },
+              {
+                label: 'System Design',
+                to: '/docs/system-design/intro',
               },
               {
                 label: 'Polyfills',

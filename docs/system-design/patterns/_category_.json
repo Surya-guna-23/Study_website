@@ -1,0 +1,8 @@
+{
+  "label": "Design patterns",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Learn 25 patterns through concrete problems, runtime walkthroughs, Java sketches, tradeoffs, and interview checkpoints."
+  }
+}

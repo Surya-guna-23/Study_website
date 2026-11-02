@@ -1,0 +1,22 @@
+[
+  {
+    "id": "parking-lot",
+    "title": "Parking Lot",
+    "category": "Case studies",
+    "level": "Beginner",
+    "kind": "Full playbook",
+    "slug": "case-studies/parking-lot",
+    "summary": "A complete beginner-to-interview parking lot playbook with illustrative diagrams, a commit-pinned source audit, runtime traces, Java explanations, drawing and speaking guides, 20 follow-ups, and three practice rounds.",
+    "sourceNote": "Audited 2026-11-01: Parking PDF text and all 21 parking_lot Java files at 5afdde64cd138ed7a8e273870598b41d63914e91 reviewed locally. Diagrams and snippets are illustrative; Java was not executed and PDF UML images were not visually verified.",
+    "sources": [
+      {
+        "label": "PDF notes",
+        "url": "https://drive.google.com/file/d/1aE9QhlRZgtUDI-p_2NiPdVWaq3eP-Mn7/view?usp=drive_link"
+      },
+      {
+        "label": "GitLab code",
+        "url": "https://gitlab.com/shrayansh8/lld-lowleveldesign/-/tree/5afdde64cd138ed7a8e273870598b41d63914e91/src/main/java/com/conceptcoding/interviewquestions/parking_lot"
+      }
+    ]
+  }
+]
